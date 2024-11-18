@@ -31,7 +31,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
     Button btnAddStudent, btnExtension, btnLogOut;
     TabHost myTab;
-    ImageView imgNextToPayment;
+    ImageView imgNextToPayment,imgNextToPayMentHP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +73,15 @@ public class MainActivity extends AppCompatActivity {
 
         imgNextToPayment = findViewById(R.id.imgNextToPayment);
         imgNextToPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        imgNextToPayMentHP = findViewById(R.id.imgNextToPaymentHP);
+        imgNextToPayMentHP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, PaymentActivity.class);

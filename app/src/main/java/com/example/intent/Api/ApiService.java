@@ -4,6 +4,7 @@ import com.example.intent.LoginRequest;
 import com.example.intent.Model.Student;
 import com.example.intent.Model.User;
 import com.example.intent.RegisterRequest;
+import com.example.intent.Token.AuthResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -18,7 +19,7 @@ public interface ApiService {
             "Content-Type: application/json"
     })
     @POST("api/user/login")
-    Call<ApiResponse<User>> login(@Body LoginRequest loginRequest);
+    Call<ApiResponse<AuthResponse>> login(@Body LoginRequest loginRequest);
     @POST("api/user/register")
     Call<ApiResponse<User>> register(@Body RegisterRequest registerRequest);
     @GET("api/students/{studentId}")

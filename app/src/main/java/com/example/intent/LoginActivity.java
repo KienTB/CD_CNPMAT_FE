@@ -18,6 +18,8 @@ import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.Model.User;
+import com.example.intent.Token.AuthResponse;
+import com.example.intent.Token.TokenManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,15 +79,25 @@ public class LoginActivity extends AppCompatActivity {
 
         LoginRequest loginRequest = new LoginRequest(phoneNumber, password);
 
-        apiService.login(loginRequest).enqueue(new Callback<ApiResponse<User>>() {
+        apiService.login(loginRequest).enqueue(new Callback<ApiResponse<AuthResponse>>() {
             @Override
-            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
+            public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<User> apiResponse = response.body();
+                    ApiResponse<AuthResponse> apiResponse = response.body();
 
                     if (apiResponse.isSuccess() && apiResponse.getData() != null) {
-                        User user = apiResponse.getData();
-                        Toast.makeText(LoginActivity.this, "Welcome, " + user.getName(), Toast.LENGTH_SHORT).show();
+                        AuthResponse authResponse = apiResponse.getData();
+
+                        TokenManager tokenManager = new TokenManager(LoginActivity.this);
+                        tokenManager.saveToken(authResponse.getToken());
+
+                        if (authResponse.getUser() != null) {
+                            User user = authResponse.getUser();
+                            Toast.makeText(LoginActivity.this, "Welcome, " + user.getName(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                        }
+
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -100,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
                 Log.e("LoginActivity", "Login error: " + t.getMessage(), t);
                 Toast.makeText(LoginActivity.this, "Network error. Please try again later.", Toast.LENGTH_SHORT).show();
             }
