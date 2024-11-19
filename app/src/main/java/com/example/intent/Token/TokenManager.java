@@ -7,7 +7,7 @@ public class TokenManager {
     private static final String PREF_NAME = "AuthPrefs";
     private static final String KEY_TOKEN = "jwt_token";
 
-    private SharedPreferences prefs;
+    private final SharedPreferences prefs;
 
     public TokenManager(Context context) {
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);

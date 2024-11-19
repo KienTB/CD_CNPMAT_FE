@@ -74,8 +74,8 @@
                 android:padding="8dp">
 
                 <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_notifications_active" />
 
@@ -99,8 +99,8 @@
                 android:padding="8dp">
 
                 <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_message" />
 
@@ -124,8 +124,8 @@
                 android:padding="8dp">
 
                 <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_calendar_month" />
 
@@ -149,8 +149,8 @@
                 android:padding="8dp">
 
                 <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_restaurant_menu" />
 
@@ -175,8 +175,8 @@
 
                 <ImageView
                     android:id="@+id/imgNextToPaymentHP"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_payments" />
 
@@ -200,8 +200,8 @@
                 android:padding="8dp">
 
                 <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_dashboard" />
 
@@ -225,8 +225,8 @@
                 android:padding="8dp">
 
                 <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_health_and_safety" />
 
@@ -250,8 +250,8 @@
                 android:padding="8dp">
 
                 <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_miscellaneous_services" />
 
@@ -275,8 +275,8 @@
                 android:padding="8dp">
 
                 <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_import_contacts" />
 
@@ -300,8 +300,8 @@
                 android:padding="8dp">
 
                 <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_dialogs" />
 
@@ -325,8 +325,8 @@
                 android:padding="8dp">
 
                 <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_notifications_active" />
 
@@ -350,8 +350,8 @@
                 android:padding="8dp">
 
                 <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_comment" />
 
