@@ -1,4 +1,4 @@
-package com.example.intent;
+package com.example.intent.Request;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -18,12 +18,16 @@ public class RegisterRequest {
     @SerializedName("address")
     private String address;
 
-    public RegisterRequest(String phoneNumber, String password, String email, String name, String address) {
+    @SerializedName("role")
+    private String role;
+
+    public RegisterRequest(String phoneNumber, String password, String email, String name, String address, String role) {
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.email = email;
         this.name = name;
         this.address = address;
+        this.role = role;
     }
 
     public String getPhoneNumber() {
@@ -64,5 +68,13 @@ public class RegisterRequest {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

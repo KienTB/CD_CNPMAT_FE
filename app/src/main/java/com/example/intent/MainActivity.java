@@ -7,31 +7,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TabHost;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.example.intent.Parent.AccountInformationActivity;
+import com.example.intent.Parent.AddStudentActivity;
+import com.example.intent.Parent.PaymentActivity;
 
 public class MainActivity extends AppCompatActivity {
     Button btnAddStudent, btnExtension, btnLogOut;
     TabHost myTab;
-    ImageView imgNextToPayment,imgNextToPayMentHP;
+    ImageView imgNextToPayment,imgNextToPayMentHP, imgNextToAccountInformation,
+            imgNextToChangePW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +78,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        imgNextToAccountInformation = findViewById(R.id.imgNextToAccountInformation);
+        imgNextToAccountInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AccountInformationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        imgNextToChangePW = findViewById(R.id.imgNextToChangePW);
+        imgNextToChangePW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ChangePasswordActivity.class);
                 startActivity(intent);
             }
         });

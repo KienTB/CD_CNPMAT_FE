@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomePageActivity">
+    tools:context=".Parent.HomePageActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -380,18 +380,18 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="120dp"
             android:contentDescription="Không có tin tức"
             android:scaleType="centerCrop" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bạn chưa có tin nào"
-            android:textSize="14sp"
-            android:textColor="#666666"
             android:gravity="center"
-            android:paddingTop="8dp" />
+            android:paddingTop="8dp"
+            android:text="Bạn chưa có tin nào"
+            android:textColor="#666666"
+            android:textSize="14sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

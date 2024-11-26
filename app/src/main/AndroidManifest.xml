@@ -17,17 +17,26 @@
         android:theme="@style/Theme.Intent"
         tools:targetApi="31">
         <activity
-            android:name=".HomePageActivity"
+            android:name=".DashboardTeacherActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileInformationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.HomePageActivity"
             android:exported="false"
             android:theme="@style/Theme.Intent" />
         <activity
-            android:name=".PaymentActivity"
+            android:name=".Parent.PaymentActivity"
             android:exported="false" />
         <activity
-            android:name=".PhonebookActivity"
+            android:name=".Parent.PhonebookActivity"
             android:exported="false" />
         <activity
-            android:name=".AccountInformationActivity"
+            android:name=".Parent.AccountInformationActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
@@ -40,7 +49,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddStudentActivity"
+            android:name=".Parent.AddStudentActivity"
             android:exported="false" />
         <activity
             android:name=".SettingActivity"
@@ -52,13 +61,13 @@
             android:name=".ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".InformationStudentActivity"
+            android:name=".Parent.InformationStudentActivity"
             android:exported="false" />
         <activity
-            android:name=".ExtensionActivity"
+            android:name=".Parent.ExtensionActivity"
             android:exported="false" />
         <activity
-            android:name=".NotificationActivity"
+            android:name=".Parent.NotificationActivity"
             android:exported="false" />
         <activity
             android:name=".CloseActivity"

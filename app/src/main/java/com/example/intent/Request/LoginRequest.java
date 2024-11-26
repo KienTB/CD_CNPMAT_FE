@@ -1,8 +1,6 @@
-package com.example.intent;
+package com.example.intent.Request;
 
 import com.google.gson.annotations.SerializedName;
-
-import retrofit2.http.Headers;
 
 public class LoginRequest {
     @SerializedName("phone_number")

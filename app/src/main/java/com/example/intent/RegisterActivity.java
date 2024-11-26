@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -21,8 +22,7 @@ import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.Helper.StringHelper;
 import com.example.intent.Model.User;
-
-import java.util.jar.Attributes;
+import com.example.intent.Request.RegisterRequest;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     EditText edtName, edtPhoneNumber, edtEmail, edtPassword, edtAddress, edtConfirm;
     Button btnRegister;
+    RadioGroup radioGroupRole;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -46,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
         edtAddress = findViewById(R.id.edtAddress);
         edtConfirm = findViewById(R.id.edtConfirm);
+        radioGroupRole = findViewById(R.id.radioGroupRole);
 
         btnRegister = findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void processFormFields() {
-        if (!validateName() || !validatePhoneNumber() || !validateEmail() || !validatePasswordAndConfirm() || !validateAddress()) {
+        if (!validateName() || !validatePhoneNumber() || !validateEmail() || !validatePasswordAndConfirm() || !validateAddress() || !validateRole()) {
             return;
         }
 
@@ -72,12 +74,23 @@ public class RegisterActivity extends AppCompatActivity {
         String email = edtEmail.getText().toString();
         String name = edtName.getText().toString();
         String address = edtAddress.getText().toString();
+        String role = getSelectedRole();
 
-        RegisterRequest registerRequest = new RegisterRequest(phoneNumber, password, email, name, address);
+        RegisterRequest registerRequest = new RegisterRequest(phoneNumber, password, email, name, address, role);
         registerUser(registerRequest);
     }
 
-    public void registerUser(RegisterRequest registerRequest) {
+    private String getSelectedRole() {
+        int selectedId = radioGroupRole.getCheckedRadioButtonId();
+        if (selectedId == R.id.radioTeacher) {
+            return "teacher";
+        } else if (selectedId == R.id.radioParent) {
+            return "parent";
+        }
+        return null;
+    }
+
+        public void registerUser(RegisterRequest registerRequest) {
         ApiService apiService = RetrofitClient.getInstance().createService(ApiService.class);
         Call<ApiResponse<User>> call = apiService.register(registerRequest);
 
@@ -173,7 +186,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public boolean validateAddress() {
-        String address =  edtAddress.getText().toString();
+        String address = edtAddress.getText().toString();
         if (address.isEmpty()) {
             edtAddress.setError("Address cannot be empty");
         } else {
@@ -181,6 +194,14 @@ public class RegisterActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    public boolean validateRole() {
+        if (radioGroupRole.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(this, "Please select a role", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
 }

@@ -18,6 +18,7 @@ import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.Model.User;
+import com.example.intent.Request.LoginRequest;
 import com.example.intent.Token.AuthResponse;
 import com.example.intent.Token.TokenManager;
 

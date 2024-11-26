@@ -1,7 +1,6 @@
-package com.example.intent;
+package com.example.intent.Parent;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +20,8 @@ import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.Model.Student;
+import com.example.intent.R;
+import com.example.intent.Token.TokenManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +32,7 @@ public class AddStudentActivity extends AppCompatActivity {
     private Button btnConfirm;
     private ApiService apiService;
     private ImageView imgBack;
+    private TokenManager tokenManager;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,9 @@ public class AddStudentActivity extends AppCompatActivity {
         edtMHS = findViewById(R.id.edtMHS);
         btnConfirm = findViewById(R.id.btnConfirm);
 
+        tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
+
 
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +60,7 @@ public class AddStudentActivity extends AppCompatActivity {
                     Toast.makeText(AddStudentActivity.this, "Vui lòng nhập mã học sinh", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                getStudentById(studentId);
+                getStudentById(Integer.parseInt(studentId));
             }
         });
 
@@ -69,8 +73,9 @@ public class AddStudentActivity extends AppCompatActivity {
         });
     }
 
-    private void getStudentById(String studentId){
-        apiService.getStudentById(Integer.parseInt(studentId)).enqueue(new Callback<ApiResponse<Student>>() {
+    private void getStudentById(int studentId){
+        String token = "Bearer " + tokenManager.getToken();
+        apiService.getStudentById(token, studentId).enqueue(new Callback<ApiResponse<Student>>() {
             @Override
             public void onResponse(Call<ApiResponse<Student>> call, Response<ApiResponse<Student>> response) {
                 if (response.isSuccessful() && response.body() != null) {

@@ -61,6 +61,7 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/imgNextToAccountInformation"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
@@ -133,6 +134,7 @@
                 android:textSize="16sp" />
 
             <ImageView
+                android:id="@+id/imgNextToChangePW"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_chevron_right" />
