@@ -7,7 +7,14 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5"
     tools:context=".Parent.HomePageActivity">
-    <!-- Header Section -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvStudents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp" />
+
+        <!-- Header Section -->
         <androidx.cardview.widget.CardView
         android:id="@+id/headerCard"
         android:layout_width="0dp"

@@ -14,15 +14,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
+import com.example.intent.Model.Student;
 import com.example.intent.Parent.AccountInformationActivity;
 import com.example.intent.Parent.AddStudentActivity;
 import com.example.intent.Parent.PaymentActivity;
 import com.example.intent.Token.TokenManager;
 
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -30,15 +33,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    // UI Components
     private Button btnAddStudent, btnExtension, btnLogOut;
-    private TextView txtName, txtPhone,
-                    txtNameAI, txtEmailAI, txtPhoneAI, txtAddressAI;
+    private TextView txtName, txtPhone;
     private TabHost myTab;
     private ImageView imgNextToPayment, imgNextToPayMentHP,
             imgNextToAccountInformation, imgNextToChangePW;
 
-    // API and Token Management
     private TokenManager tokenManager;
     private ApiService apiService;
 

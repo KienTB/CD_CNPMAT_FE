@@ -12,7 +12,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.intent.R;
 
 public class HomePageActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

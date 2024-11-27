@@ -91,4 +91,9 @@ public class Student {
         this.address = address;
         this.userId = userId;
     }
+
+    public Student(String name, String studentClass) {
+        this.name = name;
+        this.class_name = class_name;
+    }
 }

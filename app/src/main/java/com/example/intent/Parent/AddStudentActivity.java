@@ -54,7 +54,6 @@ public class AddStudentActivity extends AppCompatActivity {
         tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
 
-
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,6 +119,7 @@ public class AddStudentActivity extends AppCompatActivity {
             intent.putExtra("studentClass", student.getClass_name());
             intent.putExtra("tabIndex", 2); // Tab thứ 3 (index = 2)
             startActivity(intent);
+            finish();
         });
 
         builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
