@@ -1,6 +1,7 @@
 package com.example.intent.Parent;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
+import com.example.intent.MainActivity;
 import com.example.intent.Model.Student;
 import com.example.intent.R;
 import com.example.intent.Token.TokenManager;
@@ -33,6 +35,7 @@ public class AddStudentActivity extends AppCompatActivity {
     private ApiService apiService;
     private ImageView imgBack;
     private TokenManager tokenManager;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +76,7 @@ public class AddStudentActivity extends AppCompatActivity {
         });
     }
 
-    private void getStudentById(int studentId){
+    private void getStudentById(int studentId) {
         String token = "Bearer " + tokenManager.getToken();
         apiService.getStudentById(token, studentId).enqueue(new Callback<ApiResponse<Student>>() {
             @Override
@@ -100,17 +103,28 @@ public class AddStudentActivity extends AppCompatActivity {
     }
 
     private void displayStudentInfo(Student student) {
-        String studentInfo = "Mã học sinh: " + student.getStudentId() + "\n" +
-                "Tên học sinh: " + student.getName() + "\n" +
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thông tin học sinh");
+
+        String message = "Mã học sinh: " + student.getStudentId() + "\n" +
+                "Tên: " + student.getName() + "\n" +
                 "Ngày sinh: " + student.getBirthDate() + "\n" +
                 "Giới tính: " + student.getGender() + "\n" +
-                "Lớp học: " + student.getClass_name() + "\n" +
+                "Lớp: " + student.getClass_name()+ "\n" +
                 "Địa chỉ: " + student.getAddress();
+        builder.setMessage(message);
 
-        new AlertDialog.Builder(this)
-                .setTitle("Thông tin học sinh")
-                .setMessage(studentInfo)
-                .setPositiveButton("Đóng", (dialog, which) -> dialog.dismiss())
-                .show();
+        builder.setPositiveButton("Xác nhận", (dialog, which) -> {
+            Intent intent = new Intent(AddStudentActivity.this, MainActivity.class);
+            intent.putExtra("studentName", student.getName());
+            intent.putExtra("studentClass", student.getClass_name());
+            intent.putExtra("tabIndex", 2); // Tab thứ 3 (index = 2)
+            startActivity(intent);
+        });
+
+        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

@@ -51,6 +51,32 @@ public class MainActivity extends AppCompatActivity {
         initializeComponents();
         setupTabListener();
         setupClickListeners();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("tabIndex")) {
+            int tabIndex = intent.getIntExtra("tabIndex", 0);
+
+            String studentName = intent.getStringExtra("studentName");
+            String studentClass = intent.getStringExtra("studentClass");
+
+            if (tabIndex == 2 && studentName != null && studentClass != null) {
+                TextView txtNameStudent = findViewById(R.id.txtNameStudent);
+                TextView txtClassStudent = findViewById(R.id.txtClassStudent);
+
+                if (txtNameStudent != null && txtClassStudent != null) {
+                    txtNameStudent.setText(studentName);
+                    txtClassStudent.setText(studentClass);
+                }
+            }
+            Toast.makeText(this, "Thêm học sinh thành công!", Toast.LENGTH_SHORT).show();
+        }
+        setIntent(new Intent());
     }
 
     private void initializeComponents() {

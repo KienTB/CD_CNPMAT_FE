@@ -40,19 +40,21 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/txtNameStudent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bùi Cao Siêu"
-                    android:textSize="20sp"
+                    android:hint="Name"
                     android:textColor="#000000"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/txtClassStudent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mã HS: 4"
-                    android:textSize="14sp"
-                    android:textColor="#666666" />
+                    android:hint="Class"
+                    android:textColor="#666666"
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
         </androidx.cardview.widget.CardView>
