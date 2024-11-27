@@ -8,6 +8,8 @@ import com.example.intent.RefreshTokenRequest;
 import com.example.intent.Request.RegisterRequest;
 import com.example.intent.Token.AuthResponse;
 
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -33,6 +35,8 @@ public interface ApiService {
     Call<ApiResponse<Student>> getStudentById(
             @Header("Authorization") String token,
             @Path("studentId") int studentId);
+    @GET("api/user/profile")
+    Call<ApiResponse<Map<String, Object>>> getUserProfile(@Header("Authorization") String token);
     @POST("api/auth/refresh")
     Call<ApiResponse<AuthResponse>> refreshToken(@Body RefreshTokenRequest refreshTokenRequest);
 }

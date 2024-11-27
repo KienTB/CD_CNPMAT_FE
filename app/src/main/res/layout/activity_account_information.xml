@@ -53,8 +53,8 @@
     </FrameLayout>
 
     <!-- Edit Fields -->
-    <EditText
-        android:id="@+id/edtName"
+    <TextView
+        android:id="@+id/txtNameAI"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -67,8 +67,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profilePictureContainer" />
 
-    <EditText
-        android:id="@+id/edtEmail"
+    <TextView
+        android:id="@+id/txtEmailAI"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
@@ -79,10 +79,10 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edtName" />
+        app:layout_constraintTop_toBottomOf="@id/txtNameAI" />
 
-    <EditText
-        android:id="@+id/edtAddress"
+    <TextView
+        android:id="@+id/txtAddressAI"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
@@ -93,10 +93,10 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edtEmail" />
+        app:layout_constraintTop_toBottomOf="@id/txtEmailAI" />
 
-    <EditText
-        android:id="@+id/edtPhone"
+    <TextView
+        android:id="@+id/txtPhoneAI"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
@@ -107,7 +107,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edtAddress" />
+        app:layout_constraintTop_toBottomOf="@id/txtAddressAI" />
 
 
 

@@ -2,18 +2,19 @@ package com.example.intent.Api;
 
 import android.content.Context;
 
+import com.example.intent.Token.TokenManager;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static final String url = "http://192.168.0.121:8080";
+    private static final String url = "http://192.168.1.105:8080";
     private static RetrofitClient instance;
     private Retrofit retrofit;
 
     private RetrofitClient() {
-
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 

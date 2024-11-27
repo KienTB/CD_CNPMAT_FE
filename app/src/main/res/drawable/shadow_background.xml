@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <filter android:drawable="@drawable/rounded_background"
+            android:shadowColor="#000000"
+            android:shadowRadius="5"
+            android:shadowDx="0"
+            android:shadowDy="2"/>
+    </item>
+</layer-list>

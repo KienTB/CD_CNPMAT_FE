@@ -1,7 +1,5 @@
 package com.example.intent;
 
-import static android.app.ProgressDialog.show;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,148 +8,185 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TabHost;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.intent.Api.ApiResponse;
+import com.example.intent.Api.ApiService;
+import com.example.intent.Api.RetrofitClient;
 import com.example.intent.Parent.AccountInformationActivity;
 import com.example.intent.Parent.AddStudentActivity;
 import com.example.intent.Parent.PaymentActivity;
+import com.example.intent.Token.TokenManager;
+
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    Button btnAddStudent, btnExtension, btnLogOut;
-    TabHost myTab;
-    ImageView imgNextToPayment,imgNextToPayMentHP, imgNextToAccountInformation,
-            imgNextToChangePW;
+    // UI Components
+    private Button btnAddStudent, btnExtension, btnLogOut;
+    private TextView txtName, txtPhone,
+                    txtNameAI, txtEmailAI, txtPhoneAI, txtAddressAI;
+    private TabHost myTab;
+    private ImageView imgNextToPayment, imgNextToPayMentHP,
+            imgNextToAccountInformation, imgNextToChangePW;
+
+    // API and Token Management
+    private TokenManager tokenManager;
+    private ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        addControl();
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        btnAddStudent = findViewById(R.id.btnAddStudent);
-        btnAddStudent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddStudentActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnExtension = findViewById(R.id.btnExtension);
-        btnExtension.setOnClickListener(new View.OnClickListener() {
-            @Override
-
-            public void onClick(View view) {
-                myTab.setCurrentTab(1);
-            }
-        });
-
-        btnLogOut = findViewById(R.id.btnLogOut);
-        btnLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSuccessDialog();
-            }
-        });
-
-        imgNextToPayment = findViewById(R.id.imgNextToPayment);
-        imgNextToPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        imgNextToPayMentHP = findViewById(R.id.imgNextToPaymentHP);
-        imgNextToPayMentHP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        imgNextToAccountInformation = findViewById(R.id.imgNextToAccountInformation);
-        imgNextToAccountInformation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AccountInformationActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        imgNextToChangePW = findViewById(R.id.imgNextToChangePW);
-        imgNextToChangePW.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ChangePasswordActivity.class);
-                startActivity(intent);
-            }
-        });
-
+        // Initialize components
+        initializeComponents();
+        setupTabListener();
+        setupClickListeners();
     }
 
-    private void showSuccessDialog() {
+    private void initializeComponents() {
+        // Initialize views
+        myTab = findViewById(R.id.myTab);
+        btnAddStudent = findViewById(R.id.btnAddStudent);
+        btnExtension = findViewById(R.id.btnExtension);
+        btnLogOut = findViewById(R.id.btnLogOut);
+        imgNextToPayment = findViewById(R.id.imgNextToPayment);
+        imgNextToPayMentHP = findViewById(R.id.imgNextToPaymentHP);
+        imgNextToAccountInformation = findViewById(R.id.imgNextToAccountInformation);
+        imgNextToChangePW = findViewById(R.id.imgNextToChangePW);
+        txtName = findViewById(R.id.txtName);
+        txtPhone = findViewById(R.id.txtPhone);
+
+        tokenManager = new TokenManager(this);
+        apiService = RetrofitClient.getInstance().createService(ApiService.class);
+
+        setupTabs();
+    }
+
+    private void setupTabs() {
+        myTab.setup();
+
+        addTab("t1", R.id.tab1, R.drawable.ic_people);
+        addTab("t2", R.id.tab2, R.drawable.ic_extension);
+        addTab("t3", R.id.tab3, R.drawable.ic_home);
+        addTab("t4", R.id.tab4, R.drawable.ic_notifications);
+        addTab("t5", R.id.tab5, R.drawable.ic_settings);
+    }
+
+    private void addTab(String tabTag, int contentId, int iconResourceId) {
+        TabHost.TabSpec spec = myTab.newTabSpec(tabTag);
+        spec.setContent(contentId);
+        spec.setIndicator("", getResources().getDrawable(iconResourceId));
+        myTab.addTab(spec);
+    }
+
+    private void setupTabListener() {
+        myTab.setOnTabChangedListener(tabId -> {
+            if ("t5".equals(tabId)) {
+                fetchUserProfile();
+            }
+        });
+    }
+
+    private void setupClickListeners() {
+        btnAddStudent.setOnClickListener(v ->
+                startActivity(new Intent(this, AddStudentActivity.class))
+        );
+
+        btnExtension.setOnClickListener(v ->
+                myTab.setCurrentTab(1)
+        );
+
+        btnLogOut.setOnClickListener(v ->
+                showLogoutConfirmDialog()
+        );
+
+        setupNavigationListeners();
+    }
+
+    private void setupNavigationListeners() {
+        imgNextToPayment.setOnClickListener(v ->
+                startActivity(new Intent(this, PaymentActivity.class))
+        );
+
+        imgNextToPayMentHP.setOnClickListener(v ->
+                startActivity(new Intent(this, PaymentActivity.class))
+        );
+
+        imgNextToAccountInformation.setOnClickListener(v ->
+                startActivity(new Intent(this, AccountInformationActivity.class))
+        );
+
+        imgNextToChangePW.setOnClickListener(v ->
+                startActivity(new Intent(this, ChangePasswordActivity.class))
+        );
+    }
+
+    private void showLogoutConfirmDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Đăng xuất")
                 .setMessage("Bạn có chắc chắn muốn đăng xuất khỏi tài khoản không?")
-                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
+                .setPositiveButton("Có", (dialog, which) -> {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                 })
-                .setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setNegativeButton("Không", (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
-    private void addControl() {
+    private void fetchUserProfile() {
+        String token = tokenManager.getToken();
 
-        myTab = findViewById(R.id.myTab);
-        myTab.setup();
-        TabHost.TabSpec spec1, spec2, spec3, spec4, spec5;
-        //ứng với mỗi tab con thực hiên 4 việc
-        spec1 = myTab.newTabSpec("t1");
-        spec1.setContent(R.id.tab1);
-        spec1.setIndicator("", getResources().getDrawable(R.drawable.ic_people));
-        myTab.addTab(spec1);
+        if (token == null || token.isEmpty()) {
+            Toast.makeText(this, "Authentication token is missing", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        spec2 = myTab.newTabSpec("t2");
-        spec2.setContent(R.id.tab2);
-        spec2.setIndicator("", getResources().getDrawable(R.drawable.ic_extension));
-        myTab.addTab(spec2);
+        apiService.getUserProfile("Bearer " + token)
+                .enqueue(new Callback<ApiResponse<Map<String, Object>>>() {
+                    @Override
+                    public void onResponse(
+                            Call<ApiResponse<Map<String, Object>>> call,
+                            Response<ApiResponse<Map<String, Object>>> response
+                    ) {
+                        handleUserProfileResponse(response);
+                    }
 
-        spec3 = myTab.newTabSpec("t3");
-        spec3.setContent(R.id.tab3);
-        spec3.setIndicator("", getResources().getDrawable(R.drawable.ic_home));
-        myTab.addTab(spec3);
+                    @Override
+                    public void onFailure(
+                            Call<ApiResponse<Map<String, Object>>> call,
+                            Throwable t
+                    ) {
+                        Toast.makeText(
+                                MainActivity.this,
+                                "An error occurred: " + t.getMessage(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                    }
+                });
+    }
 
-        spec4 = myTab.newTabSpec("t4");
-        spec4.setContent(R.id.tab4);
-        spec4.setIndicator("", getResources().getDrawable(R.drawable.ic_notifications));
-        myTab.addTab(spec4);
+    private void handleUserProfileResponse(Response<ApiResponse<Map<String, Object>>> response) {
+        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+            Map<String, Object> userProfile = response.body().getData();
 
-        spec5 = myTab.newTabSpec("t5");
-        spec5.setContent(R.id.tab5);
-        spec5.setIndicator("", getResources().getDrawable(R.drawable.ic_settings));
-        myTab.addTab(spec5);
+            String name = (String) userProfile.get("name");
+            String phone = (String) userProfile.get("phoneNumber");
+
+            txtName.setText(name != null ? name : "N/A");
+            txtPhone.setText(phone != null ? phone : "N/A");
+        } else {
+            Toast.makeText(this, "Failed to fetch user profile", Toast.LENGTH_SHORT).show();
+        }
     }
 }
