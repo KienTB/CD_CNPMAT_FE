@@ -96,6 +96,7 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/imgNextToActivityTracking"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/ic_notifications_active"/>
@@ -144,6 +145,7 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/imgNextToAttendance"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/ic_calendar_month"/>
@@ -168,6 +170,7 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/imgNextToMenu"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/ic_restaurant_menu" />
@@ -177,7 +180,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:gravity="center"
-                    android:text="Thư viện"
+                    android:text="Thực đơn"
                     android:textSize="12sp"
                     android:textColor="#000000" />
             </LinearLayout>
@@ -216,9 +219,9 @@
                 android:padding="8dp">
 
                 <ImageView
+                    android:id="@+id/imgNextToLearningCorner"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_dashboard" />
 
                 <TextView
@@ -241,9 +244,9 @@
                 android:padding="8dp">
 
                 <ImageView
+                    android:id="@+id/imgNextToHealth"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_health_and_safety" />
 
                 <TextView
@@ -266,6 +269,7 @@
                 android:padding="8dp">
 
                 <ImageView
+                    android:id="@+id/imgNextToService"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
@@ -291,6 +295,7 @@
                 android:padding="8dp">
 
                 <ImageView
+                    android:id="@+id/imgNextToPhonebook"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
@@ -316,6 +321,7 @@
                 android:padding="8dp">
 
                 <ImageView
+                    android:id="@+id/imgNextToClassDiary"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:contentDescription="Hoạt động"
@@ -341,6 +347,7 @@
                 android:padding="8dp">
 
                 <ImageView
+                    android:id="@+id/imgNextToStudentDiary"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:contentDescription="Hoạt động"

@@ -5,9 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Parent.PhonebookActivity">
+    tools:context=".Parent.AttendenceActivity">
 
-    <!-- Tiêu đề -->
+    <!-- Tiêu đề (giữ nguyên như layout cũ) -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Title"
         android:layout_width="0dp"
@@ -35,28 +35,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Danh Bạ"
+            android:text="Điểm Danh"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toEndOf="@id/imgBackToExtension"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
-
-        <ImageView
-            android:id="@+id/imgSearch"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:src="@drawable/ic_search"
-            app:tint="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Danh sách liên hệ -->
+    <!-- Danh sách điểm danh -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvContacts"
+        android:id="@+id/rvAttendance"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="16dp"

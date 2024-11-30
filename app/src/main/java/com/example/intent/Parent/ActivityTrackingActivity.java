@@ -12,13 +12,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.intent.R;
 
-public class PhonebookActivity extends AppCompatActivity {
+public class ActivityTrackingActivity extends AppCompatActivity {
     ImageView imgBackToExtension;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_phonebook);
+        setContentView(R.layout.activity_tracking);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

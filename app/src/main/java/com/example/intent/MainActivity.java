@@ -1,10 +1,8 @@
 package com.example.intent;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TabHost;
@@ -12,8 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.intent.Api.ApiResponse;
@@ -21,8 +17,17 @@ import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.Model.Student;
 import com.example.intent.Parent.AccountInformationActivity;
+import com.example.intent.Parent.ActivityTrackingActivity;
 import com.example.intent.Parent.AddStudentActivity;
+import com.example.intent.Parent.AttendenceActivity;
+import com.example.intent.Parent.ClassDiaryActivity;
+import com.example.intent.Parent.HealthActivity;
+import com.example.intent.Parent.LearningCornerActivity;
+import com.example.intent.Parent.MenuActivity;
 import com.example.intent.Parent.PaymentActivity;
+import com.example.intent.Parent.PhonebookActivity;
+import com.example.intent.Parent.ServiceActivity;
+import com.example.intent.Parent.StudentDiaryActivity;
 import com.example.intent.Token.TokenManager;
 
 import java.util.List;
@@ -36,11 +41,17 @@ public class MainActivity extends AppCompatActivity {
     private Button btnAddStudent, btnExtension, btnLogOut;
     private TextView txtName, txtPhone;
     private TabHost myTab;
-    private ImageView imgNextToPayment, imgNextToPayMentHP,
+    private ImageView imgNextToActivityTracking, imgNextToAttendance, imgNextToMenu,
+            imgNextToPayMentHP, imgNextToLearningCorner, imgNextToHealth, imgNextToService,
+            imgNextToPhonebook, imgNextToClassDiary, imgNextToStudentDiary, imgNextToPayment,
             imgNextToAccountInformation, imgNextToChangePW;
 
     private TokenManager tokenManager;
     private ApiService apiService;
+
+    private RecyclerView rvStudents;
+    private StudentAdapter studentAdapter;
+    private List<Student> studentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,39 +65,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("tabIndex")) {
-            int tabIndex = intent.getIntExtra("tabIndex", 0);
-
-            String studentName = intent.getStringExtra("studentName");
-            String studentClass = intent.getStringExtra("studentClass");
-
-            if (tabIndex == 2 && studentName != null && studentClass != null) {
-                TextView txtNameStudent = findViewById(R.id.txtNameStudent);
-                TextView txtClassStudent = findViewById(R.id.txtClassStudent);
-
-                if (txtNameStudent != null && txtClassStudent != null) {
-                    txtNameStudent.setText(studentName);
-                    txtClassStudent.setText(studentClass);
-                }
-            }
-            Toast.makeText(this, "Thêm học sinh thành công!", Toast.LENGTH_SHORT).show();
-        }
-        setIntent(new Intent());
-    }
-
     private void initializeComponents() {
-        // Initialize views
         myTab = findViewById(R.id.myTab);
         btnAddStudent = findViewById(R.id.btnAddStudent);
         btnExtension = findViewById(R.id.btnExtension);
         btnLogOut = findViewById(R.id.btnLogOut);
-        imgNextToPayment = findViewById(R.id.imgNextToPayment);
+        imgNextToActivityTracking = findViewById(R.id.imgNextToActivityTracking);
+        imgNextToAttendance = findViewById(R.id.imgNextToAttendance);
+        imgNextToMenu = findViewById(R.id.imgNextToMenu);
         imgNextToPayMentHP = findViewById(R.id.imgNextToPaymentHP);
+        imgNextToLearningCorner = findViewById(R.id.imgNextToLearningCorner);
+        imgNextToHealth = findViewById(R.id.imgNextToHealth);
+        imgNextToService = findViewById(R.id.imgNextToService);
+        imgNextToPhonebook = findViewById(R.id.imgNextToPhonebook);
+        imgNextToClassDiary = findViewById(R.id.imgNextToClassDiary);
+        imgNextToStudentDiary = findViewById(R.id.imgNextToStudentDiary);
+        imgNextToPayment = findViewById(R.id.imgNextToPayment);
         imgNextToAccountInformation = findViewById(R.id.imgNextToAccountInformation);
         imgNextToChangePW = findViewById(R.id.imgNextToChangePW);
         txtName = findViewById(R.id.txtName);
@@ -144,8 +138,44 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, PaymentActivity.class))
         );
 
+        imgNextToActivityTracking.setOnClickListener(v ->
+                startActivity(new Intent(this, ActivityTrackingActivity.class))
+        );
+
+        imgNextToAttendance.setOnClickListener(v ->
+                startActivity(new Intent(this, AttendenceActivity.class))
+        );
+
+        imgNextToMenu.setOnClickListener(v ->
+                startActivity(new Intent(this, MenuActivity.class))
+        );
+
         imgNextToPayMentHP.setOnClickListener(v ->
                 startActivity(new Intent(this, PaymentActivity.class))
+        );
+
+        imgNextToLearningCorner.setOnClickListener(v ->
+                startActivity(new Intent(this, LearningCornerActivity.class))
+        );
+
+        imgNextToHealth.setOnClickListener(v ->
+                startActivity(new Intent(this, HealthActivity.class))
+        );
+
+        imgNextToService.setOnClickListener(v ->
+                startActivity(new Intent(this, ServiceActivity.class))
+        );
+
+        imgNextToPhonebook.setOnClickListener(v ->
+                startActivity(new Intent(this, PhonebookActivity.class))
+        );
+
+        imgNextToClassDiary.setOnClickListener(v ->
+                startActivity(new Intent(this, ClassDiaryActivity.class))
+        );
+
+        imgNextToStudentDiary.setOnClickListener(v ->
+                startActivity(new Intent(this, StudentDiaryActivity.class))
         );
 
         imgNextToAccountInformation.setOnClickListener(v ->
@@ -168,6 +198,31 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Không", (dialog, which) -> dialog.dismiss())
                 .show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("tabIndex")) {
+            int tabIndex = intent.getIntExtra("tabIndex", 0);
+
+            String studentName = intent.getStringExtra("studentName");
+            String studentClass = intent.getStringExtra("studentClass");
+
+            if (tabIndex == 2 && studentName != null && studentClass != null) {
+                TextView txtNameStudent = findViewById(R.id.txtNameStudent);
+                TextView txtClassStudent = findViewById(R.id.txtClassStudent);
+
+                if (txtNameStudent != null && txtClassStudent != null) {
+                    txtNameStudent.setText(studentName);
+                    txtClassStudent.setText(studentClass);
+                }
+            }
+            Toast.makeText(this, "Thêm học sinh thành công!", Toast.LENGTH_SHORT).show();
+        }
+        setIntent(new Intent());
     }
 
     private void fetchUserProfile() {

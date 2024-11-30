@@ -17,6 +17,30 @@
         android:theme="@style/Theme.Intent"
         tools:targetApi="31">
         <activity
+            android:name=".Parent.ActivityTrackingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.StudentDiaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.ClassDiaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.ServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.HealthActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.LearningCornerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.MenuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.AttendenceActivity"
+            android:exported="false" />
+        <activity
             android:name=".DashboardTeacherActivity"
             android:exported="false" />
         <activity

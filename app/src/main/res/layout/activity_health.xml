@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Parent.PaymentActivity">
+    tools:context=".Parent.HealthActivity">
 
     <!-- Tiêu đề -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,17 +25,17 @@
             android:layout_height="34dp"
             android:contentDescription="Back arrow"
             android:src="@drawable/ic_chevron_left"
+            app:tint="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:tint="@android:color/white" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Thanh toán học phí"
+            android:text="Sức Khỏe"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
@@ -44,9 +44,9 @@
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Thông tin học sinh -->
+    <!-- Thông tin sức khỏe -->
     <LinearLayout
-        android:id="@+id/studentInfoLayout"
+        android:id="@+id/healthInfoLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -57,7 +57,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Tên học sinh -->
+        <!-- Chiều cao -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,22 +68,23 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Tên học sinh"
+                android:text="Chiều cao"
                 android:textSize="16sp"
                 android:textColor="@android:color/black" />
 
             <TextView
+                android:id="@+id/tvHeight"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Tên"
+                android:hint="Chiều cao"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:gravity="end"
                 android:textColor="@android:color/black" />
         </LinearLayout>
 
-        <!-- Lớp học -->
+        <!-- Cân nặng -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,22 +96,23 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Lớp học"
+                android:text="Cân nặng"
                 android:textSize="16sp"
                 android:textColor="@android:color/black" />
 
             <TextView
+                android:id="@+id/tvWeight"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Lớp"
+                android:hint="Cân nặng"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:gravity="end"
                 android:textColor="@android:color/black" />
         </LinearLayout>
 
-        <!-- Mã học sinh -->
+        <!-- Chỉ số BMI -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -122,15 +124,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Mã học sinh"
+                android:text="Chỉ số BMI"
                 android:textSize="16sp"
                 android:textColor="@android:color/black" />
 
             <TextView
+                android:id="@+id/tvBMI"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Mã học sinh"
+                android:hint="Chỉ số BMI"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:gravity="end"
@@ -138,27 +141,5 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Hình minh họa -->
-    <ImageView
-        android:id="@+id/illustrationImage"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/studentInfoLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Thông báo -->
-    <TextView
-        android:id="@+id/tvMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nhà trường chưa thông báo đợt thu phí mới"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:textColor="@color/gray"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/illustrationImage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
