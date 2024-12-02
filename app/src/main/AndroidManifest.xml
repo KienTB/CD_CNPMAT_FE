@@ -17,6 +17,12 @@
         android:theme="@style/Theme.Intent"
         tools:targetApi="31">
         <activity
+            android:name=".AdminMainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".TeacherMainActivity"
+            android:exported="true" />
+        <activity
             android:name=".Parent.ActivityTrackingActivity"
             android:exported="false" />
         <activity
@@ -45,9 +51,6 @@
             android:exported="false" />
         <activity
             android:name=".ChangePasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ProfileInformationActivity"
             android:exported="false" />
         <activity
             android:name=".Parent.HomePageActivity"
@@ -94,11 +97,8 @@
             android:name=".Parent.NotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".CloseActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <meta-data
             android:name="preloaded_fonts"

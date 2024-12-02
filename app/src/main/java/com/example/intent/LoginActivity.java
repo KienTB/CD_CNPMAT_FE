@@ -83,25 +83,22 @@ public class LoginActivity extends AppCompatActivity {
         apiService.login(loginRequest).enqueue(new Callback<ApiResponse<AuthResponse>>() {
             @Override
             public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
+                Log.d("LoginActivity", "Response Code: " + response.code());
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse<AuthResponse> apiResponse = response.body();
 
                     if (apiResponse.isSuccess() && apiResponse.getData() != null) {
                         AuthResponse authResponse = apiResponse.getData();
 
+                        Log.d("LoginActivity", "Auth Token: " + authResponse.getToken());
+                        Log.d("LoginActivity", "User Role: " + (authResponse.getRole() != null ? authResponse.getRole() : "No User Object"));
+
                         TokenManager tokenManager = new TokenManager(LoginActivity.this);
                         tokenManager.saveToken(authResponse.getToken());
 
-                        if (authResponse.getUser() != null) {
-                            User user = authResponse.getUser();
-                            Toast.makeText(LoginActivity.this, "Welcome, " + user.getName(), Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                        if (authResponse.getRole() != null) {
+                            navigateBasedOnRole(authResponse.getRole());
                         }
-
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
                     } else {
                         String message = apiResponse.getMessage() != null ? apiResponse.getMessage() : "Login failed";
                         Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
@@ -118,5 +115,36 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Network error. Please try again later.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void navigateBasedOnRole(String role) {
+        Intent intent;
+        String logMessage = "Login successful with role: " + role;
+        Log.d("LoginActivity", logMessage);
+
+        Toast.makeText(LoginActivity.this, logMessage, Toast.LENGTH_SHORT).show();
+
+        switch(role.toLowerCase()) {
+            case "admin":
+                Log.d("LoginActivity", "Admin login successful - navigating to AdminMainActivity");
+                intent = new Intent(LoginActivity.this, AdminMainActivity.class);
+                break;
+            case "teacher":
+                Log.d("LoginActivity", "Teacher login successful - navigating to TeacherMainActivity");
+                intent = new Intent(LoginActivity.this, TeacherMainActivity.class);
+                break;
+            case "parent":
+                Log.d("LoginActivity", "Parent login successful - navigating to MainActivity");
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                break;
+            default:
+                Log.e("LoginActivity", "Invalid role detected: " + role);
+                Toast.makeText(this, "Vai trò không hợp lệ: " + role, Toast.LENGTH_SHORT).show();
+                return;
+        }
+
+        startActivity(intent);
+        Log.d("LoginActivity", "Navigation completed successfully");
+        finish();
     }
 }

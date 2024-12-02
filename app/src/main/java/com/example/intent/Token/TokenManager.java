@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 public class TokenManager {
     private static final String PREF_NAME = "AuthPrefs";
     private static final String KEY_TOKEN = "jwt_token";
+    private static final String KEY_ROLE = "role";
     private static final String KEY_REFRESH_TOKEN = "refresh_token";
 
     private final SharedPreferences prefs;
