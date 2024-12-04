@@ -1,4 +1,4 @@
-package com.example.intent;
+package com.example.intent.Parent;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -7,44 +7,29 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
+import com.example.intent.ChangePasswordActivity;
+import com.example.intent.LoginActivity;
 import com.example.intent.Model.Student;
-import com.example.intent.Parent.AccountInformationActivity;
-import com.example.intent.Parent.ActivityTrackingActivity;
-import com.example.intent.Parent.AddStudentActivity;
-import com.example.intent.Parent.AttendenceActivity;
-import com.example.intent.Parent.ClassDiaryActivity;
-import com.example.intent.Parent.HealthActivity;
-import com.example.intent.Parent.LearningCornerActivity;
-import com.example.intent.Parent.MenuActivity;
-import com.example.intent.Parent.PaymentActivity;
-import com.example.intent.Parent.PhonebookActivity;
-import com.example.intent.Parent.ServiceActivity;
-import com.example.intent.Parent.StudentDiaryActivity;
+import com.example.intent.R;
+import com.example.intent.StudentAdapter;
 import com.example.intent.Token.TokenManager;
+import com.google.gson.Gson;
 
 import java.util.List;
-import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class MainActivity extends AppCompatActivity {
+public class ParentMainActivity extends AppCompatActivity {
     private Button btnAddStudent, btnExtension, btnLogOut;
-    private TextView txtName, txtPhone;
+    private TextView txtNameStudent, txtClassStudent;
     private TabHost myTab;
     private ImageView imgNextToActivityTracking, imgNextToAttendance, imgNextToMenu,
             imgNextToPayMentHP, imgNextToLearningCorner, imgNextToHealth, imgNextToService,
-            imgNextToPhonebook, imgNextToClassDiary, imgNextToStudentDiary, imgNextToPayment,
-            imgNextToAccountInformation, imgNextToChangePW;
+            imgNextToStudentDiary, imgNextToPayment, imgNextToAccountInformation, imgNextToChangePW;
 
     private TokenManager tokenManager;
     private ApiService apiService;
@@ -58,11 +43,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize components
         initializeComponents();
-        setupTabListener();
         setupClickListeners();
 
+        loadStudentData();
     }
 
     private void initializeComponents() {
@@ -77,14 +61,12 @@ public class MainActivity extends AppCompatActivity {
         imgNextToLearningCorner = findViewById(R.id.imgNextToLearningCorner);
         imgNextToHealth = findViewById(R.id.imgNextToHealth);
         imgNextToService = findViewById(R.id.imgNextToService);
-        imgNextToPhonebook = findViewById(R.id.imgNextToPhonebook);
-        imgNextToClassDiary = findViewById(R.id.imgNextToClassDiary);
         imgNextToStudentDiary = findViewById(R.id.imgNextToStudentDiary);
         imgNextToPayment = findViewById(R.id.imgNextToPayment);
         imgNextToAccountInformation = findViewById(R.id.imgNextToAccountInformation);
         imgNextToChangePW = findViewById(R.id.imgNextToChangePW);
-        txtName = findViewById(R.id.txtName);
-        txtPhone = findViewById(R.id.txtPhone);
+        txtNameStudent = findViewById(R.id.txtNameStudent);
+        txtClassStudent = findViewById(R.id.txtClassStudent);
 
         tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
@@ -107,14 +89,6 @@ public class MainActivity extends AppCompatActivity {
         spec.setContent(contentId);
         spec.setIndicator("", getResources().getDrawable(iconResourceId));
         myTab.addTab(spec);
-    }
-
-    private void setupTabListener() {
-        myTab.setOnTabChangedListener(tabId -> {
-            if ("t5".equals(tabId)) {
-                fetchUserProfile();
-            }
-        });
     }
 
     private void setupClickListeners() {
@@ -166,14 +140,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ServiceActivity.class))
         );
 
-        imgNextToPhonebook.setOnClickListener(v ->
-                startActivity(new Intent(this, PhonebookActivity.class))
-        );
-
-        imgNextToClassDiary.setOnClickListener(v ->
-                startActivity(new Intent(this, ClassDiaryActivity.class))
-        );
-
         imgNextToStudentDiary.setOnClickListener(v ->
                 startActivity(new Intent(this, StudentDiaryActivity.class))
         );
@@ -200,74 +166,17 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void loadStudentData() {
+        String studentJson = tokenManager.getStudentData();
+        if (studentJson != null) {
+            Gson gson = new Gson();
+            Student student = gson.fromJson(studentJson, Student.class);
 
-        Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("tabIndex")) {
-            int tabIndex = intent.getIntExtra("tabIndex", 0);
-
-            String studentName = intent.getStringExtra("studentName");
-            String studentClass = intent.getStringExtra("studentClass");
-
-            if (tabIndex == 2 && studentName != null && studentClass != null) {
-                TextView txtNameStudent = findViewById(R.id.txtNameStudent);
-                TextView txtClassStudent = findViewById(R.id.txtClassStudent);
-
-                if (txtNameStudent != null && txtClassStudent != null) {
-                    txtNameStudent.setText(studentName);
-                    txtClassStudent.setText(studentClass);
-                }
-            }
-            Toast.makeText(this, "Thêm học sinh thành công!", Toast.LENGTH_SHORT).show();
-        }
-        setIntent(new Intent());
-    }
-
-    private void fetchUserProfile() {
-        String token = tokenManager.getToken();
-
-        if (token == null || token.isEmpty()) {
-            Toast.makeText(this, "Authentication token is missing", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        apiService.getUserProfile("Bearer " + token)
-                .enqueue(new Callback<ApiResponse<Map<String, Object>>>() {
-                    @Override
-                    public void onResponse(
-                            Call<ApiResponse<Map<String, Object>>> call,
-                            Response<ApiResponse<Map<String, Object>>> response
-                    ) {
-                        handleUserProfileResponse(response);
-                    }
-
-                    @Override
-                    public void onFailure(
-                            Call<ApiResponse<Map<String, Object>>> call,
-                            Throwable t
-                    ) {
-                        Toast.makeText(
-                                MainActivity.this,
-                                "An error occurred: " + t.getMessage(),
-                                Toast.LENGTH_SHORT
-                        ).show();
-                    }
-                });
-    }
-
-    private void handleUserProfileResponse(Response<ApiResponse<Map<String, Object>>> response) {
-        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-            Map<String, Object> userProfile = response.body().getData();
-
-            String name = (String) userProfile.get("name");
-            String phone = (String) userProfile.get("phoneNumber");
-
-            txtName.setText(name != null ? name : "N/A");
-            txtPhone.setText(phone != null ? phone : "N/A");
+            txtNameStudent.setText(student.getName());
+            txtClassStudent.setText(student.getClass_name());
         } else {
-            Toast.makeText(this, "Failed to fetch user profile", Toast.LENGTH_SHORT).show();
+            txtNameStudent.setText("Không có dữ liệu học sinh.");
+            txtClassStudent.setText("");
         }
     }
 }

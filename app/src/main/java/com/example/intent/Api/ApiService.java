@@ -1,5 +1,7 @@
 package com.example.intent.Api;
 
+import com.example.intent.Model.Grade;
+import com.example.intent.Model.Schedule;
 import com.example.intent.Request.ChangePasswordRequest;
 import com.example.intent.Request.LoginRequest;
 import com.example.intent.Model.Student;
@@ -8,6 +10,7 @@ import com.example.intent.RefreshTokenRequest;
 import com.example.intent.Request.RegisterRequest;
 import com.example.intent.Token.AuthResponse;
 
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -37,6 +40,14 @@ public interface ApiService {
             @Path("studentId") int studentId);
     @GET("api/user/profile")
     Call<ApiResponse<Map<String, Object>>> getUserProfile(@Header("Authorization") String token);
+    @GET("api/schedule/student/{studentId}")
+    Call<List<Schedule>> getSchedulesByStudentId(
+            @Header("Authorization") String token,
+            @Path("studentId") Long studentId);
+    @GET("api/grade/student/{studentId}")
+    Call<List<Grade>> getGradesByStudentId(
+            @Header("Authorization") String token,
+            @Path("studentId") Long studentId);
     @POST("api/auth/refresh")
     Call<ApiResponse<AuthResponse>> refreshToken(@Body RefreshTokenRequest refreshTokenRequest);
 }

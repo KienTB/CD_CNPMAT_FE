@@ -20,10 +20,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
-import com.example.intent.MainActivity;
 import com.example.intent.Model.Student;
 import com.example.intent.R;
 import com.example.intent.Token.TokenManager;
+import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -114,7 +114,16 @@ public class AddStudentActivity extends AppCompatActivity {
         builder.setMessage(message);
 
         builder.setPositiveButton("Xác nhận", (dialog, which) -> {
-            Intent intent = new Intent(AddStudentActivity.this, MainActivity.class);
+            // Chuyển đối tượng Student sang JSON string
+            Gson gson = new Gson();
+            String studentJson = gson.toJson(student);
+
+            tokenManager.saveStudentData(studentJson);
+
+            Toast.makeText(AddStudentActivity.this, "Thêm học sinh thành công!", Toast.LENGTH_SHORT).show();
+
+            // Chuyển đến màn hình chính
+            Intent intent = new Intent(AddStudentActivity.this, ParentMainActivity.class);
             intent.putExtra("studentName", student.getName());
             intent.putExtra("studentClass", student.getClass_name());
             intent.putExtra("tabIndex", 2); // Tab thứ 3 (index = 2)

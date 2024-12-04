@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/ar_one_sans"
+                    android:fontFamily="sans-serif"
                     android:text="Danh bạ"
                     android:textColor="#000000"
                     android:textSize="16sp" />
@@ -131,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/ar_one_sans"
+                    android:fontFamily="sans-serif"
                     android:text="Đổi mật khẩu"
                     android:textColor="#000000"
                     android:textSize="16sp" />
@@ -162,7 +162,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/ar_one_sans"
+                    android:fontFamily="sans-serif"
                     android:text="Xác thực 2 bước"
                     android:textColor="#000000"
                     android:textSize="16sp" />
@@ -192,7 +192,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/ar_one_sans"
+                    android:fontFamily="sans-serif"
                     android:text="Giới thiệu cho bạn bè"
                     android:textColor="#000000"
                     android:textSize="16sp" />
@@ -222,7 +222,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/ar_one_sans"
+                    android:fontFamily="sans-serif"
                     android:text="Thông tin sản phẩm"
                     android:textColor="#000000"
                     android:textSize="16sp" />
@@ -262,7 +262,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:fontFamily="@font/ar_one_sans"
+                android:fontFamily="sans-serif"
                 android:text="Bạn đang gặp vấn đề cần hỗ trợ?"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -272,7 +272,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/ar_one_sans"
+                android:fontFamily="sans-serif"
                 android:text="Trung tâm trợ giúp"
                 android:textColor="#2196F3"
                 android:textStyle="bold" />
@@ -285,7 +285,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:backgroundTint="#023E8A"
-        android:fontFamily="@font/ar_one_sans"
+        android:fontFamily="sans-serif"
         android:text="Đăng xuất"
         android:textSize="16sp"
         android:textStyle="bold"

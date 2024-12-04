@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText edtName, edtPhoneNumber, edtEmail, edtPassword, edtAddress, edtConfirm;
     Button btnRegister;
     RadioGroup radioGroupRole;
+    ImageView imgBackToExtension;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -48,6 +50,13 @@ public class RegisterActivity extends AppCompatActivity {
         edtAddress = findViewById(R.id.edtAddress);
         edtConfirm = findViewById(R.id.edtConfirm);
         radioGroupRole = findViewById(R.id.radioGroupRole);
+        imgBackToExtension = findViewById(R.id.imgBackToExtension);
+        imgBackToExtension.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         btnRegister = findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(new View.OnClickListener() {

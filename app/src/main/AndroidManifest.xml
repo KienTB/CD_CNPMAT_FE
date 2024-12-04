@@ -17,10 +17,37 @@
         android:theme="@style/Theme.Intent"
         tools:targetApi="31">
         <activity
-            android:name=".AdminMainActivity"
+            android:name=".Admin.PostNewsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.UserManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.StatisticalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.EvaluateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.TeachingScheduleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.LectureNoteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.ClassManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.ScoreActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.StudentListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.AdminMainActivity"
             android:exported="true" />
         <activity
-            android:name=".TeacherMainActivity"
+            android:name=".Teacher.TeacherMainActivity"
             android:exported="true" />
         <activity
             android:name=".Parent.ActivityTrackingActivity"
@@ -47,7 +74,7 @@
             android:name=".Parent.AttendenceActivity"
             android:exported="false" />
         <activity
-            android:name=".DashboardTeacherActivity"
+            android:name=".Teacher.DashboardTeacherActivity"
             android:exported="false" />
         <activity
             android:name=".ChangePasswordActivity"
@@ -97,7 +124,7 @@
             android:name=".Parent.NotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Parent.ParentMainActivity"
             android:exported="true" />
 
         <meta-data

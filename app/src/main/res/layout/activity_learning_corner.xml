@@ -43,7 +43,6 @@
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Danh sách bài tập -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAssignments"
         android:layout_width="0dp"

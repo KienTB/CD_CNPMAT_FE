@@ -14,11 +14,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.intent.Admin.AdminMainActivity;
 import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
-import com.example.intent.Model.User;
+import com.example.intent.Parent.ParentMainActivity;
 import com.example.intent.Request.LoginRequest;
+import com.example.intent.Teacher.TeacherMainActivity;
 import com.example.intent.Token.AuthResponse;
 import com.example.intent.Token.TokenManager;
 
@@ -119,23 +121,23 @@ public class LoginActivity extends AppCompatActivity {
 
     private void navigateBasedOnRole(String role) {
         Intent intent;
-        String logMessage = "Login successful with role: " + role;
+        String logMessage = "Đăng nhập thành công với vai trò: " + role;
         Log.d("LoginActivity", logMessage);
 
         Toast.makeText(LoginActivity.this, logMessage, Toast.LENGTH_SHORT).show();
 
         switch(role.toLowerCase()) {
             case "admin":
-                Log.d("LoginActivity", "Admin login successful - navigating to AdminMainActivity");
+                Log.d("LoginActivity", "Admin login successful");
                 intent = new Intent(LoginActivity.this, AdminMainActivity.class);
                 break;
             case "teacher":
-                Log.d("LoginActivity", "Teacher login successful - navigating to TeacherMainActivity");
+                Log.d("LoginActivity", "Teacher login successful");
                 intent = new Intent(LoginActivity.this, TeacherMainActivity.class);
                 break;
             case "parent":
-                Log.d("LoginActivity", "Parent login successful - navigating to MainActivity");
-                intent = new Intent(LoginActivity.this, MainActivity.class);
+                Log.d("LoginActivity", "Parent login successful");
+                intent = new Intent(LoginActivity.this, ParentMainActivity.class);
                 break;
             default:
                 Log.e("LoginActivity", "Invalid role detected: " + role);

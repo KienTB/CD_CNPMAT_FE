@@ -3,6 +3,7 @@ package com.example.intent.Parent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,10 +11,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.intent.Model.Student;
 import com.example.intent.R;
+import com.example.intent.Token.TokenManager;
+import com.google.gson.Gson;
 
 public class StudentDiaryActivity extends AppCompatActivity {
     ImageView imgBackToExtension;
+    TextView tvStudentName, tvStudentBirthDate, tvStudentGender, tvStudentClass, tvStudentAddress;
+    private TokenManager tokenManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,5 +37,29 @@ public class StudentDiaryActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        tvStudentName = findViewById(R.id.tvStudentName);
+        tvStudentBirthDate = findViewById(R.id.tvStudentBirthDate);
+        tvStudentGender = findViewById(R.id.tvStudentGender);
+        tvStudentClass = findViewById(R.id.tvStudentClass);
+        tvStudentAddress = findViewById(R.id.tvStudentAddress);
+
+        tokenManager = new TokenManager(this);
+
+        // Lấy thông tin học sinh từ SharedPreferences
+        String studentJson = tokenManager.getStudentData();
+        if (studentJson != null) {
+            Gson gson = new Gson();
+            Student student = gson.fromJson(studentJson, Student.class);
+
+            // Hiển thị thông tin lên giao diện
+            tvStudentName.setText(student.getName());
+            tvStudentBirthDate.setText(student.getBirthDate());
+            tvStudentGender.setText(student.getGender());
+            tvStudentClass.setText(student.getClass_name());
+            tvStudentAddress.setText(student.getAddress());
+        } else {
+            tvStudentName.setText("Không có dữ liệu học sinh.");
+        }
     }
 }

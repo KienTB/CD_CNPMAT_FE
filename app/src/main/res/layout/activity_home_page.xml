@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5"
     tools:context=".Parent.HomePageActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvStudents"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp" />
+        android:layout_height="wrap_content">
 
-        <!-- Header Section -->
         <androidx.cardview.widget.CardView
         android:id="@+id/headerCard"
         android:layout_width="0dp"
@@ -66,7 +63,6 @@
         </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-    <!-- Grid Layout Section -->
     <androidx.cardview.widget.CardView
         android:id="@+id/gridCard"
         android:layout_width="0dp"
@@ -82,7 +78,7 @@
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="4"
+            android:columnCount="3"
             android:padding="16dp"
             android:layout_marginTop="8dp">
 
@@ -97,17 +93,17 @@
 
                 <ImageView
                     android:id="@+id/imgNextToActivityTracking"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/ic_notifications_active"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:text="Hoạt động"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textColor="#000000" />
             </LinearLayout>
 
@@ -121,17 +117,17 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/ic_message"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:text="Lời nhắn"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textColor="#000000" />
             </LinearLayout>
 
@@ -146,21 +142,20 @@
 
                 <ImageView
                     android:id="@+id/imgNextToAttendance"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/ic_calendar_month"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:text="Điểm danh"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textColor="#000000" />
             </LinearLayout>
 
-            <!-- Item 4 -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -171,17 +166,17 @@
 
                 <ImageView
                     android:id="@+id/imgNextToMenu"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/ic_restaurant_menu" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:text="Thực đơn"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textColor="#000000" />
             </LinearLayout>
 
@@ -195,19 +190,19 @@
 
                 <ImageView
                     android:id="@+id/imgNextToPaymentHP"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/ic_payments" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:text="Học phí"
                     android:textColor="#000000"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -220,19 +215,19 @@
 
                 <ImageView
                     android:id="@+id/imgNextToLearningCorner"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/ic_dashboard" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:text="Góc học tập"
                     android:textColor="#000000"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -245,19 +240,19 @@
 
                 <ImageView
                     android:id="@+id/imgNextToHealth"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/ic_health_and_safety" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:text="Sức khoẻ"
                     android:textColor="#000000"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -270,73 +265,25 @@
 
                 <ImageView
                     android:id="@+id/imgNextToService"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_service" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:text="Dịch vụ"
                     android:textColor="#000000"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="8dp">
 
-                <ImageView
-                    android:id="@+id/imgNextToPhonebook"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:contentDescription="Hoạt động"
-                    android:src="@drawable/ic_contact" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="sans-serif"
-                    android:gravity="center"
-                    android:text="Danh bạ"
-                    android:textColor="#000000"
-                    android:textSize="12sp" />
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="8dp">
-
-                <ImageView
-                    android:id="@+id/imgNextToClassDiary"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:contentDescription="Hoạt động"
-                    android:src="@drawable/ic_dialog" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="sans-serif"
-                    android:gravity="center"
-                    android:text="Nhật ký lớp"
-                    android:textColor="#000000"
-                    android:textSize="12sp" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -348,46 +295,22 @@
 
                 <ImageView
                     android:id="@+id/imgNextToStudentDiary"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:contentDescription="Hoạt động"
                     android:src="@drawable/ic_diary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:text="Nhật ký HS"
                     android:textColor="#000000"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="8dp">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:contentDescription="Hoạt động"
-                    android:src="@drawable/ic_comment" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="sans-serif"
-                    android:gravity="center"
-                    android:text="Góp ý"
-                    android:textColor="#000000"
-                    android:textSize="12sp" />
-            </LinearLayout>
         </GridLayout>
     </androidx.cardview.widget.CardView>
 
@@ -436,3 +359,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
