@@ -1,6 +1,7 @@
 package com.example.intent.Teacher;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.intent.R;
 
 public class ClassManagementActivity extends AppCompatActivity {
-
+    private ImageView imgBackToExtension;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,5 +23,7 @@ public class ClassManagementActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        imgBackToExtension = findViewById(R.id.imgBackToExtension);
+        imgBackToExtension.setOnClickListener(v -> finish());
     }
 }

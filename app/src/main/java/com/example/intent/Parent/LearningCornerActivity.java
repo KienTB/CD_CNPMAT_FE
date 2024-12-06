@@ -67,11 +67,7 @@ public class LearningCornerActivity extends AppCompatActivity {
             Long studentId = parseStudentIdFromJson(studentDataJson);
             if (studentId != null) {
                 loadAttendanceData(studentId);
-            } else {
-                // Xử lý trường hợp student_id không hợp lệ
             }
-        } else {
-            // Xử lý trường hợp không có dữ liệu học sinh
         }
     }
 

@@ -21,12 +21,8 @@ import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.ChangePasswordActivity;
 import com.example.intent.LoginActivity;
-import com.example.intent.Model.Grade;
 import com.example.intent.Parent.AccountInformationActivity;
-import com.example.intent.Parent.AddStudentActivity;
-import com.example.intent.Parent.ParentMainActivity;
 import com.example.intent.R;
-import com.example.intent.StudentAdapter;
 import com.example.intent.Token.TokenManager;
 
 import java.util.Map;
@@ -41,7 +37,7 @@ public class TeacherMainActivity extends AppCompatActivity {
     private TextView txtName, txtPhone;
     private ImageView imgNextToAccountInformation, imgNextToChangePW,
             imgStudentList, imgGrade, imgClassManagement,
-            imgLectureNotes, imgTeachingSchedule, imgEvaluation, imgReport;
+            imgAttendance, imgTeachingSchedule, imgEvaluation, imgReport;
 
     private CalendarView calendarView;
 
@@ -72,7 +68,7 @@ public class TeacherMainActivity extends AppCompatActivity {
         imgStudentList = findViewById(R.id.imgStudentList);
         imgGrade = findViewById(R.id.imgGrade);
         imgClassManagement = findViewById(R.id.imgClassManagement);
-        imgLectureNotes = findViewById(R.id.imgLectureNotes);
+        imgAttendance = findViewById(R.id.imgAttendance);
         imgTeachingSchedule = findViewById(R.id.imgTeachingSchedule);
         imgEvaluation = findViewById(R.id.imgEvaluation);
         imgReport = findViewById(R.id.imgReport);
@@ -128,8 +124,8 @@ public class TeacherMainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ClassManagementActivity.class))
         );
 
-        imgLectureNotes.setOnClickListener(v ->
-                startActivity(new Intent(this, LectureNoteActivity.class))
+        imgAttendance.setOnClickListener(v ->
+                startActivity(new Intent(this, AttendanceActivity.class))
         );
 
         imgTeachingSchedule.setOnClickListener(v ->

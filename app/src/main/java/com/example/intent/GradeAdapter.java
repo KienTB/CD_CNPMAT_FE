@@ -31,9 +31,9 @@ public class GradeAdapter extends RecyclerView.Adapter<GradeAdapter.GradeViewHol
     public void onBindViewHolder(@NonNull GradeAdapter.GradeViewHolder holder, int position) {
         Grade grade = gradeList.get(position);
         if (grade != null) {
-            holder.tvSubject.setText("Môn: " + grade.getSubject());
-            holder.tvScore.setText("Ngày: " + grade.getScore());
-            holder.tvTerm.setText("Trạng thái: " + (grade.getTerm() != null ? grade.getTerm() : "Chưa cập nhật"));
+            holder.tvSubject.setText(grade.getSubject());
+            holder.tvScore.setText(String.valueOf(grade.getScore()));
+            holder.tvTerm.setText(grade.getTerm() != null ? grade.getTerm() : "Chưa cập nhật");
         }
     }
 

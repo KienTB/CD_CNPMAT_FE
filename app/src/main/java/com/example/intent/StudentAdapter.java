@@ -1,9 +1,9 @@
 package com.example.intent;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,9 +15,18 @@ import java.util.List;
 
 public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentViewHolder> {
     private List<Student> studentList;
+    private OnItemClickListener listener;
 
     public StudentAdapter(List<Student> studentList) {
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Student student);
+    }
+
+    public StudentAdapter(List<Student> studentList, OnItemClickListener listener) {
         this.studentList = studentList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -25,17 +34,15 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
     public StudentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.student_item, parent, false);
-        return new StudentViewHolder(view);
+        return new StudentViewHolder(view, listener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull StudentViewHolder holder, int position) {
         Student student = studentList.get(position);
-        if (student == null) {
-            return;
+        if (student != null) {
+            holder.bind(student);
         }
-        holder.txtStudentName.setText(student.getName());
-        holder.txtStudentClass.setText(student.getClass_name());
     }
 
     @Override
@@ -43,17 +50,34 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
         return studentList.size();
     }
 
-    public static class StudentViewHolder extends RecyclerView.ViewHolder {
-        TextView txtStudentName, txtStudentClass;
+    public void updateList(List<Student> newStudents) {
+        this.studentList = newStudents;
+        notifyDataSetChanged();
+    }
 
-        public StudentViewHolder(@NonNull View itemView) {
+    public static class StudentViewHolder extends RecyclerView.ViewHolder {
+        TextView txtStudentName, txtStudentClass, txtStudentId;
+        Student currentStudent;
+
+        public StudentViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
+
             txtStudentName = itemView.findViewById(R.id.txtStudentName);
             txtStudentClass = itemView.findViewById(R.id.txtStudentClass);
+            txtStudentId = itemView.findViewById(R.id.txtStudentId);
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null && currentStudent != null) {
+                    listener.onItemClick(currentStudent);
+                }
+            });
         }
-    }
-    public void updateStudentList(List<Student> newList) {
-        this.studentList = newList;
-        notifyDataSetChanged();
+
+        public void bind(Student student) {
+            currentStudent = student;
+            txtStudentName.setText(student.getName());
+            txtStudentClass.setText(student.getClass_name());
+            txtStudentId.setText(String.valueOf(student.getStudentId()));
+        }
     }
 }

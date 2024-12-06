@@ -94,11 +94,19 @@ public class LoginActivity extends AppCompatActivity {
 
                         Log.d("LoginActivity", "Auth Token: " + authResponse.getToken());
                         Log.d("LoginActivity", "User Role: " + (authResponse.getRole() != null ? authResponse.getRole() : "No User Object"));
+                        Log.d("LoginActivity", "Teacher ID: " + authResponse.getTeacherId());
 
                         TokenManager tokenManager = new TokenManager(LoginActivity.this);
                         tokenManager.saveToken(authResponse.getToken());
 
                         if (authResponse.getRole() != null) {
+                            tokenManager = new TokenManager(LoginActivity.this);
+                            if (authResponse.getTeacherId() != null) {
+                                tokenManager.saveTeacherId(authResponse.getTeacherId());
+                                Log.d("LoginActivity", "Saved Teacher ID: " + authResponse.getTeacherId());
+                            } else {
+                                Log.e("LoginActivity", "Teacher ID is null");
+                            }
                             navigateBasedOnRole(authResponse.getRole());
                         }
                     } else {
@@ -121,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void navigateBasedOnRole(String role) {
         Intent intent;
-        String logMessage = "Đăng nhập thành công với vai trò: " + role;
+        String logMessage = "Chào mừng, bạn đã đăng nhập thành công!";
         Log.d("LoginActivity", logMessage);
 
         Toast.makeText(LoginActivity.this, logMessage, Toast.LENGTH_SHORT).show();

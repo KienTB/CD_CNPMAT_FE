@@ -17,6 +17,15 @@
         android:theme="@style/Theme.Intent"
         tools:targetApi="31">
         <activity
+            android:name=".Teacher.AttendanceInputActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.ScoreInputActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.StudentDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".Admin.PostNewsActivity"
             android:exported="false" />
         <activity
@@ -32,7 +41,7 @@
             android:name=".Teacher.TeachingScheduleActivity"
             android:exported="false" />
         <activity
-            android:name=".Teacher.LectureNoteActivity"
+            android:name=".Teacher.AttendanceActivity"
             android:exported="false" />
         <activity
             android:name=".Teacher.ClassManagementActivity"
@@ -56,9 +65,6 @@
             android:name=".Parent.StudentDiaryActivity"
             android:exported="false" />
         <activity
-            android:name=".Parent.ClassDiaryActivity"
-            android:exported="false" />
-        <activity
             android:name=".Parent.ServiceActivity"
             android:exported="false" />
         <activity
@@ -72,9 +78,6 @@
             android:exported="false" />
         <activity
             android:name=".Parent.AttendenceActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Teacher.DashboardTeacherActivity"
             android:exported="false" />
         <activity
             android:name=".ChangePasswordActivity"

@@ -7,10 +7,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.ChangePasswordActivity;
@@ -22,10 +24,15 @@ import com.example.intent.Token.TokenManager;
 import com.google.gson.Gson;
 
 import java.util.List;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ParentMainActivity extends AppCompatActivity {
     private Button btnAddStudent, btnExtension, btnLogOut;
-    private TextView txtNameStudent, txtClassStudent;
+    private TextView txtNameStudent, txtClassStudent, txtName, txtPhone;
     private TabHost myTab;
     private ImageView imgNextToActivityTracking, imgNextToAttendance, imgNextToMenu,
             imgNextToPayMentHP, imgNextToLearningCorner, imgNextToHealth, imgNextToService,
@@ -67,11 +74,14 @@ public class ParentMainActivity extends AppCompatActivity {
         imgNextToChangePW = findViewById(R.id.imgNextToChangePW);
         txtNameStudent = findViewById(R.id.txtNameStudent);
         txtClassStudent = findViewById(R.id.txtClassStudent);
+        txtName = findViewById(R.id.txtName);
+        txtPhone = findViewById(R.id.txtPhone);
 
         tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
 
         setupTabs();
+        setupTabListener();
     }
 
     private void setupTabs() {
@@ -177,6 +187,60 @@ public class ParentMainActivity extends AppCompatActivity {
         } else {
             txtNameStudent.setText("Không có dữ liệu học sinh.");
             txtClassStudent.setText("");
+        }
+    }
+
+    private void setupTabListener() {
+        myTab.setOnTabChangedListener(tabId -> {
+            if ("t5".equals(tabId)) {
+                fetchUserProfile();
+            }
+        });
+    }
+
+    private void fetchUserProfile() {
+        String token = tokenManager.getToken();
+
+        if (token == null || token.isEmpty()) {
+            Toast.makeText(this, "Authentication token is missing", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        apiService.getUserProfile("Bearer " + token)
+                .enqueue(new Callback<ApiResponse<Map<String, Object>>>() {
+                    @Override
+                    public void onResponse(
+                            Call<ApiResponse<Map<String, Object>>> call,
+                            Response<ApiResponse<Map<String, Object>>> response
+                    ) {
+                        handleUserProfileResponse(response);
+                    }
+
+                    @Override
+                    public void onFailure(
+                            Call<ApiResponse<Map<String, Object>>> call,
+                            Throwable t
+                    ) {
+                        Toast.makeText(
+                                ParentMainActivity.this,
+                                "An error occurred: " + t.getMessage(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                    }
+                });
+    }
+
+    private void handleUserProfileResponse(Response<ApiResponse<Map<String, Object>>> response) {
+        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+            Map<String, Object> userProfile = response.body().getData();
+
+            String name = (String) userProfile.get("name");
+            String phone = (String) userProfile.get("phoneNumber");
+
+            txtName.setText(name != null ? name : "N/A");
+            txtPhone.setText(phone != null ? phone : "N/A");
+        } else {
+            Toast.makeText(this, "Failed to fetch user profile", Toast.LENGTH_SHORT).show();
         }
     }
 }

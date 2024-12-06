@@ -22,14 +22,6 @@ import com.example.intent.ChangePasswordActivity;
 import com.example.intent.LoginActivity;
 import com.example.intent.Parent.AccountInformationActivity;
 import com.example.intent.R;
-import com.example.intent.Teacher.ClassManagementActivity;
-import com.example.intent.Teacher.EvaluateActivity;
-import com.example.intent.Teacher.LectureNoteActivity;
-import com.example.intent.Teacher.ScoreActivity;
-import com.example.intent.Teacher.StatisticalActivity;
-import com.example.intent.Teacher.StudentListActivity;
-import com.example.intent.Teacher.TeacherMainActivity;
-import com.example.intent.Teacher.TeachingScheduleActivity;
 import com.example.intent.Token.TokenManager;
 
 import java.util.Map;

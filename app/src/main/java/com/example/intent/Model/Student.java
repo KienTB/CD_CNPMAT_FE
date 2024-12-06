@@ -2,8 +2,6 @@ package com.example.intent.Model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.time.LocalDate;
-
 public class Student {
     @SerializedName("studentId")
     private Long studentId;
@@ -25,6 +23,17 @@ public class Student {
 
     @SerializedName("userId")
     private Long userId;
+
+    @SerializedName("teacherId")
+    private Long teacherId;
+
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
+    }
 
     public Long getStudentId() {
         return studentId;
@@ -82,7 +91,7 @@ public class Student {
         this.userId = userId;
     }
 
-    public Student(Long studentId, String name, String birthDate, String gender, String class_name, String address, Long userId) {
+    public Student() {
         this.studentId = studentId;
         this.name = name;
         this.birthDate = birthDate;
@@ -90,10 +99,6 @@ public class Student {
         this.class_name = class_name;
         this.address = address;
         this.userId = userId;
-    }
-
-    public Student(String name, String studentClass) {
-        this.name = name;
-        this.class_name = class_name;
+        this.teacherId = teacherId;
     }
 }

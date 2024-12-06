@@ -32,7 +32,18 @@ public class User {
     @SerializedName("updated_at")
     private LocalDate updated_at;
 
-    public User(Long user_id, String phoneNumber, String password, String email, String role, String name, String address, LocalDate created_at, LocalDate updated_at) {
+    @SerializedName("teacherId")
+    private long teacherId;
+
+    public long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(long teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    public User(Long user_id, String phoneNumber, String password, String email, String role, String name, String address, LocalDate created_at, LocalDate updated_at, long teacher_id) {
         this.userId = userId;
         this.phoneNumber = phoneNumber;
         this.password = password;
@@ -42,6 +53,7 @@ public class User {
         this.address = address;
         this.created_at = created_at;
         this.updated_at = updated_at;
+        this.teacherId = teacher_id;
     }
 
     public Long getUserId() {
@@ -114,5 +126,9 @@ public class User {
 
     public void setUpdated_at(LocalDate updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

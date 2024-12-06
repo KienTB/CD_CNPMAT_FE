@@ -1,13 +1,22 @@
 package com.example.intent.Token;
 
-import com.example.intent.Model.User;
+import com.google.gson.annotations.SerializedName;
 
 public class AuthResponse {
     public String token;
-    private int userId;
+    private Long userId;
     private String role;
     private String name;
     private String refreshToken;
+    private Integer teacherId;
+
+    public Integer getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Integer teacherId) {
+        this.teacherId = teacherId;
+    }
 
     public String getToken() {
         return token;
@@ -17,11 +26,11 @@ public class AuthResponse {
         this.token = token;
     }
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -49,12 +58,13 @@ public class AuthResponse {
         this.refreshToken = refreshToken;
     }
 
-    public AuthResponse(String token, int userId, String role, String name, String refreshToken) {
+    public AuthResponse(String token, long userId, String role, String name, String refreshToken, Integer teacherId) {
         this.token = token;
         this.userId = userId;
         this.role = role;
         this.name = name;
         this.refreshToken = refreshToken;
+        this.teacherId = teacherId;
     }
 }
 //HANDLE JWT RESPONSE

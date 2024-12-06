@@ -3,6 +3,7 @@ package com.example.intent.Teacher;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -30,19 +31,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ScoreActivity extends AppCompatActivity {
-    private ImageView imgBackToExtension;
+public class AttendanceActivity extends AppCompatActivity {
     private RecyclerView recyclerViewStudents;
     private StudentAdapter studentAdapter;
     private List<Student> studentList = new ArrayList<>();
     private TokenManager tokenManager;
     private ApiService apiService;
+    private ImageView imgBackToExtension;
     private SearchView searchView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_score);
+        setContentView(R.layout.activity_attendance);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -53,10 +54,11 @@ public class ScoreActivity extends AppCompatActivity {
         searchView = findViewById(R.id.searchView);
 
         studentAdapter = new StudentAdapter(studentList, student -> {
-            Intent intent = new Intent(ScoreActivity.this, ScoreInputActivity.class);
+            Intent intent = new Intent(AttendanceActivity.this, AttendanceInputActivity.class);
             intent.putExtra("studentId", student.getStudentId());
             startActivity(intent);
         });
+
         recyclerViewStudents.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewStudents.setAdapter(studentAdapter);
 
@@ -67,7 +69,7 @@ public class ScoreActivity extends AppCompatActivity {
         if (teacherId != -1) {
             fetchStudentsByTeacherId(teacherId);
         } else {
-            Toast.makeText(this, "Teacher ID not found. Please log in again.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Không tìm thấy ID giáo viên. Vui lòng đăng nhập lại.", Toast.LENGTH_SHORT).show();
         }
 
         imgBackToExtension.setOnClickListener(v -> finish());
@@ -87,15 +89,15 @@ public class ScoreActivity extends AppCompatActivity {
                             studentList.addAll(response.body().getData());
                             studentAdapter.notifyDataSetChanged();
                         } else {
-                            Toast.makeText(ScoreActivity.this,
-                                    "Failed to fetch students: " + (response.body() != null ? response.body().getMessage() : "Unknown error"),
+                            Toast.makeText(AttendanceActivity.this,
+                                    "Tải danh sách học sinh thất bại: " + (response.body() != null ? response.body().getMessage() : "Lỗi không xác định"),
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ApiResponse<List<Student>>> call, Throwable t) {
-                        Toast.makeText(ScoreActivity.this, "API call failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AttendanceActivity.this, "Gọi API thất bại: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -118,11 +120,11 @@ public class ScoreActivity extends AppCompatActivity {
     private void filterStudents(String query) {
         List<Student> filteredList = new ArrayList<>();
         for (Student student : studentList) {
-            if (String.valueOf(student.getStudentId()).contains(query)) {
+            if (student.getName().toLowerCase().contains(query.toLowerCase()) ||
+                    String.valueOf(student.getStudentId()).contains(query)) {
                 filteredList.add(student);
             }
         }
         studentAdapter.updateList(filteredList);
     }
-
 }
