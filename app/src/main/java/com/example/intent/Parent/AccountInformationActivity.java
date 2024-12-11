@@ -25,7 +25,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AccountInformationActivity extends AppCompatActivity {
-    ImageView imgBackToSetting;
+    ImageView imgBack;
     private TokenManager tokenManager;
     private ApiService apiService;
 
@@ -44,12 +44,12 @@ public class AccountInformationActivity extends AppCompatActivity {
         txtEmailAI = findViewById(R.id.txtEmailAI);
         txtPhoneAI = findViewById(R.id.txtPhoneAI);
         txtAddressAI = findViewById(R.id.txtAddressAI);
-        imgBackToSetting = findViewById(R.id.imgBackToSetting);
+        imgBack = findViewById(R.id.imgBack);
 
         tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
 
-        imgBackToSetting.setOnClickListener(v -> finish());
+        imgBack.setOnClickListener(v -> finish());
     }
 
     private void fetchAccountInformation() {

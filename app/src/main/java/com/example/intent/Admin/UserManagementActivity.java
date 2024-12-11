@@ -58,7 +58,7 @@ public class UserManagementActivity extends AppCompatActivity {
         userAdapter = new UserAdapter(userList, user -> {
             Intent intent = new Intent(UserManagementActivity.this, UserDetailActivity.class);
             intent.putExtra("userId", user.getUserId());
-            intent.putExtra("phoneNumber", user.getName());
+            intent.putExtra("phoneNumber", user.getPhoneNumber());
             intent.putExtra("email", user.getEmail());
             intent.putExtra("role", user.getRole());
             intent.putExtra("name", user.getName());

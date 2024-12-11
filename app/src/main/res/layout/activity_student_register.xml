@@ -106,17 +106,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView5" />
 
-            <EditText
-                android:id="@+id/edtBirthDate"
+            <TextView
+                android:id="@+id/tvBirthDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:elevation="6dp"
+                android:textSize="18dp"
                 android:background="@drawable/button_border"
-                android:drawableStart="@drawable/ic_email"
+                android:drawableStart="@drawable/ic_date"
                 android:drawablePadding="8dp"
                 android:hint="Ngày sinh"
-                android:inputType="textEmailAddress"
+                android:focusable="true"
+                android:clickable="true"
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -128,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/button_border"
-                android:drawableStart="@drawable/ic_phone"
+                android:drawableStart="@drawable/ic_class_management"
                 android:drawablePadding="8dp"
                 android:elevation="6dp"
                 android:hint="Lớp"
@@ -136,7 +138,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edtBirthDate" />
+                app:layout_constraintTop_toBottomOf="@id/tvBirthDate" />
 
             <EditText
                 android:id="@+id/edtUserId"
@@ -145,10 +147,9 @@
                 android:layout_marginTop="10dp"
                 android:elevation="6dp"
                 android:background="@drawable/button_border"
-                android:drawableStart="@drawable/ic_password"
+                android:drawableStart="@drawable/ic_code"
                 android:drawablePadding="8dp"
                 android:hint="Mã phụ huynh"
-                android:inputType="textPassword"
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -161,10 +162,9 @@
                 android:layout_marginTop="10dp"
                 android:elevation="6dp"
                 android:background="@drawable/button_border"
-                android:drawableStart="@drawable/ic_password"
+                android:drawableStart="@drawable/ic_add_location"
                 android:drawablePadding="8dp"
                 android:hint="Địa chỉ"
-                android:inputType="textPassword"
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -177,17 +177,16 @@
                 android:layout_marginTop="10dp"
                 android:elevation="6dp"
                 android:background="@drawable/button_border"
-                android:drawableStart="@drawable/ic_password"
+                android:drawableStart="@drawable/ic_code"
                 android:drawablePadding="8dp"
                 android:hint="Mã giáo viên"
-                android:inputType="textPassword"
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edtAddress" />
 
             <RadioGroup
-                android:id="@+id/radioGroupRole"
+                android:id="@+id/radioGroupGender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="6dp"
@@ -228,7 +227,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/radioGroupRole" />
+                app:layout_constraintTop_toBottomOf="@+id/radioGroupGender" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

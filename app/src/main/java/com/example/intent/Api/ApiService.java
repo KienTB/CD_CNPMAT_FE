@@ -12,6 +12,7 @@ import com.example.intent.RefreshTokenRequest;
 import com.example.intent.Request.RegisterRequest;
 import com.example.intent.Request.ScheduleRequest;
 import com.example.intent.Request.StudentRegisterRequest;
+import com.example.intent.Request.UpdateUserRequest;
 import com.example.intent.Token.AuthResponse;
 
 import java.util.List;
@@ -19,10 +20,12 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ApiService {
@@ -92,6 +95,18 @@ public interface ApiService {
     Call<ApiResponse<Student>> registerStudent(
             @Header("Authorization") String token,
             @Body StudentRegisterRequest studentRegisterRequest);
+
+    @PUT("api/admin/update/user/{userId}")
+    Call<ApiResponse<User>> updateUser(
+            @Header("Authorization") String token,
+            @Path("userId") Long userId,
+            @Body UpdateUserRequest updateUserRequest);
+
+    @DELETE("api/admin/delete/user/{userId}")
+    Call<ApiResponse<String>> deleteUser(
+            @Header("Authorization") String token,
+            @Path("userId") Long userId);
+
     @POST("api/auth/refresh")
     Call<ApiResponse<AuthResponse>> refreshToken(@Body RefreshTokenRequest refreshTokenRequest);
 }
