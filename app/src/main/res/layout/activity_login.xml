@@ -109,19 +109,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogIn" />
 
-    <TextView
-        android:id="@+id/txtRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="104dp"
-        android:fontFamily="sans-serif"
-        android:text="Bạn chưa có tài khoản? Đăng ký ngay"
-        android:textColor="#023E8A"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogIn" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

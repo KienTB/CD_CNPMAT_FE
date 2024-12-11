@@ -1,6 +1,7 @@
 package com.example.intent.Api;
 
 import com.example.intent.Model.Grade;
+import com.example.intent.Model.Notification;
 import com.example.intent.Model.Schedule;
 import com.example.intent.Request.ChangePasswordRequest;
 import com.example.intent.Request.GradeRequest;
@@ -10,6 +11,7 @@ import com.example.intent.Model.User;
 import com.example.intent.RefreshTokenRequest;
 import com.example.intent.Request.RegisterRequest;
 import com.example.intent.Request.ScheduleRequest;
+import com.example.intent.Request.StudentRegisterRequest;
 import com.example.intent.Token.AuthResponse;
 
 import java.util.List;
@@ -41,7 +43,8 @@ public interface ApiService {
             @Body ChangePasswordRequest changePasswordRequest);
 
     @GET("api/user/profile")
-    Call<ApiResponse<Map<String, Object>>> getUserProfile(@Header("Authorization") String token);
+    Call<ApiResponse<Map<String, Object>>> getUserProfile(
+            @Header("Authorization") String token);
 
     @GET("api/parent/student/{studentId}")
     Call<ApiResponse<Student>> getStudentById(
@@ -73,6 +76,22 @@ public interface ApiService {
             @Header("Authorization") String token,
             @Body ScheduleRequest scheduleRequest);
 
+    @GET("api/get/notifications")
+    Call<ApiResponse<List<Notification>>> getNotifications(
+            @Header("Authorization") String token);
+
+    @GET("api/admin/get/all/users")
+    Call<ApiResponse<List<User>>> getAllUsers(
+            @Header("Authorization") String token);
+
+    @GET("api/admin/get/all/students")
+    Call<ApiResponse<List<Student>>> getAllStudents(
+            @Header("Authorization") String token);
+
+    @POST("api/admin/register/student")
+    Call<ApiResponse<Student>> registerStudent(
+            @Header("Authorization") String token,
+            @Body StudentRegisterRequest studentRegisterRequest);
     @POST("api/auth/refresh")
     Call<ApiResponse<AuthResponse>> refreshToken(@Body RefreshTokenRequest refreshTokenRequest);
 }

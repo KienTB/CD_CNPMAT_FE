@@ -3,6 +3,7 @@ package com.example.intent.Admin;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TabHost;
@@ -68,12 +69,26 @@ public class AdminMainActivity extends AppCompatActivity {
         setupTabs();
     }
 
+    public void openUserManagement(View view) {
+        Intent intent = new Intent(this, UserManagementActivity.class);
+        startActivity(intent);
+    }
+
+    public void openStudentManagement(View view) {
+        Intent intent = new Intent(this, StudentManagementActivity.class);
+        startActivity(intent);
+    }
+
+    public void openNotificationManagement(View view) {
+        Intent intent = new Intent(this, NotificationManagementActivity.class);
+        startActivity(intent);
+    }
+
     private void setupTabs() {
         myTab.setup();
 
-        addTab("t1", R.id.tab1, R.drawable.ic_home);
-        addTab("t2", R.id.tab2, R.drawable.ic_notifications);
-        addTab("t3", R.id.tab3, R.drawable.ic_settings);
+        addTab("t1", R.id.tab1, R.drawable.ic_manage_search);
+        addTab("t2", R.id.tab2, R.drawable.ic_settings);
     }
 
     private void addTab(String tabTag, int contentId, int iconResourceId) {
@@ -111,7 +126,7 @@ public class AdminMainActivity extends AppCompatActivity {
 
     private void setupTabListener() {
         myTab.setOnTabChangedListener(tabId -> {
-            if ("t3".equals(tabId)) {
+            if ("t2".equals(tabId)) {
                 fetchUserProfile();
             }
         });

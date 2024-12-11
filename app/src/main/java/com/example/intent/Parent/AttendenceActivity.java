@@ -1,12 +1,8 @@
 package com.example.intent.Parent;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
-import com.example.intent.AttendanceAdapter;
+import com.example.intent.Teacher.AttendanceAdapter;
 import com.example.intent.Model.Schedule;
 import com.example.intent.R;
 import com.example.intent.Token.TokenManager;

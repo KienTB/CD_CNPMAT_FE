@@ -33,24 +33,12 @@
                         android:orientation="vertical">
 
                         <include
-                            layout="@layout/activity_teacher_home_page"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                            layout="@layout/activity_management" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/tab2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <include layout="@layout/activity_notification" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/tab3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">

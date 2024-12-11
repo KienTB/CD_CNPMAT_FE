@@ -1,4 +1,4 @@
-package com.example.intent;
+package com.example.intent.Admin;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -22,7 +22,9 @@ import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.Helper.StringHelper;
+import com.example.intent.LoginActivity;
 import com.example.intent.Model.User;
+import com.example.intent.R;
 import com.example.intent.Request.RegisterRequest;
 
 import retrofit2.Call;

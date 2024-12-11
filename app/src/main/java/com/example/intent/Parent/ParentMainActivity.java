@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.intent.Api.ApiResponse;
@@ -17,12 +18,16 @@ import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.ChangePasswordActivity;
 import com.example.intent.LoginActivity;
+import com.example.intent.Model.Notification;
 import com.example.intent.Model.Student;
+import com.example.intent.NotificationAdapter;
 import com.example.intent.R;
 import com.example.intent.StudentAdapter;
+import com.example.intent.Teacher.TeacherMainActivity;
 import com.example.intent.Token.TokenManager;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +46,9 @@ public class ParentMainActivity extends AppCompatActivity {
     private TokenManager tokenManager;
     private ApiService apiService;
 
-    private RecyclerView rvStudents;
+    private RecyclerView rvStudents, recyclerViewNotifications;
     private StudentAdapter studentAdapter;
+    private NotificationAdapter notificationAdapter;
     private List<Student> studentList;
 
     @Override
@@ -77,11 +83,20 @@ public class ParentMainActivity extends AppCompatActivity {
         txtName = findViewById(R.id.txtName);
         txtPhone = findViewById(R.id.txtPhone);
 
+        recyclerViewNotifications = findViewById(R.id.recyclerViewNotifications);
+
+        recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(this));
+
+        notificationAdapter = new NotificationAdapter(new ArrayList<>());
+
+        recyclerViewNotifications.setAdapter(notificationAdapter);
+
         tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
 
         setupTabs();
         setupTabListener();
+        fetchNotifications();
     }
 
     private void setupTabs() {
@@ -242,5 +257,32 @@ public class ParentMainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Failed to fetch user profile", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void fetchNotifications() {
+        String token = tokenManager.getToken();
+
+        String bearerToken = "Bearer " + token;
+
+        ApiService apiService = RetrofitClient.getInstance().createService(ApiService.class);
+        Call<ApiResponse<List<Notification>>> call = apiService.getNotifications(bearerToken);
+
+        call.enqueue(new Callback<ApiResponse<List<Notification>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Notification>>> call, Response<ApiResponse<List<Notification>>> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Notification> notifications = response.body().getData();
+                    notificationAdapter.updateData(notifications);
+                } else {
+                    Toast.makeText(ParentMainActivity.this, "Không thể lấy thông báo", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<Notification>>> call, Throwable t) {
+                Toast.makeText(ParentMainActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

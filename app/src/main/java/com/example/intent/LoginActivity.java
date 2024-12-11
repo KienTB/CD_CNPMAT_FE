@@ -31,7 +31,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
     private EditText edtPhoneNumber, edtPassword;
     private Button btnLogIn;
-    private TextView txtRegister, txtForgotPassword;
+    private TextView txtForgotPassword;
     private ApiService apiService;
 
     @Override
@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
         edtPhoneNumber = findViewById(R.id.edtPhoneNumber);
         edtPassword = findViewById(R.id.edtPassword);
         btnLogIn = findViewById(R.id.btnLogIn);
-        txtRegister = findViewById(R.id.txtRegister);
         txtForgotPassword = findViewById(R.id.txtForgotPassword);
 
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
@@ -52,16 +51,10 @@ public class LoginActivity extends AppCompatActivity {
             String phoneNumber = edtPhoneNumber.getText().toString();
             String password = edtPassword.getText().toString();
             if (phoneNumber.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Vui lòng điền vào tất cả các ô trống", Toast.LENGTH_SHORT).show();
                 return;
             }
             loginUser(phoneNumber, password);
-        });
-
-        txtRegister.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            startActivity(intent);
-            finish();
         });
 
         txtForgotPassword.setOnClickListener(view -> {
@@ -78,8 +71,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String phoneNumber, String password) {
-        Log.d("LoginActivity", "Attempting login with phone number: " + phoneNumber);
-
         LoginRequest loginRequest = new LoginRequest(phoneNumber, password);
 
         apiService.login(loginRequest).enqueue(new Callback<ApiResponse<AuthResponse>>() {

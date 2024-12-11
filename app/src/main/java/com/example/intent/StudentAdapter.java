@@ -17,9 +17,6 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
     private List<Student> studentList;
     private OnItemClickListener listener;
 
-    public StudentAdapter(List<Student> studentList) {
-    }
-
     public interface OnItemClickListener {
         void onItemClick(Student student);
     }

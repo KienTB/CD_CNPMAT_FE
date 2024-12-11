@@ -1,8 +1,4 @@
-    package com.example.intent.Api;
-
-    import android.content.Context;
-
-    import com.example.intent.Token.TokenManager;
+package com.example.intent.Api;
 
     import okhttp3.OkHttpClient;
     import okhttp3.logging.HttpLoggingInterceptor;
@@ -10,7 +6,8 @@
     import retrofit2.converter.gson.GsonConverterFactory;
 
     public class RetrofitClient {
-        private static final String url = "http://192.168.1.105:8080";
+
+        private static final String url = "http://172.20.10.3:8080";
         private static RetrofitClient instance;
         private Retrofit retrofit;
 

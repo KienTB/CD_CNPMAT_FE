@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,7 +15,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Intent"
-        tools:targetApi="31">
+        tools:targetApi="31" >
+        <activity
+            android:name=".Admin.StudentRegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.UserDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.ManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.NotificationManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.StudentManagementActivity"
+            android:exported="false" />
         <activity
             android:name=".Teacher.AttendanceInputActivity"
             android:exported="false" />
@@ -98,7 +113,7 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true"
-            android:label="@string/title_activity_login">
+            android:label="@string/title_activity_login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -112,7 +127,7 @@
             android:name=".SettingActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Admin.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".ForgotPasswordActivity"
@@ -124,7 +139,7 @@
             android:name=".Parent.ExtensionActivity"
             android:exported="false" />
         <activity
-            android:name=".Parent.NotificationActivity"
+            android:name=".NotificationActivity"
             android:exported="false" />
         <activity
             android:name=".Parent.ParentMainActivity"

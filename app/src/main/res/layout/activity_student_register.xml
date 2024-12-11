@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin.RegisterActivity">
+    tools:context=".Admin.StudentRegisterActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="Thêm người dùng"
+                    android:text="Thêm học sinh"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@android:color/white"
@@ -107,7 +107,7 @@
                 app:layout_constraintTop_toBottomOf="@id/textView5" />
 
             <EditText
-                android:id="@+id/edtEmail"
+                android:id="@+id/edtBirthDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -115,12 +115,44 @@
                 android:background="@drawable/button_border"
                 android:drawableStart="@drawable/ic_email"
                 android:drawablePadding="8dp"
-                android:hint="Email"
+                android:hint="Ngày sinh"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edtName" />
+
+            <EditText
+                android:id="@+id/edtClass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_border"
+                android:drawableStart="@drawable/ic_phone"
+                android:drawablePadding="8dp"
+                android:elevation="6dp"
+                android:hint="Lớp"
+                android:padding="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edtBirthDate" />
+
+            <EditText
+                android:id="@+id/edtUserId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:elevation="6dp"
+                android:background="@drawable/button_border"
+                android:drawableStart="@drawable/ic_password"
+                android:drawablePadding="8dp"
+                android:hint="Mã phụ huynh"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edtClass" />
 
             <EditText
                 android:id="@+id/edtAddress"
@@ -129,62 +161,30 @@
                 android:layout_marginTop="10dp"
                 android:elevation="6dp"
                 android:background="@drawable/button_border"
-                android:drawableStart="@drawable/ic_add_location"
+                android:drawableStart="@drawable/ic_password"
                 android:drawablePadding="8dp"
                 android:hint="Địa chỉ"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edtEmail" />
+                app:layout_constraintTop_toBottomOf="@id/edtUserId" />
 
             <EditText
-                android:id="@+id/edtPhoneNumber"
+                android:id="@+id/edtTeacherId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:elevation="6dp"
                 android:background="@drawable/button_border"
-                android:drawableStart="@drawable/ic_phone"
+                android:drawableStart="@drawable/ic_password"
                 android:drawablePadding="8dp"
-                android:hint="Số điện thoại"
-                android:inputType="phone"
+                android:hint="Mã giáo viên"
+                android:inputType="textPassword"
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edtAddress" />
-
-            <EditText
-                android:id="@+id/edtPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:elevation="6dp"
-                android:background="@drawable/button_border"
-                android:drawableStart="@drawable/ic_password"
-                android:drawablePadding="8dp"
-                android:hint="Mật khẩu"
-                android:inputType="textPassword"
-                android:padding="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edtPhoneNumber" />
-
-            <EditText
-                android:id="@+id/edtConfirm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:elevation="6dp"
-                android:background="@drawable/button_border"
-                android:drawableStart="@drawable/ic_password"
-                android:drawablePadding="8dp"
-                android:hint="Xác nhận mật khẩu"
-                android:inputType="textPassword"
-                android:padding="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edtPassword" />
 
             <RadioGroup
                 android:id="@+id/radioGroupRole"
@@ -195,24 +195,24 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtConfirm">
+                app:layout_constraintTop_toBottomOf="@+id/edtTeacherId">
 
                 <RadioButton
-                    android:id="@+id/radioTeacher"
+                    android:id="@+id/radioMale"
                     android:layout_width="130dp"
                     android:elevation="6dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/button_border"
-                    android:text="Teacher" />
+                    android:text="Nam" />
 
                 <RadioButton
-                    android:id="@+id/radioParent"
+                    android:id="@+id/radioFemale"
                     android:layout_width="138dp"
                     android:elevation="6dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_border"
-                    android:text="Parent" />
+                    android:text="Nữ" />
             </RadioGroup>
 
             <Button
@@ -222,7 +222,7 @@
                 android:layout_marginTop="10dp"
                 android:elevation="6dp"
                 android:backgroundTint="#023E8A"
-                android:text="Đăng ký"
+                android:text="Thêm"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -233,4 +233,5 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,6 @@
-package com.example.intent.Parent;
+package com.example.intent.Admin;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -12,24 +11,19 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.intent.R;
 
-public class NotificationActivity extends AppCompatActivity {
-    ImageView imgBackToExtension;
+public class NotificationManagementActivity extends AppCompatActivity {
+    private ImageView imgBackToExtentsion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_notification);
+        setContentView(R.layout.activity_notification_management);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        imgBackToExtension = findViewById(R.id.imgBackToExtension);
-        imgBackToExtension.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        imgBackToExtentsion = findViewById(R.id.imgBackToExtension);
+        imgBackToExtentsion.setOnClickListener(view -> finish());
     }
 }

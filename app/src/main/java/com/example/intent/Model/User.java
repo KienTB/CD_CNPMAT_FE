@@ -26,12 +26,6 @@ public class User {
     @SerializedName("address")
     private String address;
 
-    @SerializedName("created_at")
-    private LocalDate created_at;
-
-    @SerializedName("updated_at")
-    private LocalDate updated_at;
-
     @SerializedName("teacherId")
     private long teacherId;
 
@@ -43,7 +37,7 @@ public class User {
         this.teacherId = teacherId;
     }
 
-    public User(Long user_id, String phoneNumber, String password, String email, String role, String name, String address, LocalDate created_at, LocalDate updated_at, long teacher_id) {
+    public User(Long user_id, String phoneNumber, String password, String email, String role, String name, String address, long teacher_id) {
         this.userId = userId;
         this.phoneNumber = phoneNumber;
         this.password = password;
@@ -51,8 +45,6 @@ public class User {
         this.role = role;
         this.name = name;
         this.address = address;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
         this.teacherId = teacher_id;
     }
 
@@ -110,22 +102,6 @@ public class User {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public LocalDate getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(LocalDate created_at) {
-        this.created_at = created_at;
-    }
-
-    public LocalDate getUpdated_at() {
-        return updated_at;
-    }
-
-    public void setUpdated_at(LocalDate updated_at) {
-        this.updated_at = updated_at;
     }
 
     public void setPhoneNumber(String phoneNumber) {
