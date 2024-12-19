@@ -17,15 +17,14 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
+import com.example.intent.Api.StudentApiResponse;
 import com.example.intent.Model.Student;
-import com.example.intent.Model.User;
+import com.example.intent.Model.DataStudent;
 import com.example.intent.R;
 import com.example.intent.StudentAdapter;
-import com.example.intent.Teacher.StudentDetailActivity;
-import com.example.intent.Teacher.StudentListActivity;
+import com.example.intent.StudentNormalAdapter;
 import com.example.intent.Token.TokenManager;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ import retrofit2.Response;
 
 public class StudentManagementActivity extends AppCompatActivity {
     private RecyclerView recyclerViewStudents;
-    private StudentAdapter studentAdapter;
+    private StudentNormalAdapter studentNormalAdapter;
     private List<Student> studentList = new ArrayList<>();
     private TokenManager tokenManager;
     private ApiService apiService;
@@ -54,6 +53,7 @@ public class StudentManagementActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         imgBackToExtension = findViewById(R.id.imgBackToExtension);
         imgBackToExtension.setOnClickListener(view -> finish());
 
@@ -67,10 +67,12 @@ public class StudentManagementActivity extends AppCompatActivity {
         });
 
         recyclerViewStudents = findViewById(R.id.recyclerViewStudents);
-        imgBackToExtension = findViewById(R.id.imgBackToExtension);
         searchView = findViewById(R.id.searchView);
 
-        studentAdapter = new StudentAdapter(studentList, student -> {
+        studentNormalAdapter = new StudentNormalAdapter(studentList, student -> {
+            Log.d("StudentManagement", "Selected student ID: " + student.getStudentId());
+            Log.d("StudentManagement", "Selected student teacher ID: " + student.getUser().getTeacherId());
+
             Intent intent = new Intent(StudentManagementActivity.this, StudentDetailActivity.class);
             intent.putExtra("studentId", student.getStudentId());
             intent.putExtra("name", student.getName());
@@ -78,19 +80,23 @@ public class StudentManagementActivity extends AppCompatActivity {
             intent.putExtra("birthDate", student.getBirthDate());
             intent.putExtra("gender", student.getGender());
             intent.putExtra("address", student.getAddress());
+            intent.putExtra("userId", student.getUser().getUserId());
+            intent.putExtra("teacherId", student.getTeacher().getTeacherId());
             startActivity(intent);
         });
 
         recyclerViewStudents.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewStudents.setAdapter(studentAdapter);
+        recyclerViewStudents.setAdapter(studentNormalAdapter);
 
         tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
 
         long userId = tokenManager.getUserId();
+        Log.d("StudentManagement", "Fetched user ID: " + userId);
         if (userId != -1) {
             fetchStudentsByUserId(userId);
         } else {
+            Log.e("StudentManagement", "User ID not found. Please login again.");
             Toast.makeText(this, "Không tìm thấy ID người dùng. Vui lòng đăng nhập lại.", Toast.LENGTH_SHORT).show();
         }
 
@@ -99,27 +105,46 @@ public class StudentManagementActivity extends AppCompatActivity {
 
     private void fetchStudentsByUserId(long userId) {
         String token = tokenManager.getToken();
+        Log.d("StudentManagement", "Fetching students with token: " + token);
 
         apiService.getAllStudents("Bearer " + token)
-            .enqueue(new Callback<ApiResponse<List<Student>>>() {
-                @Override
-                public void onResponse(Call<ApiResponse<List<Student>>> call, Response<ApiResponse<List<Student>>> response) {
-                    if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                        studentList.clear();
-                        studentList.addAll(response.body().getData());
-                        studentAdapter.notifyDataSetChanged();
-                    } else {
-                        Toast.makeText(StudentManagementActivity.this,
-                                "Tải danh sách học sinh thất bại: " + (response.body() != null ? response.body().getMessage() : "Lỗi không xác định"),
-                                Toast.LENGTH_SHORT).show();
+                .enqueue(new Callback<StudentApiResponse<List<DataStudent>>>() {
+                    @Override
+                    public void onResponse(Call<StudentApiResponse<List<DataStudent>>> call, Response<StudentApiResponse<List<DataStudent>>> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                            studentList.clear();
+                            for (DataStudent dataStudent : response.body().getData()) {
+                                Student student = new Student(
+                                        dataStudent.getStudentId(),
+                                        dataStudent.getName(),
+                                        dataStudent.getBirthDate(),
+                                        dataStudent.getGender(),
+                                        dataStudent.getClass_name(),
+                                        dataStudent.getAddress(),
+                                        dataStudent.getUser(),
+                                        dataStudent.getTeacher()
+                                );
+                                studentList.add(student);
+                            }
+                            Log.d("StudentManagement", "Fetched " + studentList.size() + " students.");
+                            for (Student student : studentList) {
+                                Log.d("StudentManagement", "Student ID: " + student.getStudentId() + ", Teacher ID: " + student.getUser().getTeacherId());
+                            }
+                            studentNormalAdapter.notifyDataSetChanged();
+                        } else {
+                            Log.e("StudentManagement", "Failed to fetch students: " + (response.body() != null ? response.body().getMessage() : "Unknown error"));
+                            Toast.makeText(StudentManagementActivity.this,
+                                    "Tải danh sách học sinh thất bại: " + (response.body() != null ? response.body().getMessage() : "Lỗi không xác định"),
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<ApiResponse<List<Student>>> call, Throwable t) {
-                    Toast.makeText(StudentManagementActivity.this, "Gọi API thất bại: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+                    @Override
+                    public void onFailure(Call<StudentApiResponse<List<DataStudent>>> call, Throwable t) {
+                        Log.e("StudentManagement", "API call failed: " + t.getMessage());
+                        Toast.makeText(StudentManagementActivity.this, "Gọi API thất bại: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void setupSearchView() {
@@ -145,7 +170,7 @@ public class StudentManagementActivity extends AppCompatActivity {
                 filteredList.add(student);
             }
         }
-        studentAdapter.updateList(filteredList);
+        studentNormalAdapter.updateList(filteredList);
     }
 
 }

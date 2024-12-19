@@ -1,9 +1,11 @@
 package com.example.intent.Admin;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -29,20 +31,23 @@ import com.example.intent.Request.StudentRegisterRequest;
 import com.example.intent.Token.TokenManager;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class StudentRegisterActivity extends AppCompatActivity {
-    private EditText edtName, edtClass, edtUserId, edtAddress, edtTeacherId;
-    private TextView tvBirthDate;
+    private EditText edtName,tvBirthDate, edtClass, edtUserId, edtAddress, edtTeacherId;
     private RadioGroup radioGroupGender;
     private Button btnRegister;
     private ImageView imgBackToExtension;
     private TokenManager tokenManager;
     private ApiService apiService;
+    private String scheduleDate;
 
     private String birthDate;
 
@@ -53,11 +58,17 @@ public class StudentRegisterActivity extends AppCompatActivity {
 
         initViews();
 
-        tvBirthDate.setOnClickListener(v -> openDatePickerDialog());
-
         imgBackToExtension.setOnClickListener(v -> finish());
 
         btnRegister.setOnClickListener(v -> processFormFields());
+
+        tvBirthDate.setOnClickListener(v -> showDatePickerDialog());
+
+        edtClass.setOnClickListener(v -> showClassSelectionDialog());
+        edtUserId.setOnClickListener(v -> fetchUserIds());
+        edtTeacherId.setOnClickListener(v -> fetchTeacherIds());
+
+        edtAddress.setOnClickListener(v -> showAddressSelectionDialog());
     }
 
     private void initViews() {
@@ -75,20 +86,52 @@ public class StudentRegisterActivity extends AppCompatActivity {
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
     }
 
-    private void openDatePickerDialog() {
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_calendar);
-
-        CalendarView calendarView = dialog.findViewById(R.id.calendarView);
-        calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            birthDate = dayOfMonth + "/" + (month + 1) + "/" + year;
-            tvBirthDate.setText(birthDate);
-            dialog.dismiss();
-            Toast.makeText(this, "Ngày sinh đã chọn: " + birthDate, Toast.LENGTH_SHORT).show();
-        });
-
-        dialog.show();
+    private void showClassSelectionDialog() {
+        String[] classes = {"12a1", "12a2", "12a3", "12a4", "12a5", "12a6", "12a7", "12a8"};
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Chọn lớp học")
+                .setItems(classes, (dialog, which) -> edtClass.setText(classes[which]))
+                .show();
     }
+
+    private void showAddressSelectionDialog() {
+        String[] classes = {"Phú La, Hà Đông, Hà Nội", "Kiến Hưng, Hà Đông, Hà Nội", "La Khê, Hà Đông, Hà Nội", "Mộ Lao, Hà Đông, Hà Nội", "Nguyễn Trãi, Hà Đông, Hà Nội", "Quang Trung, Hà Đông, Hà Nội", "Vạn Phúc, Hà Đông, Hà Nội", "Văn Quán, Hà Đông, Hà Nội"};
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Chọn địa chỉ")
+                .setItems(classes, (dialog, which) -> edtAddress.setText(classes[which]))
+                .show();
+    }
+
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, selectedYear, selectedMonth, selectedDay) -> {
+            String rawDate = String.format(Locale.getDefault(), "%d/%d/%d", selectedDay, selectedMonth + 1, selectedYear);
+            try {
+                String formattedDate = convertDateFormat(rawDate);
+                tvBirthDate.setText(formattedDate);
+
+                birthDate = formattedDate;
+            } catch (Exception e) {
+                Toast.makeText(this, "Lỗi chuyển đổi định dạng ngày: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("StudentRegisterActivity", "Date conversion error", e);
+            }
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    private String convertDateFormat(String inputDate) throws Exception {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("d/M/yyyy", Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date = inputFormat.parse(inputDate);
+        return outputFormat.format(date);
+    }
+
+
 
     private void processFormFields() {
         if (!validateName() || !validateBirthDate() || !validateClass() || !validateUserId() || !validateAddress() || !validateTeacherId()) {
@@ -111,13 +154,6 @@ public class StudentRegisterActivity extends AppCompatActivity {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private String convertDateFormat(String inputDate) throws Exception {
-        SimpleDateFormat inputFormat = new SimpleDateFormat("d/M/yyyy");
-        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = inputFormat.parse(inputDate);
-        return outputFormat.format(date);
     }
 
     private void registerStudentUser(StudentRegisterRequest studentRegisterRequest) {
@@ -224,5 +260,67 @@ public class StudentRegisterActivity extends AppCompatActivity {
         }
         edtTeacherId.setError(null);
         return true;
+    }
+
+    private void fetchUserIds() {
+        String token = tokenManager.getToken();
+        Call<ApiResponse<List<Long>>> call = apiService.getAllUserIdParent("Bearer " + token);
+
+        call.enqueue(new Callback<ApiResponse<List<Long>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Long>>> call, Response<ApiResponse<List<Long>>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    List<Long> userIds = response.body().getData();
+                    showUserIdSelectionDialog(userIds);
+                } else {
+                    Toast.makeText(StudentRegisterActivity.this, "Không thể lấy danh sách User ID", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<Long>>> call, Throwable t) {
+                Toast.makeText(StudentRegisterActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showUserIdSelectionDialog(List<Long> userIds) {
+        String[] userIdArray = userIds.stream().map(String::valueOf).toArray(String[]::new);
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Chọn mã phụ huynh")
+                .setItems(userIdArray, (dialog, which) -> edtUserId.setText(userIdArray[which]))
+                .show();
+    }
+
+    private void fetchTeacherIds() {
+        String token = tokenManager.getToken();
+        Call<ApiResponse<List<Long>>> call = apiService.getAllUserIdTeacher("Bearer " + token);
+
+        call.enqueue(new Callback<ApiResponse<List<Long>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Long>>> call, Response<ApiResponse<List<Long>>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    List<Long> userIds = response.body().getData();
+                    showTeacherIdSelectionDialog(userIds);
+                } else {
+                    Toast.makeText(StudentRegisterActivity.this, "Không thể lấy danh sách User ID", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<Long>>> call, Throwable t) {
+                Toast.makeText(StudentRegisterActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showTeacherIdSelectionDialog(List<Long> userIds) {
+        String[] userIdArray = userIds.stream().map(String::valueOf).toArray(String[]::new);
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Chọn mã giáo viên")
+                .setItems(userIdArray, (dialog, which) -> edtTeacherId.setText(userIdArray[which]))
+                .show();
     }
 }

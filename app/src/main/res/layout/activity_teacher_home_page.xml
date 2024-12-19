@@ -55,14 +55,14 @@
                             android:id="@+id/imgStudentList"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/ic_student_list" />
+                            android:src="@drawable/ic_class_management" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:gravity="center"
-                            android:text="DS Học sinh"
+                            android:text="Quản lý lớp"
                             android:textSize="14sp"
                             android:textColor="#000000" />
                     </LinearLayout>
@@ -88,31 +88,6 @@
                             android:layout_marginTop="8dp"
                             android:gravity="center"
                             android:text="Nhập điểm"
-                            android:textSize="14sp"
-                            android:textColor="#000000" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/imgClassManagement"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@drawable/ic_class_management" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:gravity="center"
-                            android:text="Quản lý lớp"
                             android:textSize="14sp"
                             android:textColor="#000000" />
                     </LinearLayout>

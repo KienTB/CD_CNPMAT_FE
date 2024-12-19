@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.intent.R;
 
-public class StudentDetailActivity extends AppCompatActivity {
+public class StudentInfomationActivity extends AppCompatActivity {
 
     private ImageView imgBack;
     private TextView tvStudentName, tvStudentId, tvStudentClass,

@@ -3,15 +3,20 @@ package com.example.intent.Api;
 import com.example.intent.Model.Grade;
 import com.example.intent.Model.Notification;
 import com.example.intent.Model.Schedule;
+import com.example.intent.Model.DataStudent;
 import com.example.intent.Request.ChangePasswordRequest;
 import com.example.intent.Request.GradeRequest;
 import com.example.intent.Request.LoginRequest;
 import com.example.intent.Model.Student;
 import com.example.intent.Model.User;
 import com.example.intent.RefreshTokenRequest;
+import com.example.intent.Request.NotificationRegisterRequest;
 import com.example.intent.Request.RegisterRequest;
+import com.example.intent.Request.ResetPasswordRequest;
 import com.example.intent.Request.ScheduleRequest;
 import com.example.intent.Request.StudentRegisterRequest;
+import com.example.intent.Request.UpdateNotificationRequest;
+import com.example.intent.Request.UpdateStudentRequest;
 import com.example.intent.Request.UpdateUserRequest;
 import com.example.intent.Token.AuthResponse;
 
@@ -48,6 +53,12 @@ public interface ApiService {
     @GET("api/user/profile")
     Call<ApiResponse<Map<String, Object>>> getUserProfile(
             @Header("Authorization") String token);
+
+    @GET("api/user/parent/id")
+    Call<ApiResponse<List<Long>>> getAllUserIdParent(@Header("Authorization") String token);
+
+    @GET("api/user/teacher/id")
+    Call<ApiResponse<List<Long>>> getAllUserIdTeacher(@Header("Authorization") String token);
 
     @GET("api/parent/student/{studentId}")
     Call<ApiResponse<Student>> getStudentById(
@@ -88,7 +99,7 @@ public interface ApiService {
             @Header("Authorization") String token);
 
     @GET("api/admin/get/all/students")
-    Call<ApiResponse<List<Student>>> getAllStudents(
+    Call<StudentApiResponse<List<DataStudent>>> getAllStudents(
             @Header("Authorization") String token);
 
     @POST("api/admin/register/student")
@@ -106,6 +117,40 @@ public interface ApiService {
     Call<ApiResponse<String>> deleteUser(
             @Header("Authorization") String token,
             @Path("userId") Long userId);
+
+    @PUT("api/admin/update/student/{studentId}")
+    Call<ApiResponse<Student>> updateStudent(
+            @Header("Authorization") String token,
+            @Path("studentId") Long studentId,
+            @Body UpdateStudentRequest updateStudentRequest);
+
+    @DELETE("api/admin/delete/student/{studentId}")
+    Call<ApiResponse<String>> deleteStudent(
+            @Header("Authorization") String token,
+            @Path("studentId") Long studentId);
+
+    @POST("api/admin/register/notification")
+    Call<ApiResponse<Notification>> registerNotification(
+            @Header("Authorization") String token,
+            @Body NotificationRegisterRequest notificationRegisterRequest);
+
+    @PUT("api/admin/update/notification/{notificationId}")
+    Call<ApiResponse<Notification>> updateNotification(
+            @Header("Authorization") String token,
+            @Path("notificationId") Long notificationId,
+            @Body UpdateNotificationRequest updateNotificationRequest);
+
+    @DELETE("api/admin/delete/notification/{notificationId}")
+    Call<ApiResponse<String>> deleteNotification(
+            @Header("Authorization") String token,
+            @Path("notificationId") Long notificationId);
+
+    @POST("api/user/send-otp")
+    Call<ApiResponse<String>> sendOtp(@Body Map<String, String> phoneNumber);
+
+    @POST("api/user/reset/password")
+    Call<ApiResponse<String>> resetPassword(@Body ResetPasswordRequest resetPasswordRequest);
+
 
     @POST("api/auth/refresh")
     Call<ApiResponse<AuthResponse>> refreshToken(@Body RefreshTokenRequest refreshTokenRequest);

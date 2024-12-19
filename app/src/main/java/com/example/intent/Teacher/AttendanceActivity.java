@@ -1,31 +1,37 @@
 package com.example.intent.Teacher;
 
-import android.content.Intent;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SearchView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
+import com.example.intent.Model.Schedule;
 import com.example.intent.Model.Student;
 import com.example.intent.R;
+import com.example.intent.Request.ScheduleRequest;
 import com.example.intent.StudentAdapter;
 import com.example.intent.Token.TokenManager;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,25 +44,27 @@ public class AttendanceActivity extends AppCompatActivity {
     private TokenManager tokenManager;
     private ApiService apiService;
     private ImageView imgBackToExtension;
-    private SearchView searchView;
+    private EditText etActivity, etDate;
+    private RadioGroup radioGroupStatus;
+    private Button btnSubmit;
+    private String attendanceStatus;
+    private String scheduleDate;
+    private Long userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_attendance);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
         recyclerViewStudents = findViewById(R.id.recyclerViewStudents);
         imgBackToExtension = findViewById(R.id.imgBackToExtension);
-        searchView = findViewById(R.id.searchView);
+        radioGroupStatus = findViewById(R.id.radioGroupStatus);
+        btnSubmit = findViewById(R.id.btnSubmit);
+        etActivity = findViewById(R.id.etActivity);
+        etDate = findViewById(R.id.etDate);
 
         studentAdapter = new StudentAdapter(studentList, student -> {
-            Intent intent = new Intent(AttendanceActivity.this, AttendanceInputActivity.class);
-            intent.putExtra("studentId", student.getStudentId());
-            startActivity(intent);
+            Toast.makeText(this, "Clicked on: " + student.getName(), Toast.LENGTH_SHORT).show();
         });
 
         recyclerViewStudents.setLayoutManager(new LinearLayoutManager(this));
@@ -70,11 +78,65 @@ public class AttendanceActivity extends AppCompatActivity {
             fetchStudentsByTeacherId(teacherId);
         } else {
             Toast.makeText(this, "Không tìm thấy ID giáo viên. Vui lòng đăng nhập lại.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        userId = tokenManager.getUserId();
+        if (userId == -1) {
+            Toast.makeText(this, "Không tìm thấy thông tin người dùng!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
 
         imgBackToExtension.setOnClickListener(v -> finish());
 
-        setupSearchView();
+        radioGroupStatus.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton selectedRadioButton = findViewById(checkedId);
+            if (selectedRadioButton != null) {
+                attendanceStatus = selectedRadioButton.getTag().toString();
+            }
+        });
+
+        etActivity.setOnClickListener(v -> showSubjectSelectionDialog());
+
+        etDate.setOnClickListener(v -> showDatePickerDialog());
+
+        btnSubmit.setOnClickListener(v -> submitAttendance());
+    }
+
+    private void showSubjectSelectionDialog() {
+        String[] subjects = {"Toán", "Văn", "Anh", "Lý", "Hóa", "Sinh", "Sử", "Địa"};
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Chọn môn học")
+                .setItems(subjects, (dialog, which) -> etActivity.setText(subjects[which]))
+                .show();
+    }
+
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, selectedYear, selectedMonth, selectedDay) -> {
+            String rawDate = String.format(Locale.getDefault(), "%d/%d/%d", selectedDay, selectedMonth + 1, selectedYear);
+            try {
+                scheduleDate = convertDateFormat(rawDate);
+                etDate.setText(scheduleDate);
+            } catch (Exception e) {
+                Toast.makeText(this, "Lỗi chuyển đổi ngày: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("AttendanceActivity", "Date conversion failed", e);
+            }
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    private String convertDateFormat(String inputDate) throws Exception {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("d/M/yyyy", Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date = inputFormat.parse(inputDate);
+        return outputFormat.format(date);
     }
 
     private void fetchStudentsByTeacherId(long teacherId) {
@@ -89,42 +151,82 @@ public class AttendanceActivity extends AppCompatActivity {
                             studentList.addAll(response.body().getData());
                             studentAdapter.notifyDataSetChanged();
                         } else {
-                            Toast.makeText(AttendanceActivity.this,
-                                    "Tải danh sách học sinh thất bại: " + (response.body() != null ? response.body().getMessage() : "Lỗi không xác định"),
-                                    Toast.LENGTH_SHORT).show();
+                            String message = response.body() != null ? response.body().getMessage() : "Lỗi không xác định";
+                            Toast.makeText(AttendanceActivity.this, "Tải danh sách học sinh thất bại: " + message, Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ApiResponse<List<Student>>> call, Throwable t) {
                         Toast.makeText(AttendanceActivity.this, "Gọi API thất bại: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("AttendanceActivity", "API call failed", t);
                     }
                 });
     }
 
-    private void setupSearchView() {
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filterStudents(newText);
-                return true;
-            }
-        });
-    }
-
-    private void filterStudents(String query) {
-        List<Student> filteredList = new ArrayList<>();
-        for (Student student : studentList) {
-            if (student.getName().toLowerCase().contains(query.toLowerCase()) ||
-                    String.valueOf(student.getStudentId()).contains(query)) {
-                filteredList.add(student);
-            }
+    private void submitAttendance() {
+        String activity = etActivity.getText().toString().trim();
+        if (activity.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập môn học!", Toast.LENGTH_SHORT).show();
+            return;
         }
-        studentAdapter.updateList(filteredList);
+
+        if (attendanceStatus == null) {
+            Toast.makeText(this, "Vui lòng chọn trạng thái điểm danh!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (scheduleDate == null) {
+            Toast.makeText(this, "Vui lòng chọn ngày!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        List<Long> selectedStudentIds = studentAdapter.getSelectedStudentIds();
+        if (selectedStudentIds.isEmpty()) {
+            Toast.makeText(this, "Vui lòng chọn ít nhất một học sinh!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        for (Long studentId : selectedStudentIds) {
+            ScheduleRequest scheduleRequest = new ScheduleRequest(
+                    null,
+                    studentId,
+                    userId,
+                    activity,
+                    scheduleDate,
+                    attendanceStatus
+            );
+
+            String token = "Bearer " + tokenManager.getToken();
+            apiService.addSchedule(token, scheduleRequest)
+                    .enqueue(new Callback<ApiResponse<Schedule>>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse<Schedule>> call, Response<ApiResponse<Schedule>> response) {
+                            if (response.isSuccessful() &&
+                                    response.body() != null &&
+                                    (response.body().isSuccess() ||
+                                            response.body().getMessage().equals("Attendance added successfully"))) {
+                                Toast.makeText(AttendanceActivity.this, "Lưu lịch điểm danh thành công!", Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                String message = (response.body() != null) ? response.body().getMessage() : "Lỗi không xác định";
+                                Toast.makeText(AttendanceActivity.this, "Lưu lịch điểm danh thất bại: " + message, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResponse<Schedule>> call, Throwable t) {
+                            Toast.makeText(AttendanceActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.e("AttendanceInputActivity", "API call failed", t);
+                        }
+                    });
+
+            Log.d("Attendance", "Student ID: " + studentId +
+                    ", User ID: " + userId +
+                    ", Status: " + attendanceStatus);
+
+            Toast.makeText(this, "Đã ghi nhận điểm danh!", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 }

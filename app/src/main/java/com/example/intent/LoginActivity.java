@@ -2,9 +2,12 @@ package com.example.intent;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogIn;
     private TextView txtForgotPassword;
     private ApiService apiService;
+    private ImageView btnTogglePassword;
+    private boolean isPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +49,14 @@ public class LoginActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
         btnLogIn = findViewById(R.id.btnLogIn);
         txtForgotPassword = findViewById(R.id.txtForgotPassword);
+        btnTogglePassword = findViewById(R.id.btnTogglePassword);
 
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
+
+        setupPasswordToggle(edtPassword, btnTogglePassword, () -> {
+            isPasswordVisible = !isPasswordVisible;
+            return isPasswordVisible;
+        });
 
         btnLogIn.setOnClickListener(view -> {
             String phoneNumber = edtPhoneNumber.getText().toString();
@@ -70,13 +81,25 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void setupPasswordToggle(EditText editText, ImageView toggleButton, LoginActivity.VisibilityToggle visibilityToggle) {
+        toggleButton.setOnClickListener(v -> {
+            if (visibilityToggle.toggle()) {
+                editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                toggleButton.setImageResource(R.drawable.ic_eye_off);
+            } else {
+                editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                toggleButton.setImageResource(R.drawable.ic_eye_off);
+            }
+            editText.setSelection(editText.getText().length());
+        });
+    }
+
     private void loginUser(String phoneNumber, String password) {
         LoginRequest loginRequest = new LoginRequest(phoneNumber, password);
 
         apiService.login(loginRequest).enqueue(new Callback<ApiResponse<AuthResponse>>() {
             @Override
             public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
-                Log.d("LoginActivity", "Response Code: " + response.code());
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse<AuthResponse> apiResponse = response.body();
 
@@ -105,8 +128,12 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Log.e("LoginActivity", "Error: " + response.code() + ", Message: " + response.message());
-                    Toast.makeText(LoginActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                    if (response.code() == 400) {
+                        Toast.makeText(LoginActivity.this, "Số điện thoại hoặc mật khẩu không hợp lệ", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e("LoginActivity", "Error: " + response.code() + ", Message: " + response.message());
+                        Toast.makeText(LoginActivity.this, "Lỗi: " + response.code(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
@@ -143,9 +170,12 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Vai trò không hợp lệ: " + role, Toast.LENGTH_SHORT).show();
                 return;
         }
-
         startActivity(intent);
-        Log.d("LoginActivity", "Navigation completed successfully");
         finish();
+    }
+
+    @FunctionalInterface
+    private interface VisibilityToggle {
+        boolean toggle();
     }
 }

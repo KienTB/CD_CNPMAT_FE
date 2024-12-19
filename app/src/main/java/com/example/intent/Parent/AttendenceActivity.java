@@ -3,6 +3,7 @@ package com.example.intent.Parent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,8 +19,11 @@ import com.example.intent.Token.TokenManager;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +36,7 @@ public class AttendenceActivity extends AppCompatActivity {
     private List<Schedule> scheduleList = new ArrayList<>();
     private TokenManager tokenManager;
     private ApiService apiService;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,7 @@ public class AttendenceActivity extends AppCompatActivity {
 
         imgBackToExtension = findViewById(R.id.imgBackToExtension);
         rvAttendance = findViewById(R.id.rvAttendance);
+        searchView = findViewById(R.id.searchView);
 
         tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
@@ -50,24 +56,71 @@ public class AttendenceActivity extends AppCompatActivity {
         attendanceAdapter = new AttendanceAdapter(scheduleList);
         rvAttendance.setAdapter(attendanceAdapter);
 
-        // Lấy student_id từ TokenManager
         String studentDataJson = tokenManager.getStudentData();
         if (studentDataJson != null) {
             Long studentId = parseStudentIdFromJson(studentDataJson);
             if (studentId != null) {
                 loadAttendanceData(studentId);
-            } else {
-                // Xử lý trường hợp student_id không hợp lệ
             }
+        }
+        setupSearchView();
+    }
+
+    private void setupSearchView() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterAttendanceByDate(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    attendanceAdapter.updateList(scheduleList);
+                } else {
+                    filterAttendanceByDate(newText);
+                }
+                return true;
+            }
+        });
+    }
+
+    private void filterAttendanceByDate(String date) {
+        if (!date.matches("\\d{4}/\\d{2}/\\d{2}")) {
+            Toast.makeText(this, "Định dạng ngày không hợp lệ. Vui lòng nhập yyyy/MM/dd", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        List<Schedule> filteredList = new ArrayList<>();
+        for (Schedule schedule : scheduleList) {
+            String formattedDate = formatDate(schedule.getScheduleDate());
+            if (formattedDate.equals(date)) {
+                filteredList.add(schedule);
+            }
+        }
+
+        if (filteredList.isEmpty()) {
+            Toast.makeText(this, "Không tìm thấy lịch điểm danh cho ngày " + date, Toast.LENGTH_SHORT).show();
         } else {
-            // Xử lý trường hợp không có dữ liệu học sinh
+            attendanceAdapter.updateList(filteredList);
+        }
+    }
+
+    private String formatDate(String date) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+            Date parsedDate = inputFormat.parse(date);
+            return outputFormat.format(parsedDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return date;
         }
     }
 
     private Long parseStudentIdFromJson(String studentDataJson) {
-        // Giải mã JSON để lấy student_id (Sử dụng thư viện JSON như Gson)
         try {
-            // Giả sử studentDataJson là chuỗi JSON chứa trường studentId
             JSONObject jsonObject = new JSONObject(studentDataJson);
             return jsonObject.optLong("studentId", -1);
         } catch (Exception e) {
@@ -78,8 +131,6 @@ public class AttendenceActivity extends AppCompatActivity {
 
     private void loadAttendanceData(Long studentId) {
         String token = tokenManager.getToken();
-        Log.d("API_DEBUG", "Token: " + token);
-        Log.d("API_DEBUG", "Student ID: " + studentId);
 
         apiService.getSchedulesByStudentId("Bearer " + token, studentId)
                 .enqueue(new Callback<List<Schedule>>() {
@@ -98,7 +149,7 @@ public class AttendenceActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            handleErrorResponse(response);
+                            Log.e("API_DEBUG", "Error: " + response.message());
                         }
                     }
 
@@ -112,21 +163,5 @@ public class AttendenceActivity extends AppCompatActivity {
                         });
                     }
                 });
-    }
-
-    private void handleErrorResponse(Response<?> response) {
-        try {
-            String errorBody = response.errorBody() != null
-                    ? response.errorBody().string()
-                    : "Không có thông tin lỗi";
-            Log.e("API_DEBUG", "Error Body: " + errorBody);
-
-            runOnUiThread(() -> Toast.makeText(
-                    AttendenceActivity.this,
-                    "Lỗi: " + errorBody,
-                    Toast.LENGTH_LONG).show());
-        } catch (Exception e) {
-            Log.e("API_DEBUG", "Error parsing error body", e);
-        }
     }
 }

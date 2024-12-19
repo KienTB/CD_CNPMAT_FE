@@ -27,17 +27,17 @@ public class User {
     private String address;
 
     @SerializedName("teacherId")
-    private long teacherId;
+    private Long teacherId;
 
-    public long getTeacherId() {
+    public Long getTeacherId() {
         return teacherId;
     }
 
-    public void setTeacherId(long teacherId) {
+    public void setTeacherId(Long teacherId) {
         this.teacherId = teacherId;
     }
 
-    public User(Long user_id, String phoneNumber, String password, String email, String role, String name, String address, long teacher_id) {
+    public User(Long user_id, String phoneNumber, String password, String email, String role, String name, String address, Long teacherId) {
         this.userId = userId;
         this.phoneNumber = phoneNumber;
         this.password = password;
@@ -45,7 +45,7 @@ public class User {
         this.role = role;
         this.name = name;
         this.address = address;
-        this.teacherId = teacher_id;
+        this.teacherId = teacherId;
     }
 
     public Long getUserId() {
@@ -107,4 +107,6 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+
 }

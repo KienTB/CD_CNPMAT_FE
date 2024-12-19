@@ -17,6 +17,36 @@
         android:theme="@style/Theme.Intent"
         tools:targetApi="31">
         <activity
+            android:name=".InformationProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.StatisticalDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.StatisticalScoreActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.StatisticalAttendanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.EditNotificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.NotificationRegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.NotificationDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.EditStudentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.StudentDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".Admin.EditUserActivity"
             android:exported="false" />
         <activity
@@ -41,7 +71,7 @@
             android:name=".Teacher.ScoreInputActivity"
             android:exported="false" />
         <activity
-            android:name=".Teacher.StudentDetailActivity"
+            android:name=".Teacher.StudentInfomationActivity"
             android:exported="false" />
         <activity
             android:name=".Admin.PostNewsActivity"
@@ -130,7 +160,7 @@
             android:name=".SettingActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin.RegisterActivity"
+            android:name=".Admin.UserRegisterActivity"
             android:exported="false" />
         <activity
             android:name=".ForgotPasswordActivity"

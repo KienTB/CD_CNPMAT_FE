@@ -22,6 +22,7 @@ import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.ChangePasswordActivity;
+import com.example.intent.InformationProductActivity;
 import com.example.intent.LoginActivity;
 import com.example.intent.Model.Notification;
 import com.example.intent.NotificationAdapter;
@@ -42,8 +43,8 @@ public class TeacherMainActivity extends AppCompatActivity {
     private Button btnLogOut;
     private TextView txtName, txtPhone;
     private ImageView imgNextToAccountInformation, imgNextToChangePW,
-            imgStudentList, imgGrade, imgClassManagement,
-            imgAttendance, imgTeachingSchedule, imgEvaluation, imgReport;
+            imgStudentList, imgGrade, imgAttendance,
+            imgTeachingSchedule, imgEvaluation, imgReport, imgNextToInformationProduct;
 
     private CalendarView calendarView;
 
@@ -76,11 +77,11 @@ public class TeacherMainActivity extends AppCompatActivity {
         imgNextToAccountInformation = findViewById(R.id.imgNextToAccountInformation);
         imgStudentList = findViewById(R.id.imgStudentList);
         imgGrade = findViewById(R.id.imgGrade);
-        imgClassManagement = findViewById(R.id.imgClassManagement);
         imgAttendance = findViewById(R.id.imgAttendance);
         imgTeachingSchedule = findViewById(R.id.imgTeachingSchedule);
         imgEvaluation = findViewById(R.id.imgEvaluation);
         imgReport = findViewById(R.id.imgReport);
+        imgNextToInformationProduct = findViewById(R.id.imgNextToInformationProduct);
 
         calendarView = findViewById(R.id.calendarView);
 
@@ -92,7 +93,10 @@ public class TeacherMainActivity extends AppCompatActivity {
 
         recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(this));
 
-        notificationAdapter = new NotificationAdapter(new ArrayList<>());
+        notificationAdapter = new NotificationAdapter(new ArrayList<>(), notification -> {
+            Toast.makeText(this, "Clicked: " + notification.getTitle(), Toast.LENGTH_SHORT).show();
+        });
+
 
         recyclerViewNotifications.setAdapter(notificationAdapter);
 
@@ -138,10 +142,6 @@ public class TeacherMainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ScoreActivity.class))
         );
 
-        imgClassManagement.setOnClickListener(v ->
-                startActivity(new Intent(this, ClassManagementActivity.class))
-        );
-
         imgAttendance.setOnClickListener(v ->
                 startActivity(new Intent(this, AttendanceActivity.class))
         );
@@ -156,6 +156,9 @@ public class TeacherMainActivity extends AppCompatActivity {
 
         imgReport.setOnClickListener(v ->
                 startActivity(new Intent(this, StatisticalActivity.class))
+        );
+        imgNextToInformationProduct.setOnClickListener(v ->
+                startActivity(new Intent(this, InformationProductActivity.class))
         );
     }
 

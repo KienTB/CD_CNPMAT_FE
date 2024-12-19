@@ -1,9 +1,9 @@
 package com.example.intent;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,11 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.intent.Model.Student;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentViewHolder> {
+
     private List<Student> studentList;
     private OnItemClickListener listener;
+    private List<Long> selectedStudentIds = new ArrayList<>();
 
     public interface OnItemClickListener {
         void onItemClick(Student student);
@@ -24,6 +27,10 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
     public StudentAdapter(List<Student> studentList, OnItemClickListener listener) {
         this.studentList = studentList;
         this.listener = listener;
+    }
+
+    public List<Long> getSelectedStudentIds() {
+        return selectedStudentIds;
     }
 
     @NonNull
@@ -39,12 +46,22 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
         Student student = studentList.get(position);
         if (student != null) {
             holder.bind(student);
+            holder.checkBox.setOnCheckedChangeListener(null);
+            holder.checkBox.setChecked(selectedStudentIds.contains(student.getStudentId()));
+
+            holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    selectedStudentIds.add(student.getStudentId());
+                } else {
+                    selectedStudentIds.remove(student.getStudentId());
+                }
+            });
         }
     }
 
     @Override
     public int getItemCount() {
-        return studentList.size();
+        return studentList != null ? studentList.size() : 0;
     }
 
     public void updateList(List<Student> newStudents) {
@@ -54,6 +71,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
 
     public static class StudentViewHolder extends RecyclerView.ViewHolder {
         TextView txtStudentName, txtStudentClass, txtStudentId;
+        CheckBox checkBox;
         Student currentStudent;
 
         public StudentViewHolder(@NonNull View itemView, OnItemClickListener listener) {
@@ -62,6 +80,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
             txtStudentName = itemView.findViewById(R.id.txtStudentName);
             txtStudentClass = itemView.findViewById(R.id.txtStudentClass);
             txtStudentId = itemView.findViewById(R.id.txtStudentId);
+            checkBox = itemView.findViewById(R.id.checkBoxSelectStudent);
 
             itemView.setOnClickListener(v -> {
                 if (listener != null && currentStudent != null) {

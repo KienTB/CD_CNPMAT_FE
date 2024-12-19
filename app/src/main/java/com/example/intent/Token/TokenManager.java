@@ -11,6 +11,15 @@ public class TokenManager {
     private static final String KEY_STUDENT_DATA = "student_data";
     private static final String KEY_TEACHER_ID = "teacher_id";
     private static final String KEY_USER_ID = "user_id";
+    private static final String KEY_STUDENT_ID = "student_id";
+
+    public long getStudentId() {
+        return prefs.getLong(KEY_STUDENT_ID, -1L);
+    }
+
+    public void saveStudentId(long studentId) {
+        prefs.edit().putLong(KEY_STUDENT_ID, studentId).apply();
+    }
 
     public void saveUserId(long userId) {
         prefs.edit().putLong(KEY_USER_ID, userId).apply();

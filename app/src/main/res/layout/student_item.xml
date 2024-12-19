@@ -53,15 +53,13 @@
                 android:textColor="#666666" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imgMoreOptions"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_more_vert"
-            android:contentDescription="More Options"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"/>
+        <CheckBox
+            android:id="@+id/checkBoxSelectStudent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

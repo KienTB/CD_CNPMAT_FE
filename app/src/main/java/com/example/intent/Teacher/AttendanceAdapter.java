@@ -32,9 +32,14 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         Schedule schedule = scheduleList.get(position);
         if (schedule != null) {
             holder.tvActivity.setText(schedule.getActivity());
-            holder.tvDate.setText("Ngày: " + schedule.getScheduleDate());
-            holder.tvStatus.setText("Trạng thái: " + (schedule.getStatus() != null ? schedule.getStatus() : "Chưa cập nhật"));
+            holder.tvDate.setText(schedule.getScheduleDate());
+            holder.tvStatus.setText((schedule.getStatus() != null ? schedule.getStatus() : "Chưa cập nhật"));
         }
+    }
+
+    public void updateList(List<Schedule> filteredList) {
+        this.scheduleList = filteredList;
+        notifyDataSetChanged();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.intent.Teacher;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,6 +11,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.intent.Admin.StudentManagementActivity;
+import com.example.intent.Admin.UserManagementActivity;
 import com.example.intent.R;
 
 public class StatisticalActivity extends AppCompatActivity {
@@ -31,5 +34,14 @@ public class StatisticalActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    public void openStatisticalAttendance(View view) {
+        Intent intent = new Intent(this, StatisticalAttendanceActivity.class);
+        startActivity(intent);
+    }
+
+    public void openStatisticalScore(View view) {
+        Intent intent = new Intent(this, StatisticalScoreActivity.class);
+        startActivity(intent);
     }
 }

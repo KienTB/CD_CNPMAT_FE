@@ -17,6 +17,7 @@ import com.example.intent.Api.RetrofitClient;
 import com.example.intent.Model.Student;
 import com.example.intent.R;
 import com.example.intent.StudentAdapter;
+import com.example.intent.StudentNormalAdapter;
 import com.example.intent.Token.TokenManager;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import retrofit2.Response;
 public class StudentListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewStudents;
-    private StudentAdapter studentAdapter;
+    private StudentNormalAdapter studentNormalAdapter;
     private List<Student> studentList = new ArrayList<>();
     private TokenManager tokenManager;
     private ApiService apiService;
@@ -45,22 +46,19 @@ public class StudentListActivity extends AppCompatActivity {
         imgBackToExtension = findViewById(R.id.imgBackToExtension);
         searchView = findViewById(R.id.searchView);
 
-        studentAdapter = new StudentAdapter(studentList, student -> {
-            Log.d("StudentListActivity", "onItemClick CALLED");
-            Log.d("StudentListActivity", "Student details: " + student.getName() + " - ID: " + student.getStudentId());
-            Intent intent = new Intent(StudentListActivity.this, StudentDetailActivity.class);
+        studentNormalAdapter = new StudentNormalAdapter(studentList, student -> {
+            Intent intent = new Intent(StudentListActivity.this, StudentInfomationActivity.class);
             intent.putExtra("studentId", student.getStudentId());
             intent.putExtra("name", student.getName());
             intent.putExtra("class_name", student.getClass_name());
             intent.putExtra("birthDate", student.getBirthDate());
             intent.putExtra("gender", student.getGender());
             intent.putExtra("address", student.getAddress());
-            Log.d("StudentListActivity", "Starting StudentDetailActivity");
             startActivity(intent);
         });
 
         recyclerViewStudents.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewStudents.setAdapter(studentAdapter);
+        recyclerViewStudents.setAdapter(studentNormalAdapter);
 
         tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
@@ -87,7 +85,7 @@ public class StudentListActivity extends AppCompatActivity {
                         if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                             studentList.clear();
                             studentList.addAll(response.body().getData());
-                            studentAdapter.notifyDataSetChanged();
+                            studentNormalAdapter.notifyDataSetChanged();
                         } else {
                             Toast.makeText(StudentListActivity.this,
                                     "Tải danh sách học sinh thất bại: " + (response.body() != null ? response.body().getMessage() : "Lỗi không xác định"),
@@ -125,6 +123,6 @@ public class StudentListActivity extends AppCompatActivity {
                 filteredList.add(student);
             }
         }
-        studentAdapter.updateList(filteredList);
+        studentNormalAdapter.updateList(filteredList);
     }
 }

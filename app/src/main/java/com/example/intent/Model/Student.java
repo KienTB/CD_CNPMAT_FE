@@ -22,17 +22,25 @@ public class Student {
     private String address;
 
     @SerializedName("userId")
-    private Long userId;
+    private User user;
 
     @SerializedName("teacherId")
-    private Long teacherId;
+    private User teacher;
 
-    public Long getTeacherId() {
-        return teacherId;
+    public User getUser() {
+        return user;
     }
 
-    public void setTeacherId(Long teacherId) {
-        this.teacherId = teacherId;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(User teacher) {
+        this.teacher = teacher;
     }
 
     public Long getStudentId() {
@@ -83,22 +91,14 @@ public class Student {
         this.address = address;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Student() {
+    public Student(Long studentId, String name, String birthDate, String gender, String class_name, String address, User user, User teacher) {
         this.studentId = studentId;
         this.name = name;
         this.birthDate = birthDate;
         this.gender = gender;
         this.class_name = class_name;
         this.address = address;
-        this.userId = userId;
-        this.teacherId = teacherId;
+        this.user = user;
+        this.teacher = teacher;
     }
 }

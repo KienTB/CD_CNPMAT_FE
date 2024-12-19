@@ -17,6 +17,7 @@ import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.ChangePasswordActivity;
+import com.example.intent.InformationProductActivity;
 import com.example.intent.LoginActivity;
 import com.example.intent.Model.Notification;
 import com.example.intent.Model.Student;
@@ -41,7 +42,8 @@ public class ParentMainActivity extends AppCompatActivity {
     private TabHost myTab;
     private ImageView imgNextToActivityTracking, imgNextToAttendance, imgNextToMenu,
             imgNextToPayMentHP, imgNextToLearningCorner, imgNextToHealth, imgNextToService,
-            imgNextToStudentDiary, imgNextToPayment, imgNextToAccountInformation, imgNextToChangePW;
+            imgNextToStudentDiary, imgNextToPayment, imgNextToAccountInformation, imgNextToChangePW,
+            imgNextToInformationProduct;
 
     private TokenManager tokenManager;
     private ApiService apiService;
@@ -76,6 +78,7 @@ public class ParentMainActivity extends AppCompatActivity {
         imgNextToService = findViewById(R.id.imgNextToService);
         imgNextToStudentDiary = findViewById(R.id.imgNextToStudentDiary);
         imgNextToPayment = findViewById(R.id.imgNextToPayment);
+        imgNextToInformationProduct = findViewById(R.id.imgNextToInformationProduct);
         imgNextToAccountInformation = findViewById(R.id.imgNextToAccountInformation);
         imgNextToChangePW = findViewById(R.id.imgNextToChangePW);
         txtNameStudent = findViewById(R.id.txtNameStudent);
@@ -87,7 +90,10 @@ public class ParentMainActivity extends AppCompatActivity {
 
         recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(this));
 
-        notificationAdapter = new NotificationAdapter(new ArrayList<>());
+        notificationAdapter = new NotificationAdapter(new ArrayList<>(), notification -> {
+            Toast.makeText(this, "Clicked: " + notification.getTitle(), Toast.LENGTH_SHORT).show();
+        });
+
 
         recyclerViewNotifications.setAdapter(notificationAdapter);
 
@@ -175,6 +181,10 @@ public class ParentMainActivity extends AppCompatActivity {
 
         imgNextToChangePW.setOnClickListener(v ->
                 startActivity(new Intent(this, ChangePasswordActivity.class))
+        );
+
+        imgNextToInformationProduct.setOnClickListener(v ->
+                startActivity(new Intent(this, InformationProductActivity.class))
         );
     }
 

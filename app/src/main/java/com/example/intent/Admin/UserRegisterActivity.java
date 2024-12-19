@@ -22,7 +22,6 @@ import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.Helper.StringHelper;
-import com.example.intent.LoginActivity;
 import com.example.intent.Model.User;
 import com.example.intent.R;
 import com.example.intent.Request.RegisterRequest;
@@ -31,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity {
+public class UserRegisterActivity extends AppCompatActivity {
 
     EditText edtName, edtPhoneNumber, edtEmail, edtPassword, edtAddress, edtConfirm;
     Button btnRegister;
@@ -73,6 +72,16 @@ public class RegisterActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        edtAddress.setOnClickListener(v -> showAddressSelectionDialog());
+    }
+
+    private void showAddressSelectionDialog() {
+        String[] classes = {"Phú La, Hà Đông, Hà Nội", "Kiến Hưng, Hà Đông, Hà Nội", "La Khê, Hà Đông, Hà Nội", "Mộ Lao, Hà Đông, Hà Nội", "Nguyễn Trãi, Hà Đông, Hà Nội", "Quang Trung, Hà Đông, Hà Nội", "Vạn Phúc, Hà Đông, Hà Nội", "Văn Quán, Hà Đông, Hà Nội"};
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Chọn địa chỉ")
+                .setItems(classes, (dialog, which) -> edtAddress.setText(classes[which]))
+                .show();
     }
 
     public void processFormFields() {
@@ -112,34 +121,36 @@ public class RegisterActivity extends AppCompatActivity {
                     if (response.body().isSuccess()) {
                         showSuccessDialog();
                     } else {
-                        Toast.makeText(RegisterActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserRegisterActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserRegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
-                Toast.makeText(RegisterActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserRegisterActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void showSuccessDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Đăng ký thành công")
-                .setMessage("Bạn đã đăng ký thành công. Hãy đăng nhập!")
+                .setTitle("Thêm người dùng thành công")
+                .setMessage("Bạn đã thêm người dùng thành công!")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(RegisterActivity.this, UserManagementActivity.class);
+                        Intent intent = new Intent(UserRegisterActivity.this, UserManagementActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
                         finish();
                     }
                 })
                 .show();
     }
+
 
     public boolean validateName() {
         String name =  edtName.getText().toString();

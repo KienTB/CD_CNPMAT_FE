@@ -20,6 +20,7 @@ import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.ChangePasswordActivity;
+import com.example.intent.InformationProductActivity;
 import com.example.intent.LoginActivity;
 import com.example.intent.Parent.AccountInformationActivity;
 import com.example.intent.R;
@@ -35,7 +36,7 @@ public class AdminMainActivity extends AppCompatActivity {
     private TabHost myTab;
     private Button btnLogOut;
     private TextView txtName, txtPhone;
-    private ImageView imgNextToAccountInformation, imgNextToChangePW;
+    private ImageView imgNextToAccountInformation, imgNextToChangePW, imgNextToInformationProduct;
 
     private TokenManager tokenManager;
     private ApiService apiService;
@@ -62,6 +63,7 @@ public class AdminMainActivity extends AppCompatActivity {
 
         imgNextToChangePW = findViewById(R.id.imgNextToChangePW);
         imgNextToAccountInformation = findViewById(R.id.imgNextToAccountInformation);
+        imgNextToInformationProduct = findViewById(R.id.imgNextToInformationProduct);
 
         tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
@@ -108,6 +110,10 @@ public class AdminMainActivity extends AppCompatActivity {
 
         imgNextToChangePW.setOnClickListener(v ->
                 startActivity(new Intent(this, ChangePasswordActivity.class))
+        );
+
+        imgNextToInformationProduct.setOnClickListener(v ->
+                startActivity(new Intent(this, InformationProductActivity.class))
         );
     }
 

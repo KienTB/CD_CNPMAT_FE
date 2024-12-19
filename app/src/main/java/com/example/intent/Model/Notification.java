@@ -16,12 +16,8 @@ public class Notification {
     @SerializedName("userId")
     private Long userId;
 
-    public Notification(Long notificationId, String title, String content, Long userId) {
-        this.notificationId = notificationId;
-        this.title = title;
-        this.content = content;
-        this.userId = userId;
-    }
+    @SerializedName("createdAt")
+    private String createdAt;
 
     public Long getNotificationId() {
         return notificationId;
@@ -53,5 +49,21 @@ public class Notification {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Notification(Long notificationId, String title, String content, Long userId, String createdAt) {
+        this.notificationId = notificationId;
+        this.title = title;
+        this.content = content;
+        this.userId = userId;
+        this.createdAt = createdAt;
     }
 }

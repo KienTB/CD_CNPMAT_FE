@@ -64,7 +64,6 @@ public class UserManagementActivity extends AppCompatActivity {
             intent.putExtra("name", user.getName());
             intent.putExtra("address", user.getAddress());
             intent.putExtra("teacherId", user.getTeacherId());
-            Log.d("StudentListActivity", "Starting StudentDetailActivity");
             startActivity(intent);
         });
 
@@ -86,7 +85,7 @@ public class UserManagementActivity extends AppCompatActivity {
         btnAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserManagementActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(UserManagementActivity.this, UserRegisterActivity.class);
                 startActivity(intent);
             }
         });

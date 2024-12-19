@@ -118,6 +118,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtAddressAI" />
 
+    <Button
+        android:id="@+id/btnConfirm2"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#023E8A"
+        android:fontFamily="@font/ar_one_sans"
+        android:text="Xác nhận"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtPhoneAI" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

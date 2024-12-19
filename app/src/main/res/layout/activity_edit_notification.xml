@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Teacher.ScoreInputActivity">
+    tools:context=".Admin.EditNotificationActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Title"
@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:id="@+id/imgBackToExtension"
+            android:id="@+id/imgBack"
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:contentDescription="Back arrow"
@@ -34,82 +34,63 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Nhập điểm cho học sinh"
+            android:text="Sửa thông báo"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
-            app:layout_constraintStart_toEndOf="@id/imgBackToExtension"
+            app:layout_constraintStart_toEndOf="@id/imgBack"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <EditText
-        android:id="@+id/etSubject"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilNotificationTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Môn học"
-        android:padding="10dp"
-        android:background="@drawable/button_border"
+        android:hint="Nhập tiêu đề"
         app:layout_constraintTop_toBottomOf="@id/Title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_margin="16dp">
 
-    <EditText
-        android:id="@+id/etScore"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:padding="12dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilNotificationContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Điểm số"
-        android:inputType="numberDecimal"
-        android:padding="10dp"
-        android:background="@drawable/button_border"
-        app:layout_constraintTop_toBottomOf="@id/etSubject"
+        android:hint="Nhập nội dung thông báo"
+        app:layout_constraintTop_toBottomOf="@id/tilNotificationTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_margin="16dp">
 
-    <RadioGroup
-        android:id="@+id/rgTerm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/etScore"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp">
-
-        <RadioButton
-            android:id="@+id/rbMidTerm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Giữa kỳ"
-            android:textColor="#000000" />
-
-        <RadioButton
-            android:id="@+id/rbFinalTerm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cuối kỳ"
-            android:textColor="#000000" />
-
-        <RadioButton
-            android:id="@+id/rbSummary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tổng kết"
-            android:textColor="#000000" />
-    </RadioGroup>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etContent"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:gravity="top" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/btnSubmit"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnSubmitNotification"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Lưu Điểm"
+        android:text="Xác nhận"
         android:backgroundTint="#023E8A"
-        android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/rgTerm"
+        android:textColor="@android:color/white"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/tilNotificationContent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp" />
+        android:layout_margin="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

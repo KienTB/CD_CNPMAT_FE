@@ -43,7 +43,6 @@
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- SearchView -->
     <android.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="0dp"

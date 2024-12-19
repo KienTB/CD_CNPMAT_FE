@@ -1,20 +1,17 @@
 package com.example.intent;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
@@ -28,42 +25,59 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ChangePasswordActivity extends AppCompatActivity {
-    private ImageView imgBack;
     private EditText edtCurrentPassword, edtNewPassword, edtConfirmPassword;
     private Button btnSave;
+    private ImageView btnToggleCurrentPassword, btnToggleNewPassword, btnToggleConfirmPassword;
+    private boolean isCurrentPasswordVisible = false, isNewPasswordVisible = false, isConfirmPasswordVisible = false;
     private ApiService apiService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_change_password);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        imgBack = findViewById(R.id.imgBack);
+
         edtCurrentPassword = findViewById(R.id.edtCurrentPassword);
         edtNewPassword = findViewById(R.id.edtNewPassword);
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
         btnSave = findViewById(R.id.btnSave);
+        btnToggleCurrentPassword = findViewById(R.id.btnToggleCurrentPassword);
+        btnToggleNewPassword = findViewById(R.id.btnToggleNewPassword);
+        btnToggleConfirmPassword = findViewById(R.id.btnToggleConfirmPassword);
 
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
 
-        imgBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        setupPasswordToggle(edtCurrentPassword, btnToggleCurrentPassword, () -> {
+            isCurrentPasswordVisible = !isCurrentPasswordVisible;
+            return isCurrentPasswordVisible;
         });
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validateInput()) {
-                    changePassword();
-                }
+        setupPasswordToggle(edtNewPassword, btnToggleNewPassword, () -> {
+            isNewPasswordVisible = !isNewPasswordVisible;
+            return isNewPasswordVisible;
+        });
+
+        setupPasswordToggle(edtConfirmPassword, btnToggleConfirmPassword, () -> {
+            isConfirmPasswordVisible = !isConfirmPasswordVisible;
+            return isConfirmPasswordVisible;
+        });
+
+        btnSave.setOnClickListener(v -> {
+            if (validateInput()) {
+                changePassword();
             }
+        });
+    }
+
+    private void setupPasswordToggle(EditText editText, ImageView toggleButton, VisibilityToggle visibilityToggle) {
+        toggleButton.setOnClickListener(v -> {
+            if (visibilityToggle.toggle()) {
+                editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                toggleButton.setImageResource(R.drawable.ic_eye_off);
+            } else {
+                editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                toggleButton.setImageResource(R.drawable.ic_eye_off);
+            }
+            editText.setSelection(editText.getText().length());
         });
     }
 
@@ -73,78 +87,76 @@ public class ChangePasswordActivity extends AppCompatActivity {
         String confirmPassword = edtConfirmPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(currentPassword)) {
-            edtCurrentPassword.setError("Vui lòng nhập mật khẩu hiện tại");
+            Toast.makeText(this, "Vui lòng nhập mật khẩu hiện tại", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (TextUtils.isEmpty(newPassword)) {
-            edtNewPassword.setError("Vui lòng nhập mật khẩu mới");
+            Toast.makeText(this, "Vui lòng nhập mật khẩu mới", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (newPassword.length() < 8) {
-            edtNewPassword.setError("Mật khẩu phải có ít nhất 8 ký tự");
+            Toast.makeText(this, "Mật khẩu phải có ít nhất 8 ký tự", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        String passwordPattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
+        if (!newPassword.matches(passwordPattern)) {
+            Toast.makeText(this, "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ in hoa, chữ thường, số và ký tự đặc biệt", Toast.LENGTH_LONG).show();
             return false;
         }
 
         if (TextUtils.isEmpty(confirmPassword)) {
-            edtConfirmPassword.setError("Vui lòng xác nhận mật khẩu mới");
+            Toast.makeText(this, "Vui lòng xác nhận mật khẩu mới", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (!newPassword.equals(confirmPassword)) {
-            edtConfirmPassword.setError("Mật khẩu xác nhận không khớp");
+            Toast.makeText(this, "Mật khẩu xác nhận không khớp", Toast.LENGTH_SHORT).show();
             return false;
         }
+
         return true;
     }
 
     private void changePassword() {
-    String currentPassword = edtCurrentPassword.getText().toString().trim();
-    String newPassword = edtNewPassword.getText().toString().trim();
-    String confirmPassword = edtConfirmPassword.getText().toString().trim();
+        String currentPassword = edtCurrentPassword.getText().toString().trim();
+        String newPassword = edtNewPassword.getText().toString().trim();
+        String confirmPassword = edtConfirmPassword.getText().toString().trim();
 
-    ChangePasswordRequest request = new ChangePasswordRequest(
-            currentPassword,
-            newPassword,
-            confirmPassword
-    );
+        ChangePasswordRequest request = new ChangePasswordRequest(currentPassword, newPassword, confirmPassword);
 
-    TokenManager tokenManager = new TokenManager(this);
-    String token = tokenManager.getToken();
+        TokenManager tokenManager = new TokenManager(this);
+        String token = tokenManager.getToken();
 
-    if (token == null) {
+        if (token == null) {
             Toast.makeText(this, "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
             return;
-    }
+        }
 
-    String authHeader = "Bearer " + token;
+        String authHeader = "Bearer " + token;
 
-    apiService.changePassword(authHeader, request).enqueue(new Callback<ApiResponse<AuthResponse>>() {
-        @Override
-        public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
-
-            if (response.isSuccessful() && response.body() != null) {
-                if (response.body().isSuccess()) {
-                    Toast.makeText(ChangePasswordActivity.this,
-                            "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
+        apiService.changePassword(authHeader, request).enqueue(new Callback<ApiResponse<AuthResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    Toast.makeText(ChangePasswordActivity.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    Toast.makeText(ChangePasswordActivity.this,
-                            response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePasswordActivity.this, "Có lỗi xảy ra, vui lòng thử lại", Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                Toast.makeText(ChangePasswordActivity.this,
-                        "Có lỗi xảy ra, vui lòng thử lại", Toast.LENGTH_SHORT).show();
             }
-        }
 
-        @Override
-        public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
-            Toast.makeText(ChangePasswordActivity.this,
-                    "Lỗi kết nối, vui lòng thử lại", Toast.LENGTH_SHORT).show();
-        }
-    });
-}
+            @Override
+            public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
+                Toast.makeText(ChangePasswordActivity.this, "Lỗi kết nối, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
+    @FunctionalInterface
+    private interface VisibilityToggle {
+        boolean toggle();
+    }
 }
