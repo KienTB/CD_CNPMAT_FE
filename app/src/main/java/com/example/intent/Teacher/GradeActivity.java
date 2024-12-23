@@ -1,6 +1,5 @@
 package com.example.intent.Teacher;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -22,12 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
+import com.example.intent.Model.DataStudent;
 import com.example.intent.Model.Grade;
-import com.example.intent.Model.Schedule;
 import com.example.intent.Model.Student;
 import com.example.intent.R;
 import com.example.intent.Request.GradeRequest;
-import com.example.intent.Request.ScheduleRequest;
 import com.example.intent.StudentAdapter;
 import com.example.intent.Token.TokenManager;
 
@@ -38,7 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ScoreActivity extends AppCompatActivity {
+public class GradeActivity extends AppCompatActivity {
     private RecyclerView recyclerViewStudents;
     private StudentAdapter studentAdapter;
     private List<Student> studentList = new ArrayList<>();
@@ -137,23 +135,35 @@ public class ScoreActivity extends AppCompatActivity {
         String token = tokenManager.getToken();
 
         apiService.getStudentByTeacherId("Bearer " + token, teacherId)
-                .enqueue(new Callback<ApiResponse<List<Student>>>() {
+                .enqueue(new Callback<ApiResponse<List<DataStudent>>>() {
                     @Override
-                    public void onResponse(Call<ApiResponse<List<Student>>> call, Response<ApiResponse<List<Student>>> response) {
+                    public void onResponse(Call<ApiResponse<List<DataStudent>>> call, Response<ApiResponse<List<DataStudent>>> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                             studentList.clear();
-                            studentList.addAll(response.body().getData());
+                            for (DataStudent dataStudent : response.body().getData()) {
+                                Student student = new Student(
+                                        dataStudent.getStudentId(),
+                                        dataStudent.getName(),
+                                        dataStudent.getBirthDate(),
+                                        dataStudent.getGender(),
+                                        dataStudent.getClass_name(),
+                                        dataStudent.getAddress(),
+                                        dataStudent.getUser(),
+                                        dataStudent.getTeacher()
+                                );
+                                studentList.add(student);
+                            }
                             studentAdapter.notifyDataSetChanged();
                         } else {
-                            Toast.makeText(ScoreActivity.this,
+                            Toast.makeText(GradeActivity.this,
                                     "Failed to fetch students: " + (response.body() != null ? response.body().getMessage() : "Unknown error"),
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse<List<Student>>> call, Throwable t) {
-                        Toast.makeText(ScoreActivity.this, "API call failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    public void onFailure(Call<ApiResponse<List<DataStudent>>> call, Throwable t) {
+                        Toast.makeText(GradeActivity.this, "API call failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -202,17 +212,17 @@ public class ScoreActivity extends AppCompatActivity {
                                     response.body() != null &&
                                     (response.body().isSuccess() ||
                                             response.body().getMessage().equals("Grade added successfully"))) {
-                                Toast.makeText(ScoreActivity.this, "Lưu điểm thành công!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(GradeActivity.this, "Lưu điểm thành công!", Toast.LENGTH_SHORT).show();
                                 finish();
                             } else {
                                 String message = (response.body() != null) ? response.body().getMessage() : "Lỗi không xác định";
-                                Toast.makeText(ScoreActivity.this, "Lưu điểm thất bại: " + message, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(GradeActivity.this, "Lưu điểm thất bại: " + message, Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onFailure(Call<ApiResponse<Grade>> call, Throwable t) {
-                            Toast.makeText(ScoreActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GradeActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                             Log.e("ScoreInputActivity", "API call failed", t);
                         }
                     });

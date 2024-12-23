@@ -2,18 +2,16 @@ package com.example.intent.Model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class Schedule {
     @SerializedName("scheduleId")
-    private int scheduleId;
+    private Long scheduleId;
 
-    @SerializedName("studentId")
-    private Long studentId;
+    @SerializedName("student")
+    private Student student;
 
-    @SerializedName("userId")
-    private Long userId;
+    @SerializedName("user")
+    private User user;
 
     @SerializedName("activity")
     private String activity;
@@ -24,37 +22,37 @@ public class Schedule {
     @SerializedName("status")
     private String status;
 
-    public Schedule(int scheduleId, Long studentId, Long userId, String activity, String scheduleDate, String status) {
+    public Schedule(Long scheduleId, Student student, User user, String activity, String scheduleDate, String status) {
         this.scheduleId = scheduleId;
-        this.studentId = studentId;
-        this.userId = userId;
+        this.student = student;
+        this.user = user;
         this.activity = activity;
         this.scheduleDate = scheduleDate;
         this.status = status;
     }
 
-    public int getScheduleId() {
+    public Long getScheduleId() {
         return scheduleId;
     }
 
-    public void setScheduleId(int scheduleId) {
+    public void setScheduleId(Long scheduleId) {
         this.scheduleId = scheduleId;
     }
 
-    public Long getStudentId() {
-        return studentId;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentId(Long studentId) {
-        this.studentId = studentId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getActivity() {

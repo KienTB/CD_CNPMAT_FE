@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +14,8 @@ import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.Model.Student;
-import com.example.intent.Model.User;
 import com.example.intent.R;
 import com.example.intent.Request.UpdateStudentRequest;
-import com.example.intent.Request.UpdateUserRequest;
 import com.example.intent.Token.TokenManager;
 
 import java.text.SimpleDateFormat;
@@ -81,10 +78,10 @@ public class EditStudentActivity extends AppCompatActivity {
             String updatedName = edtName.getText().toString().trim();
             String updatedBirthDate = edtBirthDate.getText().toString().trim();
             String updatedClass = edtClass.getText().toString().trim();
-            String updatedGender = edtAddress.getText().toString().trim();
+            String updatedGender = edtGender.getText().toString().trim();
             String updatedAddress = edtAddress.getText().toString().trim();
-            Long updatedUserId = Long.valueOf(edtUserId.toString());
-            Long updateTeacherId = Long.valueOf(edtTeacherId.toString());
+            Long updatedUserId = Long.valueOf(edtUserId.getText().toString());
+            Long updatedTeacherId = Long.valueOf(edtTeacherId.getText().toString());
 
             if (TextUtils.isEmpty(updatedName)) {
                 Toast.makeText(this, "Vui lòng nhập họ và tên!", Toast.LENGTH_SHORT).show();
@@ -96,14 +93,14 @@ public class EditStudentActivity extends AppCompatActivity {
                 return;
             }
 
-            updateStudentInfo(studentId, updatedName, updatedBirthDate, updatedClass, updatedGender, updatedAddress, updatedUserId, updateTeacherId);
+            updateStudentInfo(studentId, updatedName, updatedBirthDate, updatedClass, updatedGender, updatedAddress, updatedUserId, updatedTeacherId);
         });
 
         imgBack.setOnClickListener(v -> finish());
     }
 
     private void updateStudentInfo(Long studentId, String name, String birthDate, String class_name, String gender, String address, Long userId, Long teacherId) {
-        UpdateStudentRequest request = new UpdateStudentRequest(name, birthDate, class_name, gender, userId, address, teacherId);
+        UpdateStudentRequest request = new UpdateStudentRequest(name, birthDate, gender, class_name, userId, address, teacherId);
         String token = "Bearer " + tokenManager.getToken();
 
         apiService.updateStudent(token, studentId, request).enqueue(new Callback<ApiResponse<Student>>() {

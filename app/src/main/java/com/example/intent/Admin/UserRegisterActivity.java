@@ -25,6 +25,7 @@ import com.example.intent.Helper.StringHelper;
 import com.example.intent.Model.User;
 import com.example.intent.R;
 import com.example.intent.Request.RegisterRequest;
+import com.example.intent.Token.TokenManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +37,8 @@ public class UserRegisterActivity extends AppCompatActivity {
     Button btnRegister;
     RadioGroup radioGroupRole;
     ImageView imgBackToExtension;
+    private TokenManager tokenManager;
+    private ApiService apiService;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -51,6 +54,10 @@ public class UserRegisterActivity extends AppCompatActivity {
         edtAddress = findViewById(R.id.edtAddress);
         edtConfirm = findViewById(R.id.edtConfirm);
         radioGroupRole = findViewById(R.id.radioGroupRole);
+
+        tokenManager = new TokenManager(this);
+        apiService = RetrofitClient.getInstance().createService(ApiService.class);
+
         imgBackToExtension = findViewById(R.id.imgBackToExtension);
         imgBackToExtension.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,12 +72,6 @@ public class UserRegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 processFormFields();
             }
-        });
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
         });
 
         edtAddress.setOnClickListener(v -> showAddressSelectionDialog());
@@ -111,8 +112,8 @@ public class UserRegisterActivity extends AppCompatActivity {
     }
 
         public void registerUser(RegisterRequest registerRequest) {
-        ApiService apiService = RetrofitClient.getInstance().createService(ApiService.class);
-        Call<ApiResponse<User>> call = apiService.register(registerRequest);
+        String token = "Bearer " + tokenManager.getToken();
+        Call<ApiResponse<User>> call = apiService.register(token, registerRequest);
 
         call.enqueue(new Callback<ApiResponse<User>>() {
             @Override

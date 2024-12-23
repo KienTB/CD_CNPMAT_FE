@@ -8,11 +8,11 @@ public class Grade {
     @SerializedName("gradeId")
     private Long gradeId;
 
-    @SerializedName("studentId")
-    private Long studentId;
+    @SerializedName("student")
+    private Student student;
 
-    @SerializedName("userId")
-    private Long userId;
+    @SerializedName("user")
+    private User user;
 
     @SerializedName("subject")
     private String subject;
@@ -29,22 +29,6 @@ public class Grade {
 
     public void setGradeId(Long gradeId) {
         this.gradeId = gradeId;
-    }
-
-    public Long getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(Long studentId) {
-        this.studentId = studentId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public String getSubject() {
@@ -71,13 +55,28 @@ public class Grade {
         this.term = term;
     }
 
-    public Grade(Long gradeId, Long studentId, Long userId, String subject, Float score, String term, LocalDate createdAt, LocalDate updatedAt) {
-        this.gradeId = gradeId;
-        this.studentId = studentId;
-        this.userId = userId;
-        this.subject = subject;
-        this.score = score;
-        this.term = term;
+    public Student getStudent() {
+        return student;
     }
 
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Grade(Long gradeId, Float score, Student student, String subject, String term, User user) {
+        this.gradeId = gradeId;
+        this.score = score;
+        this.student = student;
+        this.subject = subject;
+        this.term = term;
+        this.user = user;
+    }
 }

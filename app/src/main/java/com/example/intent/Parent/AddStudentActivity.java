@@ -62,6 +62,7 @@ public class AddStudentActivity extends AppCompatActivity {
                     Toast.makeText(AddStudentActivity.this, "Vui lòng nhập mã học sinh", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                tokenManager.clearStudentData();
                 getStudentById(Integer.parseInt(studentId));
             }
         });
@@ -89,7 +90,7 @@ public class AddStudentActivity extends AppCompatActivity {
                         Toast.makeText(AddStudentActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(AddStudentActivity.this, "Không tìm thấy học sinh", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddStudentActivity.this, "Không tìm thấy học sinh, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -114,7 +115,6 @@ public class AddStudentActivity extends AppCompatActivity {
         builder.setMessage(message);
 
         builder.setPositiveButton("Xác nhận", (dialog, which) -> {
-            // Chuyển đối tượng Student sang JSON string
             Gson gson = new Gson();
             String studentJson = gson.toJson(student);
 
@@ -122,7 +122,6 @@ public class AddStudentActivity extends AppCompatActivity {
 
             Toast.makeText(AddStudentActivity.this, "Thêm học sinh thành công!", Toast.LENGTH_SHORT).show();
 
-            // Chuyển đến màn hình chính
             Intent intent = new Intent(AddStudentActivity.this, ParentMainActivity.class);
             intent.putExtra("studentName", student.getName());
             intent.putExtra("studentClass", student.getClass_name());

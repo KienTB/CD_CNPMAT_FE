@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
+import com.example.intent.Model.DataStudent;
 import com.example.intent.Model.Student;
 import com.example.intent.R;
 import com.example.intent.StudentAdapter;
@@ -79,12 +80,24 @@ public class StudentListActivity extends AppCompatActivity {
         String token = tokenManager.getToken();
 
         apiService.getStudentByTeacherId("Bearer " + token, teacherId)
-                .enqueue(new Callback<ApiResponse<List<Student>>>() {
+                .enqueue(new Callback<ApiResponse<List<DataStudent>>>() {
                     @Override
-                    public void onResponse(Call<ApiResponse<List<Student>>> call, Response<ApiResponse<List<Student>>> response) {
+                    public void onResponse(Call<ApiResponse<List<DataStudent>>> call, Response<ApiResponse<List<DataStudent>>> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                             studentList.clear();
-                            studentList.addAll(response.body().getData());
+                            for (DataStudent dataStudent : response.body().getData()) {
+                                Student student = new Student(
+                                        dataStudent.getStudentId(),
+                                        dataStudent.getName(),
+                                        dataStudent.getBirthDate(),
+                                        dataStudent.getGender(),
+                                        dataStudent.getClass_name(),
+                                        dataStudent.getAddress(),
+                                        dataStudent.getUser(),
+                                        dataStudent.getTeacher()
+                                );
+                                studentList.add(student);
+                            }
                             studentNormalAdapter.notifyDataSetChanged();
                         } else {
                             Toast.makeText(StudentListActivity.this,
@@ -94,7 +107,7 @@ public class StudentListActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse<List<Student>>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<List<DataStudent>>> call, Throwable t) {
                         Toast.makeText(StudentListActivity.this, "Gọi API thất bại: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });

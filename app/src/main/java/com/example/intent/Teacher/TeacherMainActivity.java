@@ -38,6 +38,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.animation.ObjectAnimator;
+
 public class TeacherMainActivity extends AppCompatActivity {
     private TabHost myTab;
     private Button btnLogOut;
@@ -53,6 +55,8 @@ public class TeacherMainActivity extends AppCompatActivity {
 
     private TokenManager tokenManager;
     private ApiService apiService;
+
+    private ImageView[] tabIcons;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,7 +143,7 @@ public class TeacherMainActivity extends AppCompatActivity {
         );
 
         imgGrade.setOnClickListener(v ->
-                startActivity(new Intent(this, ScoreActivity.class))
+                startActivity(new Intent(this, GradeActivity.class))
         );
 
         imgAttendance.setOnClickListener(v ->

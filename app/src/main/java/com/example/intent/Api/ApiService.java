@@ -15,7 +15,9 @@ import com.example.intent.Request.RegisterRequest;
 import com.example.intent.Request.ResetPasswordRequest;
 import com.example.intent.Request.ScheduleRequest;
 import com.example.intent.Request.StudentRegisterRequest;
+import com.example.intent.Request.UpdateGradeRequest;
 import com.example.intent.Request.UpdateNotificationRequest;
+import com.example.intent.Request.UpdateScheduleRequest;
 import com.example.intent.Request.UpdateStudentRequest;
 import com.example.intent.Request.UpdateUserRequest;
 import com.example.intent.Token.AuthResponse;
@@ -42,8 +44,10 @@ public interface ApiService {
     @POST("api/user/login")
     Call<ApiResponse<AuthResponse>> login(@Body LoginRequest loginRequest);
 
-    @POST("api/user/register")
-    Call<ApiResponse<User>> register(@Body RegisterRequest registerRequest);
+    @POST("api/admin/user/register")
+    Call<ApiResponse<User>> register(
+            @Header("Authorization") String token,
+            @Body RegisterRequest registerRequest);
 
     @POST("api/user/change-password")
     Call<ApiResponse<AuthResponse>> changePassword(
@@ -76,19 +80,61 @@ public interface ApiService {
             @Path("studentId") Long studentId);
 
     @GET("api/teacher/student/{teacherId}")
-    Call<ApiResponse<List<Student>>> getStudentByTeacherId(
+    Call<ApiResponse<List<DataStudent>>> getStudentByTeacherId(
             @Header("Authorization") String token,
             @Path("teacherId") Long teacherId);
+
+    @GET("api/teacher/grade/{studentId}")
+    Call<List<Grade>> getGradesForTeacher(
+            @Header("Authorization") String token,
+            @Path("studentId") Long studentId
+    );
 
     @POST("api/teacher/add/grade")
     Call<ApiResponse<Grade>> addGrade(
             @Header("Authorization") String token,
             @Body GradeRequest gradeRequest);
 
+    @PUT("api/teacher/edit/grade/{studentId}/{gradeId}")
+    Call<ApiResponse<Grade>> updateGrade(
+            @Header("Authorization") String token,
+            @Path("studentId") Long studentId,
+            @Path("gradeId") Long gradeId,
+            @Body UpdateGradeRequest updateGradeRequest
+    );
+
+    @DELETE("api/teacher/delete/grade/{studentId}/{gradeId}")
+    Call<ApiResponse<Void>> deleteGrade(
+            @Header("Authorization") String token,
+            @Path("studentId") Long studentId,
+            @Path("gradeId") Long gradeId
+    );
+
+    @GET("api/teacher/schedule/{studentId}")
+    Call<List<Schedule>> getSchedulesForTeacher(
+            @Header("Authorization") String token,
+            @Path("studentId") Long studentId
+    );
+
     @POST("api/teacher/add/schedule")
     Call<ApiResponse<Schedule>> addSchedule(
             @Header("Authorization") String token,
             @Body ScheduleRequest scheduleRequest);
+
+    @PUT("api/teacher/edit/schedule/{studentId}/{scheduleId}")
+    Call<ApiResponse<Schedule>> updateSchedule(
+            @Header("Authorization") String token,
+            @Path("studentId") Long studentId,
+            @Path("scheduleId") Long scheduleId,
+            @Body UpdateScheduleRequest updateScheduleRequest
+    );
+
+    @DELETE("api/teacher/delete/schedule/{studentId}/{scheduleId}")
+    Call<ApiResponse<Void>> deleteSchedule(
+            @Header("Authorization") String token,
+            @Path("studentId") Long studentId,
+            @Path("scheduleId") Long scheduleId
+    );
 
     @GET("api/get/notifications")
     Call<ApiResponse<List<Notification>>> getNotifications(

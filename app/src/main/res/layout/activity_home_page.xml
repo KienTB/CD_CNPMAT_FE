@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
+    android:background="#F5F6FA"
     tools:context=".Parent.HomePageActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,7 +47,7 @@
                     android:id="@+id/txtNameStudent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Name"
+                    android:hint="Họ và tên"
                     android:textColor="#000000"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -56,7 +56,7 @@
                     android:id="@+id/txtClassStudent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Class"
+                    android:hint="Lớp"
                     android:textColor="#666666"
                     android:textSize="14sp" />
             </LinearLayout>

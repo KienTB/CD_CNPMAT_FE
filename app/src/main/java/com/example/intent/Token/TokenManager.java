@@ -2,7 +2,6 @@ package com.example.intent.Token;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 public class TokenManager {
     private static final String PREF_NAME = "AuthPrefs";
@@ -12,6 +11,13 @@ public class TokenManager {
     private static final String KEY_TEACHER_ID = "teacher_id";
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_STUDENT_ID = "student_id";
+
+    public void clearStudentData() {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(KEY_STUDENT_DATA);
+        editor.remove(KEY_STUDENT_ID);
+        editor.apply();
+    }
 
     public long getStudentId() {
         return prefs.getLong(KEY_STUDENT_ID, -1L);
@@ -26,7 +32,7 @@ public class TokenManager {
     }
 
     public long getUserId() {
-        return prefs.getLong(KEY_USER_ID, -1L); // -1L nếu không tìm thấy userId
+        return prefs.getLong(KEY_USER_ID, -1L);
     }
 
     public void deleteUserId() {

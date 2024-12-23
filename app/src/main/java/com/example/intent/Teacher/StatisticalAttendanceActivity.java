@@ -2,7 +2,6 @@ package com.example.intent.Teacher;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -18,9 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
+import com.example.intent.Model.DataStudent;
 import com.example.intent.Model.Student;
 import com.example.intent.R;
-import com.example.intent.StudentAdapter;
 import com.example.intent.StudentNormalAdapter;
 import com.example.intent.Token.TokenManager;
 
@@ -56,7 +55,7 @@ public class StatisticalAttendanceActivity extends AppCompatActivity {
         });
 
         studentNormalAdapter = new StudentNormalAdapter(studentList, student -> {
-            Intent intent = new Intent(StatisticalAttendanceActivity.this, StatisticalDetailActivity.class);
+            Intent intent = new Intent(StatisticalAttendanceActivity.this, StatisticalAttendanceDetailActivity.class);
             intent.putExtra("studentId", student.getStudentId());
             startActivity(intent);
         });
@@ -82,12 +81,24 @@ public class StatisticalAttendanceActivity extends AppCompatActivity {
         String token = tokenManager.getToken();
 
         apiService.getStudentByTeacherId("Bearer " + token, teacherId)
-                .enqueue(new Callback<ApiResponse<List<Student>>>() {
+                .enqueue(new Callback<ApiResponse<List<DataStudent>>>() {
                     @Override
-                    public void onResponse(Call<ApiResponse<List<Student>>> call, Response<ApiResponse<List<Student>>> response) {
+                    public void onResponse(Call<ApiResponse<List<DataStudent>>> call, Response<ApiResponse<List<DataStudent>>> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                             studentList.clear();
-                            studentList.addAll(response.body().getData());
+                            for (DataStudent dataStudent : response.body().getData()) {
+                                Student student = new Student(
+                                        dataStudent.getStudentId(),
+                                        dataStudent.getName(),
+                                        dataStudent.getBirthDate(),
+                                        dataStudent.getGender(),
+                                        dataStudent.getClass_name(),
+                                        dataStudent.getAddress(),
+                                        dataStudent.getUser(),
+                                        dataStudent.getTeacher()
+                                );
+                                studentList.add(student);
+                            }
                             studentNormalAdapter.notifyDataSetChanged();
                         } else {
                             Toast.makeText(StatisticalAttendanceActivity.this,
@@ -97,7 +108,7 @@ public class StatisticalAttendanceActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse<List<Student>>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<List<DataStudent>>> call, Throwable t) {
                         Toast.makeText(StatisticalAttendanceActivity.this, "Gọi API thất bại: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });

@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 
 public class StudentDiaryActivity extends AppCompatActivity {
     ImageView imgBackToExtension;
-    TextView tvStudentName, tvStudentBirthDate, tvStudentGender, tvStudentClass, tvStudentAddress;
+    TextView tvStudentName, tvStudentId, tvStudentBirthDate, tvStudentGender, tvStudentClass, tvStudentAddress;
     private TokenManager tokenManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,7 @@ public class StudentDiaryActivity extends AppCompatActivity {
         });
 
         tvStudentName = findViewById(R.id.tvStudentName);
+        tvStudentId = findViewById(R.id.tvStudentId);
         tvStudentBirthDate = findViewById(R.id.tvStudentBirthDate);
         tvStudentGender = findViewById(R.id.tvStudentGender);
         tvStudentClass = findViewById(R.id.tvStudentClass);
@@ -46,14 +47,13 @@ public class StudentDiaryActivity extends AppCompatActivity {
 
         tokenManager = new TokenManager(this);
 
-        // Lấy thông tin học sinh từ SharedPreferences
         String studentJson = tokenManager.getStudentData();
         if (studentJson != null) {
             Gson gson = new Gson();
             Student student = gson.fromJson(studentJson, Student.class);
 
-            // Hiển thị thông tin lên giao diện
             tvStudentName.setText(student.getName());
+            tvStudentId.setText(String.valueOf(student.getStudentId()));
             tvStudentBirthDate.setText(student.getBirthDate());
             tvStudentGender.setText(student.getGender());
             tvStudentClass.setText(student.getClass_name());

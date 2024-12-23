@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F6FA"
     tools:context=".Admin.UserRegisterActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -74,6 +75,7 @@
                 android:text="Kết nối phụ huynh và nhà trường"
                 android:textColor="#023E8A"
                 android:textSize="15sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imgLogo2" />
@@ -87,15 +89,17 @@
                 android:text="Nhập thông tin vào ô trống"
                 android:textColor="#023E8A"
                 android:textSize="15sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView3" />
 
             <EditText
                 android:id="@+id/edtName"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
+                android:layout_marginHorizontal="24dp"
                 android:background="@drawable/button_border"
                 android:drawableStart="@drawable/ic_people"
                 android:drawablePadding="8dp"
@@ -104,13 +108,15 @@
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView5" />
+                app:layout_constraintTop_toBottomOf="@id/textView5"
+                app:layout_constraintWidth_percent="0.85" />
 
             <EditText
                 android:id="@+id/edtEmail"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="24dp"
                 android:elevation="6dp"
                 android:background="@drawable/button_border"
                 android:drawableStart="@drawable/ic_email"
@@ -120,13 +126,15 @@
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edtName" />
+                app:layout_constraintTop_toBottomOf="@id/edtName"
+                app:layout_constraintWidth_percent="0.85" />
 
             <EditText
                 android:id="@+id/edtAddress"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="24dp"
                 android:elevation="6dp"
                 android:background="@drawable/button_border"
                 android:drawableStart="@drawable/ic_add_location"
@@ -136,13 +144,15 @@
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edtEmail" />
+                app:layout_constraintTop_toBottomOf="@id/edtEmail"
+                app:layout_constraintWidth_percent="0.85" />
 
             <EditText
                 android:id="@+id/edtPhoneNumber"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="24dp"
                 android:elevation="6dp"
                 android:background="@drawable/button_border"
                 android:drawableStart="@drawable/ic_phone"
@@ -152,13 +162,15 @@
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edtAddress" />
+                app:layout_constraintTop_toBottomOf="@id/edtAddress"
+                app:layout_constraintWidth_percent="0.85" />
 
             <EditText
                 android:id="@+id/edtPassword"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="24dp"
                 android:elevation="6dp"
                 android:background="@drawable/button_border"
                 android:drawableStart="@drawable/ic_password"
@@ -168,13 +180,15 @@
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edtPhoneNumber" />
+                app:layout_constraintTop_toBottomOf="@id/edtPhoneNumber"
+                app:layout_constraintWidth_percent="0.85" />
 
             <EditText
                 android:id="@+id/edtConfirm"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="24dp"
                 android:elevation="6dp"
                 android:background="@drawable/button_border"
                 android:drawableStart="@drawable/ic_password"
@@ -184,52 +198,57 @@
                 android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edtPassword" />
+                app:layout_constraintTop_toBottomOf="@id/edtPassword"
+                app:layout_constraintWidth_percent="0.85" />
 
             <RadioGroup
                 android:id="@+id/radioGroupRole"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:elevation="6dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="24dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtConfirm">
+                app:layout_constraintTop_toBottomOf="@+id/edtConfirm"
+                app:layout_constraintWidth_percent="0.85">
 
                 <RadioButton
                     android:id="@+id/radioTeacher"
-                    android:layout_width="130dp"
+                    android:layout_width="0dp"
                     android:elevation="6dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/button_border"
+                    android:layout_weight="1"
                     android:text="Teacher" />
 
                 <RadioButton
                     android:id="@+id/radioParent"
-                    android:layout_width="138dp"
+                    android:layout_width="0dp"
                     android:elevation="6dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_border"
+                    android:layout_weight="1"
                     android:text="Parent" />
             </RadioGroup>
 
             <Button
                 android:id="@+id/btnRegister"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="24dp"
                 android:elevation="6dp"
                 android:backgroundTint="#023E8A"
                 android:text="Đăng ký"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/radioGroupRole" />
-
+                app:layout_constraintTop_toBottomOf="@+id/radioGroupRole"
+                app:layout_constraintWidth_percent="0.85" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

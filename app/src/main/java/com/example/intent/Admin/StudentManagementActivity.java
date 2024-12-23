@@ -23,7 +23,6 @@ import com.example.intent.Api.StudentApiResponse;
 import com.example.intent.Model.Student;
 import com.example.intent.Model.DataStudent;
 import com.example.intent.R;
-import com.example.intent.StudentAdapter;
 import com.example.intent.StudentNormalAdapter;
 import com.example.intent.Token.TokenManager;
 
@@ -70,9 +69,6 @@ public class StudentManagementActivity extends AppCompatActivity {
         searchView = findViewById(R.id.searchView);
 
         studentNormalAdapter = new StudentNormalAdapter(studentList, student -> {
-            Log.d("StudentManagement", "Selected student ID: " + student.getStudentId());
-            Log.d("StudentManagement", "Selected student teacher ID: " + student.getUser().getTeacherId());
-
             Intent intent = new Intent(StudentManagementActivity.this, StudentDetailActivity.class);
             intent.putExtra("studentId", student.getStudentId());
             intent.putExtra("name", student.getName());
@@ -92,11 +88,9 @@ public class StudentManagementActivity extends AppCompatActivity {
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
 
         long userId = tokenManager.getUserId();
-        Log.d("StudentManagement", "Fetched user ID: " + userId);
         if (userId != -1) {
             fetchStudentsByUserId(userId);
         } else {
-            Log.e("StudentManagement", "User ID not found. Please login again.");
             Toast.makeText(this, "Không tìm thấy ID người dùng. Vui lòng đăng nhập lại.", Toast.LENGTH_SHORT).show();
         }
 

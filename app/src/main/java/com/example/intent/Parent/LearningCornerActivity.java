@@ -3,6 +3,7 @@ package com.example.intent.Parent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -35,6 +36,7 @@ public class LearningCornerActivity extends AppCompatActivity {
     private List<Grade> gradeList = new ArrayList<>();
     private TokenManager tokenManager;
     private ApiService apiService;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class LearningCornerActivity extends AppCompatActivity {
 
         imgBackToExtension = findViewById(R.id.imgBackToExtension);
         rvAssignments = findViewById(R.id.rvAssignments);
+        searchView = findViewById(R.id.searchView);
 
         tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
@@ -66,6 +69,56 @@ public class LearningCornerActivity extends AppCompatActivity {
                 loadAttendanceData(studentId);
             }
         }
+
+        setupSearchView();
+    }
+
+    private void setupSearchView() {
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                searchView.clearFocus();
+                showTermSelectionDialog();
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterGradeByTerm(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    gradeAdapter.updateData(gradeList);
+                } else {
+                    filterGradeByTerm(newText);
+                }
+                return true;
+            }
+        });
+    }
+
+    private void showTermSelectionDialog() {
+        String[] terms = {"Giữa kỳ", "Cuối kỳ", "Tổng kết"};
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Chọn kỳ học")
+                .setItems(terms, (dialog, which) -> {
+                    searchView.setQuery(terms[which], true);
+                    filterGradeByTerm(terms[which]);
+                })
+                .show();
+    }
+
+
+    private void filterGradeByTerm(String term) {
+        List<Grade> filteredList = new ArrayList<>();
+        for (Grade grade : gradeList) {
+            if (grade.getTerm().equalsIgnoreCase(term)) {
+                filteredList.add(grade);
+            }
+        }
+        gradeAdapter.updateData(filteredList);
     }
 
     private Long parseStudentIdFromJson(String studentDataJson) {
@@ -80,9 +133,6 @@ public class LearningCornerActivity extends AppCompatActivity {
 
     private void loadAttendanceData(Long studentId) {
         String token = tokenManager.getToken();
-        Log.d("API_DEBUG", "Token: " + token);
-        Log.d("API_DEBUG", "Student ID: " + studentId);
-
         apiService.getGradesByStudentId("Bearer " + token, studentId)
                 .enqueue(new Callback<List<Grade>>() {
                     @Override

@@ -27,7 +27,7 @@ import retrofit2.Response;
 public class ChangePasswordActivity extends AppCompatActivity {
     private EditText edtCurrentPassword, edtNewPassword, edtConfirmPassword;
     private Button btnSave;
-    private ImageView btnToggleCurrentPassword, btnToggleNewPassword, btnToggleConfirmPassword;
+    private ImageView btnToggleCurrentPassword, btnToggleNewPassword, btnToggleConfirmPassword, imgBack;
     private boolean isCurrentPasswordVisible = false, isNewPasswordVisible = false, isConfirmPasswordVisible = false;
     private ApiService apiService;
 
@@ -43,6 +43,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
         btnToggleCurrentPassword = findViewById(R.id.btnToggleCurrentPassword);
         btnToggleNewPassword = findViewById(R.id.btnToggleNewPassword);
         btnToggleConfirmPassword = findViewById(R.id.btnToggleConfirmPassword);
+        imgBack = findViewById(R.id.imgBack);
+
+        imgBack.setOnClickListener(v -> finish());
 
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
 

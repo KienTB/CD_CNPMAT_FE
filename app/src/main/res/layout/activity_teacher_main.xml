@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F6FA"
     tools:context=".Teacher.TeacherMainActivity">
 
     <TabHost
@@ -65,7 +66,8 @@
                 android:id="@android:id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:layout_gravity="top"
+                android:elevation="4dp" />
 
         </LinearLayout>
     </TabHost>

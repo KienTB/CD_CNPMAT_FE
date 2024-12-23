@@ -1,5 +1,6 @@
 package com.example.intent.Parent;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -67,6 +69,13 @@ public class AttendenceActivity extends AppCompatActivity {
     }
 
     private void setupSearchView() {
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                showDatePickerDialog();
+                searchView.clearFocus();
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -77,13 +86,41 @@ public class AttendenceActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.isEmpty()) {
-                    attendanceAdapter.updateList(scheduleList);
+                    attendanceAdapter.updateData(scheduleList);
                 } else {
                     filterAttendanceByDate(newText);
                 }
                 return true;
             }
         });
+    }
+
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, selectedYear, selectedMonth, selectedDay) -> {
+            String rawDate = String.format(Locale.getDefault(), "%d/%d/%d", selectedDay, selectedMonth + 1, selectedYear);
+            try {
+                String formattedDate = convertDateFormat(rawDate);
+                searchView.setQuery(formattedDate, true);
+                filterAttendanceByDate(formattedDate);
+            } catch (Exception e) {
+                Toast.makeText(this, "Lỗi chuyển đổi định dạng ngày: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("StatisticalDetail", "Date conversion error", e);
+            }
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    private String convertDateFormat(String inputDate) throws Exception {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("d/M/yyyy", Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        Date date = inputFormat.parse(inputDate);
+        return outputFormat.format(date);
     }
 
     private void filterAttendanceByDate(String date) {
@@ -103,7 +140,7 @@ public class AttendenceActivity extends AppCompatActivity {
         if (filteredList.isEmpty()) {
             Toast.makeText(this, "Không tìm thấy lịch điểm danh cho ngày " + date, Toast.LENGTH_SHORT).show();
         } else {
-            attendanceAdapter.updateList(filteredList);
+            attendanceAdapter.updateData(filteredList);
         }
     }
 

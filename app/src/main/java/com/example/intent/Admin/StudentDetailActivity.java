@@ -67,7 +67,6 @@ public class StudentDetailActivity extends AppCompatActivity {
     private void setupData() {
         Intent intent = getIntent();
 
-        // Retrieve data from the Intent
         Long studentId = intent.getLongExtra("studentId", -1);
         Long userId = intent.getLongExtra("userId", -1);
         Long teacherId = intent.getLongExtra("teacherId", -1);
@@ -77,7 +76,6 @@ public class StudentDetailActivity extends AppCompatActivity {
         String className = intent.getStringExtra("class_name");
         String address = intent.getStringExtra("address");
 
-        // Populate TextViews with received data
         tvStudentName.setText(String.format("Họ và tên: %s", name));
         tvStudentId.setText(String.format("Mã học sinh: %d", studentId));
         tvStudentClass.setText(String.format("Lớp: %s", className));

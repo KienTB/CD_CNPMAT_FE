@@ -2,6 +2,8 @@ package com.example.intent;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -27,6 +29,9 @@ import com.example.intent.Teacher.TeacherMainActivity;
 import com.example.intent.Token.AuthResponse;
 import com.example.intent.Token.TokenManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,6 +44,13 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView btnTogglePassword;
     private boolean isPasswordVisible = false;
 
+    private static final int MAX_ATTEMPTS = 10; // Số lần thử tối đa
+    private static final long MONITORING_PERIOD = 30000; // 30 giây
+    private static final long LOCKOUT_DURATION = 10000; // 10 giây
+    private List<Long> loginAttempts = new ArrayList<>();
+    private Handler handler = new Handler();
+    private CountDownTimer lockoutTimer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,14 +61,14 @@ public class LoginActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
         btnLogIn = findViewById(R.id.btnLogIn);
         txtForgotPassword = findViewById(R.id.txtForgotPassword);
-        btnTogglePassword = findViewById(R.id.btnTogglePassword);
+//        btnTogglePassword = findViewById(R.id.btnTogglePassword);
 
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
 
-        setupPasswordToggle(edtPassword, btnTogglePassword, () -> {
-            isPasswordVisible = !isPasswordVisible;
-            return isPasswordVisible;
-        });
+//        setupPasswordToggle(edtPassword, btnTogglePassword, () -> {
+//            isPasswordVisible = !isPasswordVisible;
+//            return isPasswordVisible;
+//        });
 
         btnLogIn.setOnClickListener(view -> {
             String phoneNumber = edtPhoneNumber.getText().toString();
@@ -65,7 +77,9 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Vui lòng điền vào tất cả các ô trống", Toast.LENGTH_SHORT).show();
                 return;
             }
-            loginUser(phoneNumber, password);
+            if (!isLoginThrottled()) {
+                loginUser(phoneNumber, password);
+            }
         });
 
         txtForgotPassword.setOnClickListener(view -> {
@@ -81,17 +95,75 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void setupPasswordToggle(EditText editText, ImageView toggleButton, LoginActivity.VisibilityToggle visibilityToggle) {
-        toggleButton.setOnClickListener(v -> {
-            if (visibilityToggle.toggle()) {
-                editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                toggleButton.setImageResource(R.drawable.ic_eye_off);
-            } else {
-                editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                toggleButton.setImageResource(R.drawable.ic_eye_off);
+//    private void setupPasswordToggle(EditText editText, ImageView toggleButton, VisibilityToggle visibilityToggle) {
+//        toggleButton.setOnClickListener(v -> {
+//            if (visibilityToggle.toggle()) {
+//                editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+//                toggleButton.setImageResource(R.drawable.ic_eye_off);
+//            } else {
+//                editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+//                toggleButton.setImageResource(R.drawable.ic_eye_off);
+//            }
+//            editText.setSelection(editText.getText().length());
+//        });
+//    }
+
+    private void clearPreviousUserData() {
+        TokenManager tokenManager = new TokenManager(LoginActivity.this);
+        tokenManager.clearStudentData();
+
+        getSharedPreferences("UserPrefs", MODE_PRIVATE).edit().clear().apply();
+
+        Log.d("LoginActivity", "Dữ liệu người dùng trước đã được xóa.");
+    }
+
+    private boolean isLoginThrottled() {
+        long currentTime = System.currentTimeMillis();
+        // Xóa các lần đăng nhập cũ hơn 30 giây
+        loginAttempts.removeIf(timestamp ->
+                currentTime - timestamp > MONITORING_PERIOD);
+
+        // Thêm lần đăng nhập hiện tại
+        loginAttempts.add(currentTime);
+
+        // Kiểm tra nếu vượt quá giới hạn
+        if (loginAttempts.size() > MAX_ATTEMPTS) {
+            btnLogIn.setEnabled(false);
+
+            Toast.makeText(this,
+                    "Bạn đã gửi quá nhiều yêu cầu trong 30s, vui lòng đợi 10s rồi thử lại!",
+                    Toast.LENGTH_LONG).show();
+
+            if (lockoutTimer != null) {
+                lockoutTimer.cancel();
             }
-            editText.setSelection(editText.getText().length());
-        });
+
+            lockoutTimer = new CountDownTimer(LOCKOUT_DURATION, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    btnLogIn.setText("Đăng nhập (" + (millisUntilFinished / 1000) + "s)");
+                }
+
+                @Override
+                public void onFinish() {
+                    btnLogIn.setEnabled(true);
+                    btnLogIn.setText("Đăng nhập");
+                    loginAttempts.clear();
+                }
+            }.start();
+
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (lockoutTimer != null) {
+            lockoutTimer.cancel();
+        }
+        handler.removeCallbacksAndMessages(null);
     }
 
     private void loginUser(String phoneNumber, String password) {
@@ -112,9 +184,9 @@ public class LoginActivity extends AppCompatActivity {
 
                         TokenManager tokenManager = new TokenManager(LoginActivity.this);
                         tokenManager.saveToken(authResponse.getToken());
+                        clearPreviousUserData();
 
                         if (authResponse.getRole() != null) {
-                            tokenManager = new TokenManager(LoginActivity.this);
                             if (authResponse.getTeacherId() != null) {
                                 tokenManager.saveTeacherId(authResponse.getTeacherId());
                                 Log.d("LoginActivity", "Saved Teacher ID: " + authResponse.getTeacherId());
@@ -152,7 +224,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Toast.makeText(LoginActivity.this, logMessage, Toast.LENGTH_SHORT).show();
 
-        switch(role.toLowerCase()) {
+        switch (role.toLowerCase()) {
             case "admin":
                 Log.d("LoginActivity", "Admin login successful");
                 intent = new Intent(LoginActivity.this, AdminMainActivity.class);

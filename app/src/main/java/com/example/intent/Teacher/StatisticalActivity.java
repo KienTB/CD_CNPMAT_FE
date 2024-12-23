@@ -11,8 +11,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.intent.Admin.StudentManagementActivity;
-import com.example.intent.Admin.UserManagementActivity;
 import com.example.intent.R;
 
 public class StatisticalActivity extends AppCompatActivity {
@@ -41,7 +39,7 @@ public class StatisticalActivity extends AppCompatActivity {
     }
 
     public void openStatisticalScore(View view) {
-        Intent intent = new Intent(this, StatisticalScoreActivity.class);
+        Intent intent = new Intent(this, StatisticalGradeActivity.class);
         startActivity(intent);
     }
 }

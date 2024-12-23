@@ -203,16 +203,22 @@ public class ParentMainActivity extends AppCompatActivity {
 
     private void loadStudentData() {
         String studentJson = tokenManager.getStudentData();
-        if (studentJson != null) {
+
+        if (studentJson != null && !studentJson.isEmpty()) {
             Gson gson = new Gson();
             Student student = gson.fromJson(studentJson, Student.class);
 
             txtNameStudent.setText(student.getName());
             txtClassStudent.setText(student.getClass_name());
         } else {
-            txtNameStudent.setText("Không có dữ liệu học sinh.");
-            txtClassStudent.setText("");
+            txtNameStudent.setText("Họ và tên");
+            txtClassStudent.setText("Lớp");
         }
+    }
+
+    private void setDefaultStudentData() {
+        txtNameStudent.setText("Họ và tên");
+        txtClassStudent.setText("Lớp");
     }
 
     private void setupTabListener() {

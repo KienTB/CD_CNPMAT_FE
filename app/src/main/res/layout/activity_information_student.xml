@@ -6,11 +6,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F6FA"
     tools:context=".Parent.InformationStudentActivity">
-
-    <!-- Logo ImageView at the top -->
-
-    <!-- NestedScrollView containing the main content -->
 
     <ImageView
         android:id="@+id/logoImage"

@@ -53,4 +53,9 @@ public class GradeAdapter extends RecyclerView.Adapter<GradeAdapter.GradeViewHol
             tvTerm = itemView.findViewById(R.id.tvTerm);
         }
     }
+
+    public void updateData(List<Grade> newGrades) {
+        this.gradeList = newGrades;
+        notifyDataSetChanged();
+    }
 }

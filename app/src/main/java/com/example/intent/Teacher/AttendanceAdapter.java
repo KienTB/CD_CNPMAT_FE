@@ -37,7 +37,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         }
     }
 
-    public void updateList(List<Schedule> filteredList) {
+    public void updateData(List<Schedule> filteredList) {
         this.scheduleList = filteredList;
         notifyDataSetChanged();
     }

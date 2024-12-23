@@ -5,9 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F6FA"
     tools:context=".Teacher.AttendanceActivity">
 
-    <!-- Title Section -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Title"
         android:layout_width="0dp"
