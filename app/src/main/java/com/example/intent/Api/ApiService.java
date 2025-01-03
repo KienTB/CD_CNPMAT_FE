@@ -11,6 +11,9 @@ import com.example.intent.Model.Student;
 import com.example.intent.Model.User;
 import com.example.intent.RefreshTokenRequest;
 import com.example.intent.Request.NotificationRegisterRequest;
+import com.example.intent.Request.OtpRequest;
+import com.example.intent.Request.OtpVerificationRequest;
+import com.example.intent.Request.PhoneRequest;
 import com.example.intent.Request.RegisterRequest;
 import com.example.intent.Request.ResetPasswordRequest;
 import com.example.intent.Request.ScheduleRequest;
@@ -44,6 +47,10 @@ public interface ApiService {
     @POST("api/user/login")
     Call<ApiResponse<AuthResponse>> login(@Body LoginRequest loginRequest);
 
+    @GET("api/user/profile")
+    Call<ApiResponse<Map<String, Object>>> getUserProfile(
+            @Header("Authorization") String token);
+
     @POST("api/admin/user/register")
     Call<ApiResponse<User>> register(
             @Header("Authorization") String token,
@@ -53,10 +60,6 @@ public interface ApiService {
     Call<ApiResponse<AuthResponse>> changePassword(
             @Header("Authorization") String token,
             @Body ChangePasswordRequest changePasswordRequest);
-
-    @GET("api/user/profile")
-    Call<ApiResponse<Map<String, Object>>> getUserProfile(
-            @Header("Authorization") String token);
 
     @GET("api/user/parent/id")
     Call<ApiResponse<List<Long>>> getAllUserIdParent(@Header("Authorization") String token);
@@ -191,10 +194,16 @@ public interface ApiService {
             @Header("Authorization") String token,
             @Path("notificationId") Long notificationId);
 
-    @POST("api/user/send-otp")
-    Call<ApiResponse<String>> sendOtp(@Body Map<String, String> phoneNumber);
+    @POST("/api/otp/check-phone")
+    Call<ApiResponse<UserCheckResponse>> checkPhone(@Body PhoneRequest request);
 
-    @POST("api/user/reset/password")
+    @POST("api/otp/send")
+    Call<ApiResponse<String>> sendOtp(@Body OtpRequest otpRequest);
+
+    @POST("api/otp/verify")
+    Call<ApiResponse<String>> verifyOtp(@Body OtpVerificationRequest otpVerificationRequest);
+
+    @POST("api/otp/reset-password")
     Call<ApiResponse<String>> resetPassword(@Body ResetPasswordRequest resetPasswordRequest);
 
 

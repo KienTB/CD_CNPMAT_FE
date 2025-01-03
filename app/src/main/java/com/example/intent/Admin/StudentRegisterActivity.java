@@ -84,6 +84,11 @@ public class StudentRegisterActivity extends AppCompatActivity {
 
         tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
+
+        imgBackToExtension.setOnClickListener(v -> {
+            setResult(RESULT_CANCELED);
+            finish();
+        });
     }
 
     private void showClassSelectionDialog() {
@@ -140,7 +145,10 @@ public class StudentRegisterActivity extends AppCompatActivity {
 
         try {
             String name = edtName.getText().toString();
-            String birthDate = convertDateFormat(tvBirthDate.getText().toString());
+            if (birthDate == null || birthDate.isEmpty()) {
+                Toast.makeText(this, "Vui lòng chọn ngày sinh", Toast.LENGTH_SHORT).show();
+                return;
+            }
             String gender = getSelectedGender();
             String class_name = edtClass.getText().toString();
             Long userId = Long.parseLong(edtUserId.getText().toString());
@@ -181,13 +189,12 @@ public class StudentRegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void showSuccessDialog() {
+    private void    showSuccessDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Thêm học sinh thành công")
                 .setMessage("Bạn đã thêm học sinh thành công!")
                 .setPositiveButton("OK", (dialog, which) -> {
-                    Intent intent = new Intent(StudentRegisterActivity.this, StudentManagementActivity.class);
-                    startActivity(intent);
+                    setResult(RESULT_OK);
                     finish();
                 })
                 .show();

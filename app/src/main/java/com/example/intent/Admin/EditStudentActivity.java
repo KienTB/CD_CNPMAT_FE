@@ -51,6 +51,8 @@ public class EditStudentActivity extends AppCompatActivity {
         btnConfirm = findViewById(R.id.btnConfirm);
 
         edtBirthDate.setOnClickListener(v -> showDatePickerDialog());
+        edtAddress.setOnClickListener(v -> showAddressSelectionDialog());
+        edtClass.setOnClickListener(v -> showClassSelectionDialog());
 
         imgBack.setOnClickListener(v -> finish());
 
@@ -97,6 +99,22 @@ public class EditStudentActivity extends AppCompatActivity {
         });
 
         imgBack.setOnClickListener(v -> finish());
+    }
+
+    private void showAddressSelectionDialog() {
+        String[] classes = {"Phú La, Hà Đông, Hà Nội", "Kiến Hưng, Hà Đông, Hà Nội", "La Khê, Hà Đông, Hà Nội", "Mộ Lao, Hà Đông, Hà Nội", "Nguyễn Trãi, Hà Đông, Hà Nội", "Quang Trung, Hà Đông, Hà Nội", "Vạn Phúc, Hà Đông, Hà Nội", "Văn Quán, Hà Đông, Hà Nội"};
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Chọn địa chỉ")
+                .setItems(classes, (dialog, which) -> edtAddress.setText(classes[which]))
+                .show();
+    }
+
+    private void showClassSelectionDialog() {
+        String[] classes = {"12a1", "12a2", "12a3", "12a4", "12a5", "12a6", "12a7", "12a8"};
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Chọn lớp học")
+                .setItems(classes, (dialog, which) -> edtClass.setText(classes[which]))
+                .show();
     }
 
     private void updateStudentInfo(Long studentId, String name, String birthDate, String class_name, String gender, String address, Long userId, Long teacherId) {

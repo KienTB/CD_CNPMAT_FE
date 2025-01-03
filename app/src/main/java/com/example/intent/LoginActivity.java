@@ -29,8 +29,11 @@ import com.example.intent.Teacher.TeacherMainActivity;
 import com.example.intent.Token.AuthResponse;
 import com.example.intent.Token.TokenManager;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,12 +44,10 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogIn;
     private TextView txtForgotPassword;
     private ApiService apiService;
-    private ImageView btnTogglePassword;
-    private boolean isPasswordVisible = false;
 
-    private static final int MAX_ATTEMPTS = 10; // Số lần thử tối đa
-    private static final long MONITORING_PERIOD = 30000; // 30 giây
-    private static final long LOCKOUT_DURATION = 10000; // 10 giây
+    private static final int MAX_ATTEMPTS = 10;
+    private static final long MONITORING_PERIOD = 30000;
+    private static final long LOCKOUT_DURATION = 10000;
     private List<Long> loginAttempts = new ArrayList<>();
     private Handler handler = new Handler();
     private CountDownTimer lockoutTimer;
@@ -61,14 +62,8 @@ public class LoginActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
         btnLogIn = findViewById(R.id.btnLogIn);
         txtForgotPassword = findViewById(R.id.txtForgotPassword);
-//        btnTogglePassword = findViewById(R.id.btnTogglePassword);
 
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
-
-//        setupPasswordToggle(edtPassword, btnTogglePassword, () -> {
-//            isPasswordVisible = !isPasswordVisible;
-//            return isPasswordVisible;
-//        });
 
         btnLogIn.setOnClickListener(view -> {
             String phoneNumber = edtPhoneNumber.getText().toString();
@@ -95,19 +90,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-//    private void setupPasswordToggle(EditText editText, ImageView toggleButton, VisibilityToggle visibilityToggle) {
-//        toggleButton.setOnClickListener(v -> {
-//            if (visibilityToggle.toggle()) {
-//                editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-//                toggleButton.setImageResource(R.drawable.ic_eye_off);
-//            } else {
-//                editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-//                toggleButton.setImageResource(R.drawable.ic_eye_off);
-//            }
-//            editText.setSelection(editText.getText().length());
-//        });
-//    }
-
     private void clearPreviousUserData() {
         TokenManager tokenManager = new TokenManager(LoginActivity.this);
         tokenManager.clearStudentData();
@@ -119,14 +101,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isLoginThrottled() {
         long currentTime = System.currentTimeMillis();
-        // Xóa các lần đăng nhập cũ hơn 30 giây
         loginAttempts.removeIf(timestamp ->
                 currentTime - timestamp > MONITORING_PERIOD);
 
-        // Thêm lần đăng nhập hiện tại
         loginAttempts.add(currentTime);
 
-        // Kiểm tra nếu vượt quá giới hạn
         if (loginAttempts.size() > MAX_ATTEMPTS) {
             btnLogIn.setEnabled(false);
 
@@ -244,10 +223,5 @@ public class LoginActivity extends AppCompatActivity {
         }
         startActivity(intent);
         finish();
-    }
-
-    @FunctionalInterface
-    private interface VisibilityToggle {
-        boolean toggle();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.intent.Admin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -56,6 +57,8 @@ public class EditUserActivity extends AppCompatActivity {
         tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
 
+        edtAddress.setOnClickListener(v -> showAddressSelectionDialog());
+
         btnConfirm.setOnClickListener(v -> {
             String updatedName = edtName.getText().toString().trim();
             String updatedEmail = edtEmail.getText().toString().trim();
@@ -88,6 +91,14 @@ public class EditUserActivity extends AppCompatActivity {
         imgBack.setOnClickListener(v -> finish());
     }
 
+    private void showAddressSelectionDialog() {
+        String[] classes = {"Phú La, Hà Đông, Hà Nội", "Kiến Hưng, Hà Đông, Hà Nội", "La Khê, Hà Đông, Hà Nội", "Mộ Lao, Hà Đông, Hà Nội", "Nguyễn Trãi, Hà Đông, Hà Nội", "Quang Trung, Hà Đông, Hà Nội", "Vạn Phúc, Hà Đông, Hà Nội", "Văn Quán, Hà Đông, Hà Nội"};
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Chọn địa chỉ")
+                .setItems(classes, (dialog, which) -> edtAddress.setText(classes[which]))
+                .show();
+    }
+
     private void updateUserInfo(long userId, String name, String email, String phone, String address) {
         UpdateUserRequest request = new UpdateUserRequest(name, email, phone, address);
         String token = "Bearer " + tokenManager.getToken();
@@ -97,6 +108,9 @@ public class EditUserActivity extends AppCompatActivity {
             public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     Toast.makeText(EditUserActivity.this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(EditUserActivity.this, UserManagementActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                     finish();
                 } else {
                     Toast.makeText(EditUserActivity.this, "Cập nhật thất bại!", Toast.LENGTH_SHORT).show();

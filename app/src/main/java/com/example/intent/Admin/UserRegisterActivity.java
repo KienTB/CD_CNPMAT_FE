@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,7 +41,6 @@ public class UserRegisterActivity extends AppCompatActivity {
     private TokenManager tokenManager;
     private ApiService apiService;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +54,9 @@ public class UserRegisterActivity extends AppCompatActivity {
         edtAddress = findViewById(R.id.edtAddress);
         edtConfirm = findViewById(R.id.edtConfirm);
         radioGroupRole = findViewById(R.id.radioGroupRole);
+
+        edtPassword.setText("123456");
+        edtConfirm.setText("123456");
 
         tokenManager = new TokenManager(this);
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
@@ -97,7 +100,7 @@ public class UserRegisterActivity extends AppCompatActivity {
         String address = edtAddress.getText().toString();
         String role = getSelectedRole();
 
-        RegisterRequest registerRequest = new RegisterRequest(phoneNumber, password, email, name, address, role);
+        RegisterRequest registerRequest = new RegisterRequest(phoneNumber, password, name, email, address, role);
         registerUser(registerRequest);
     }
 
@@ -113,6 +116,12 @@ public class UserRegisterActivity extends AppCompatActivity {
 
         public void registerUser(RegisterRequest registerRequest) {
         String token = "Bearer " + tokenManager.getToken();
+            Log.d("RegisterRequest", "phoneNumber: " + registerRequest.getPhoneNumber());
+            Log.d("RegisterRequest", "password: " + registerRequest.getPassword());
+            Log.d("RegisterRequest", "name: " + registerRequest.getName());
+            Log.d("RegisterRequest", "email: " + registerRequest.getEmail());
+            Log.d("RegisterRequest", "address: " + registerRequest.getAddress());
+            Log.d("RegisterRequest", "role: " + registerRequest.getRole());
         Call<ApiResponse<User>> call = apiService.register(token, registerRequest);
 
         call.enqueue(new Callback<ApiResponse<User>>() {
@@ -165,11 +174,11 @@ public class UserRegisterActivity extends AppCompatActivity {
     }
 
     public boolean validatePhoneNumber() {
-        String name = edtName.getText().toString();
-        if (name.isEmpty()) {
-            edtName.setError("PhoneNumber cannot be empty");
+        String phoneNumber = edtPhoneNumber.getText().toString();
+        if (phoneNumber.isEmpty()) {
+            edtPhoneNumber.setError("PhoneNumber cannot be empty");
         } else {
-            edtName.setError(null);
+            edtPhoneNumber.setError(null);
             return true;
         }
         return false;
@@ -193,13 +202,10 @@ public class UserRegisterActivity extends AppCompatActivity {
         String confirm = edtConfirm.getText().toString();
         if (password.isEmpty()) {
             edtPassword.setError("Password cannot be empty");
-            edtConfirm.setError("Confirm fields cannot be empty");
             return false;
-        } else if (edtPassword.equals(edtConfirm)) {
-            edtPassword.setError("password do not match");
-            return false;
-        } else if (confirm.isEmpty()) {
-            edtConfirm.setError("confirm fields cannot be empty");
+        } else if (!password.equals(confirm)) {
+            edtPassword.setError("Passwords do not match");
+            edtConfirm.setError("Passwords do not match");
             return false;
         } else {
             edtPassword.setError(null);

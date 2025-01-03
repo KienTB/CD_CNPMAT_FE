@@ -21,11 +21,11 @@ public class RegisterRequest {
     @SerializedName("role")
     private String role;
 
-    public RegisterRequest(String phoneNumber, String password, String email, String name, String address, String role) {
+    public RegisterRequest(String phoneNumber, String password, String name, String email, String address, String role) {
         this.phoneNumber = phoneNumber;
         this.password = password;
-        this.email = email;
         this.name = name;
+        this.email = email;
         this.address = address;
         this.role = role;
     }
