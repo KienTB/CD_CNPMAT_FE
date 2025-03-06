@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="VNNet"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Intent"
+        tools:targetApi="31">
+        <activity
+            android:name=".NewPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.StatisticalGradeDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.EditAndDeleteGradeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.EditAndDeleteAttendanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InformationProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.StatisticalAttendanceDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.StatisticalGradeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.StatisticalAttendanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.EditNotificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.NotificationRegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.NotificationDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.EditStudentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.StudentDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.EditUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.StudentRegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.UserDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.ManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.NotificationManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.StudentManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.AttendanceInputActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.ScoreInputActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.StudentInfomationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.PostNewsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.UserManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.StatisticalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.EvaluateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.TeachingScheduleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.AttendanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.ClassManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.GradeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Teacher.StudentListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.AdminMainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Teacher.TeacherMainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Parent.ActivityTrackingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.StudentDiaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.ServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.HealthActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.LearningCornerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.MenuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.AttendenceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.HomePageActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Intent" />
+        <activity
+            android:name=".Parent.PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.PhonebookActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.AccountInformationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true"
+            android:label="@string/title_activity_login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Parent.AddStudentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.UserRegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.InformationStudentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.ExtensionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NotificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Parent.ParentMainActivity"
+            android:exported="true" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>
