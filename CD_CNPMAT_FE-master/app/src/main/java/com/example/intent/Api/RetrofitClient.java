@@ -7,7 +7,7 @@ package com.example.intent.Api;
 
     public class RetrofitClient {
 
-        private static final String url = "http://172.16.65.58:8080";
+        private static final String url = "http://172.20.10.3:8080";
         private static RetrofitClient instance;
         private Retrofit retrofit;
 
