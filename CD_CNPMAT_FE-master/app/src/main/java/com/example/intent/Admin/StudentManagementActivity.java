@@ -23,7 +23,7 @@ import com.example.intent.Api.StudentApiResponse;
 import com.example.intent.Model.Student;
 import com.example.intent.Model.DataStudent;
 import com.example.intent.R;
-import com.example.intent.StudentNormalAdapter;
+import com.example.intent.Adapter.StudentNormalAdapter;
 import com.example.intent.Token.TokenManager;
 
 import java.util.ArrayList;

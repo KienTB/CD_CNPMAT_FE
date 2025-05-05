@@ -18,12 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
-import com.example.intent.AttendanceTeacherAdapter;
+import com.example.intent.Adapter.AttendanceTeacherAdapter;
 import com.example.intent.Model.Schedule;
 import com.example.intent.R;
 import com.example.intent.Token.TokenManager;
-
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

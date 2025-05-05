@@ -26,7 +26,7 @@ import com.example.intent.Model.Grade;
 import com.example.intent.Model.Student;
 import com.example.intent.R;
 import com.example.intent.Request.GradeRequest;
-import com.example.intent.StudentAdapter;
+import com.example.intent.Adapter.StudentAdapter;
 import com.example.intent.Token.TokenManager;
 
 import java.util.ArrayList;

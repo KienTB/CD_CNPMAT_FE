@@ -9,7 +9,7 @@ import com.example.intent.Request.GradeRequest;
 import com.example.intent.Request.LoginRequest;
 import com.example.intent.Model.Student;
 import com.example.intent.Model.User;
-import com.example.intent.RefreshTokenRequest;
+import com.example.intent.Request.RefreshTokenRequest;
 import com.example.intent.Request.NotificationRegisterRequest;
 import com.example.intent.Request.OtpRequest;
 import com.example.intent.Request.OtpVerificationRequest;
@@ -71,6 +71,14 @@ public interface ApiService {
     Call<ApiResponse<Student>> getStudentById(
             @Header("Authorization") String token,
             @Path("studentId") int studentId);
+
+    // API mới để thêm học sinh cho phụ huynh
+    @POST("/api/parent/student/add")
+    Call<ApiResponse<Boolean>> addStudentToParent(@Header("Authorization") String token, @Body Map<String, Long> request);
+
+    // API mới để lấy danh sách học sinh của phụ huynh
+    @GET("/api/parent/students")
+    Call<ApiResponse<List<Student>>> getParentStudents(@Header("Authorization") String token);
 
     @GET("api/parent/schedule/{studentId}")
     Call<List<Schedule>> getSchedulesByStudentId(

@@ -1,4 +1,4 @@
-package com.example.intent;
+package com.example.intent.Adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.intent.Model.Schedule;
+import com.example.intent.R;
 
 import java.util.List;
 

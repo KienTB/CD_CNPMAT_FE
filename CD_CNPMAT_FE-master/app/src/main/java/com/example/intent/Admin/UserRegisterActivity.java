@@ -114,14 +114,14 @@ public class UserRegisterActivity extends AppCompatActivity {
         return null;
     }
 
-        public void registerUser(RegisterRequest registerRequest) {
+    public void registerUser(RegisterRequest registerRequest) {
         String token = "Bearer " + tokenManager.getToken();
-            Log.d("RegisterRequest", "phoneNumber: " + registerRequest.getPhoneNumber());
-            Log.d("RegisterRequest", "password: " + registerRequest.getPassword());
-            Log.d("RegisterRequest", "name: " + registerRequest.getName());
-            Log.d("RegisterRequest", "email: " + registerRequest.getEmail());
-            Log.d("RegisterRequest", "address: " + registerRequest.getAddress());
-            Log.d("RegisterRequest", "role: " + registerRequest.getRole());
+        Log.d("RegisterRequest", "phoneNumber: " + registerRequest.getPhoneNumber());
+        Log.d("RegisterRequest", "password: " + registerRequest.getPassword());
+        Log.d("RegisterRequest", "name: " + registerRequest.getName());
+        Log.d("RegisterRequest", "email: " + registerRequest.getEmail());
+        Log.d("RegisterRequest", "address: " + registerRequest.getAddress());
+        Log.d("RegisterRequest", "role: " + registerRequest.getRole());
         Call<ApiResponse<User>> call = apiService.register(token, registerRequest);
 
         call.enqueue(new Callback<ApiResponse<User>>() {
@@ -129,12 +129,12 @@ public class UserRegisterActivity extends AppCompatActivity {
             public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     if (response.body().isSuccess()) {
-                        showSuccessDialog();
+                        showSuccessDialog(registerRequest.getRole());
                     } else {
                         Toast.makeText(UserRegisterActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(UserRegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserRegisterActivity.this, "Đăng ký không thành công", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -145,10 +145,11 @@ public class UserRegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void showSuccessDialog() {
+    private void showSuccessDialog(String role) {
+        String message = role.equals("parent") ? "Đăng ký người dùng thành công!" : "Đăng ký giáo viên thành công!";
         new AlertDialog.Builder(this)
                 .setTitle("Thêm người dùng thành công")
-                .setMessage("Bạn đã thêm người dùng thành công!")
+                .setMessage(message)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -161,11 +162,10 @@ public class UserRegisterActivity extends AppCompatActivity {
                 .show();
     }
 
-
     public boolean validateName() {
-        String name =  edtName.getText().toString();
+        String name = edtName.getText().toString();
         if (name.isEmpty()) {
-            edtName.setError("Name cannot be empty");
+            edtName.setError("Tên không được để trống");
         } else {
             edtName.setError(null);
             return true;
@@ -176,7 +176,7 @@ public class UserRegisterActivity extends AppCompatActivity {
     public boolean validatePhoneNumber() {
         String phoneNumber = edtPhoneNumber.getText().toString();
         if (phoneNumber.isEmpty()) {
-            edtPhoneNumber.setError("PhoneNumber cannot be empty");
+            edtPhoneNumber.setError("Số điện thoại không được để trống");
         } else {
             edtPhoneNumber.setError(null);
             return true;
@@ -187,25 +187,25 @@ public class UserRegisterActivity extends AppCompatActivity {
     public boolean validateEmail() {
         String email = edtEmail.getText().toString();
         if (email.isEmpty()) {
-            edtEmail.setError("Email cannot be empty");
+            edtEmail.setError("Email không được để trống");
             return false;
         } else if (!StringHelper.regexEmailValidationPattern(email)) {
-            edtEmail.setError("please enter a valid email");
+            edtEmail.setError("Vui lòng nhập email hợp lệ");
             return false;
         }
-            edtEmail.setError(null);
-            return true;
-        }
+        edtEmail.setError(null);
+        return true;
+    }
 
     public boolean validatePasswordAndConfirm() {
         String password = edtPassword.getText().toString();
         String confirm = edtConfirm.getText().toString();
         if (password.isEmpty()) {
-            edtPassword.setError("Password cannot be empty");
+            edtPassword.setError("Mật khẩu không được để trống");
             return false;
         } else if (!password.equals(confirm)) {
-            edtPassword.setError("Passwords do not match");
-            edtConfirm.setError("Passwords do not match");
+            edtPassword.setError("Mật khẩu không khớp");
+            edtConfirm.setError("Mật khẩu không khớp");
             return false;
         } else {
             edtPassword.setError(null);
@@ -217,7 +217,7 @@ public class UserRegisterActivity extends AppCompatActivity {
     public boolean validateAddress() {
         String address = edtAddress.getText().toString();
         if (address.isEmpty()) {
-            edtAddress.setError("Address cannot be empty");
+            edtAddress.setError("Địa chỉ không được để trống");
         } else {
             edtAddress.setError(null);
             return true;
@@ -227,10 +227,9 @@ public class UserRegisterActivity extends AppCompatActivity {
 
     public boolean validateRole() {
         if (radioGroupRole.getCheckedRadioButtonId() == -1) {
-            Toast.makeText(this, "Please select a role", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vui lòng chọn một vai trò", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
     }
-
 }

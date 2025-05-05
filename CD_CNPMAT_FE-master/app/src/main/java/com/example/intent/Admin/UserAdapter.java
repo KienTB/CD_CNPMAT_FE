@@ -9,10 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.intent.Model.Student;
 import com.example.intent.Model.User;
 import com.example.intent.R;
-import com.example.intent.StudentAdapter;
 
 import java.util.List;
 

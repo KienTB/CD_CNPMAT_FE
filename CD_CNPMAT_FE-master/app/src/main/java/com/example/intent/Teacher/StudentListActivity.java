@@ -2,7 +2,6 @@ package com.example.intent.Teacher;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -17,8 +16,7 @@ import com.example.intent.Api.RetrofitClient;
 import com.example.intent.Model.DataStudent;
 import com.example.intent.Model.Student;
 import com.example.intent.R;
-import com.example.intent.StudentAdapter;
-import com.example.intent.StudentNormalAdapter;
+import com.example.intent.Adapter.StudentNormalAdapter;
 import com.example.intent.Token.TokenManager;
 
 import java.util.ArrayList;

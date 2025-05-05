@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
-import com.example.intent.GradeTeacherAdapter;
+import com.example.intent.Adapter.GradeTeacherAdapter;
 import com.example.intent.Model.Grade;
 import com.example.intent.R;
 import com.example.intent.Token.TokenManager;

@@ -1,4 +1,4 @@
-package com.example.intent;
+package com.example.intent.Adapter;
 
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.intent.Model.Notification;
-import com.example.intent.Model.Student;
+import com.example.intent.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

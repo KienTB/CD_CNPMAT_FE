@@ -2,7 +2,6 @@ package com.example.intent.Admin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,7 +20,7 @@ import com.example.intent.Api.ApiResponse;
 import com.example.intent.Api.ApiService;
 import com.example.intent.Api.RetrofitClient;
 import com.example.intent.Model.Notification;
-import com.example.intent.NotificationAdapter;
+import com.example.intent.Adapter.NotificationAdapter;
 import com.example.intent.R;
 import com.example.intent.Token.TokenManager;
 

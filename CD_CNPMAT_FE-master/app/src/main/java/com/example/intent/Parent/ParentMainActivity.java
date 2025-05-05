@@ -3,8 +3,11 @@ package com.example.intent.Parent;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,10 +24,10 @@ import com.example.intent.InformationProductActivity;
 import com.example.intent.LoginActivity;
 import com.example.intent.Model.Notification;
 import com.example.intent.Model.Student;
-import com.example.intent.NotificationAdapter;
+import com.example.intent.Adapter.NotificationAdapter;
 import com.example.intent.R;
-import com.example.intent.StudentAdapter;
-import com.example.intent.Teacher.TeacherMainActivity;
+import com.example.intent.Adapter.StudentAdapter;
+import com.example.intent.Adapter.StudentHeaderAdapter;
 import com.example.intent.Token.TokenManager;
 import com.google.gson.Gson;
 
@@ -38,7 +41,7 @@ import retrofit2.Response;
 
 public class ParentMainActivity extends AppCompatActivity {
     private Button btnAddStudent, btnExtension, btnLogOut;
-    private TextView txtNameStudent, txtClassStudent, txtName, txtPhone;
+    private TextView txtName, txtPhone;
     private TabHost myTab;
     private ImageView imgNextToActivityTracking, imgNextToAttendance, imgNextToMenu,
             imgNextToPayMentHP, imgNextToLearningCorner, imgNextToHealth, imgNextToService,
@@ -48,10 +51,12 @@ public class ParentMainActivity extends AppCompatActivity {
     private TokenManager tokenManager;
     private ApiService apiService;
 
-    private RecyclerView rvStudents, recyclerViewNotifications;
-    private StudentAdapter studentAdapter;
+    private RecyclerView recyclerViewNotifications;
     private NotificationAdapter notificationAdapter;
-    private List<Student> studentList;
+
+    private RecyclerView recyclerViewStudentHeader;
+    private StudentHeaderAdapter studentHeaderAdapter;
+    private List<Student> studentList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +65,8 @@ public class ParentMainActivity extends AppCompatActivity {
 
         initializeComponents();
         setupClickListeners();
-
-        loadStudentData();
+        setupStudentHeader();
+        fetchStudents();
     }
 
     private void initializeComponents() {
@@ -81,11 +86,10 @@ public class ParentMainActivity extends AppCompatActivity {
         imgNextToInformationProduct = findViewById(R.id.imgNextToInformationProduct);
         imgNextToAccountInformation = findViewById(R.id.imgNextToAccountInformation);
         imgNextToChangePW = findViewById(R.id.imgNextToChangePW);
-        txtNameStudent = findViewById(R.id.txtNameStudent);
-        txtClassStudent = findViewById(R.id.txtClassStudent);
         txtName = findViewById(R.id.txtName);
         txtPhone = findViewById(R.id.txtPhone);
 
+        recyclerViewStudentHeader = findViewById(R.id.recyclerViewStudentHeader);
         recyclerViewNotifications = findViewById(R.id.recyclerViewNotifications);
 
         recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(this));
@@ -94,7 +98,6 @@ public class ParentMainActivity extends AppCompatActivity {
             Toast.makeText(this, "Clicked: " + notification.getTitle(), Toast.LENGTH_SHORT).show();
         });
 
-
         recyclerViewNotifications.setAdapter(notificationAdapter);
 
         tokenManager = new TokenManager(this);
@@ -102,6 +105,7 @@ public class ParentMainActivity extends AppCompatActivity {
 
         setupTabs();
         setupTabListener();
+
         fetchNotifications();
     }
 
@@ -113,6 +117,24 @@ public class ParentMainActivity extends AppCompatActivity {
         addTab("t3", R.id.tab3, R.drawable.ic_home);
         addTab("t4", R.id.tab4, R.drawable.ic_notifications);
         addTab("t5", R.id.tab5, R.drawable.ic_settings);
+
+        for (int i = 0; i < myTab.getTabWidget().getChildCount(); i++) {
+            View tabView = myTab.getTabWidget().getChildAt(i);
+
+            tabView.setBackgroundResource(R.drawable.tab_selector);
+
+            ImageView icon = tabView.findViewById(android.R.id.icon);
+            if (icon != null) {
+                LinearLayout.LayoutParams iconParams =
+                        (LinearLayout.LayoutParams) icon.getLayoutParams();
+                iconParams.gravity = Gravity.CENTER;
+                iconParams.width = getResources().getDimensionPixelSize(R.dimen.tab_icon_size);
+                iconParams.height = getResources().getDimensionPixelSize(R.dimen.tab_icon_size);
+                icon.setLayoutParams(iconParams);
+            }
+            tabView.setPadding(0, 10, 0, 10);
+        }
+        myTab.setCurrentTab(2);
     }
 
     private void addTab(String tabTag, int contentId, int iconResourceId) {
@@ -120,6 +142,14 @@ public class ParentMainActivity extends AppCompatActivity {
         spec.setContent(contentId);
         spec.setIndicator("", getResources().getDrawable(iconResourceId));
         myTab.addTab(spec);
+    }
+
+    private void setupTabListener() {
+        myTab.setOnTabChangedListener(tabId -> {
+            if ("t5".equals(tabId)) {
+                fetchUserProfile();
+            }
+        });
     }
 
     private void setupClickListeners() {
@@ -188,43 +218,59 @@ public class ParentMainActivity extends AppCompatActivity {
         );
     }
 
-    private void showLogoutConfirmDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Đăng xuất")
-                .setMessage("Bạn có chắc chắn muốn đăng xuất khỏi tài khoản không?")
-                .setPositiveButton("Có", (dialog, which) -> {
-                    Intent intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                })
-                .setNegativeButton("Không", (dialog, which) -> dialog.dismiss())
-                .show();
-    }
+    private void setupStudentHeader() {
+        // Thiết lập RecyclerView hiển thị theo chiều ngang
+        LinearLayoutManager layoutManager = new LinearLayoutManager(
+                this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewStudentHeader.setLayoutManager(layoutManager);
 
-    private void loadStudentData() {
-        String studentJson = tokenManager.getStudentData();
-
-        if (studentJson != null && !studentJson.isEmpty()) {
+        // Khởi tạo adapter với interface để xử lý sự kiện click
+        studentHeaderAdapter = new StudentHeaderAdapter(studentList, (student, position) -> {
+            // Khi một học sinh được chọn
+            updateSelectedStudent(student);
+            // Lưu thông tin học sinh được chọn
             Gson gson = new Gson();
-            Student student = gson.fromJson(studentJson, Student.class);
+            String studentJson = gson.toJson(student);
+            tokenManager.saveStudentData(studentJson);
+        });
 
-            txtNameStudent.setText(student.getName());
-            txtClassStudent.setText(student.getClass_name());
-        } else {
-            txtNameStudent.setText("Họ và tên");
-            txtClassStudent.setText("Lớp");
+        // Gán adapter cho RecyclerView
+        recyclerViewStudentHeader.setAdapter(studentHeaderAdapter);
+    }
+
+    private void fetchStudents() {
+        String token = tokenManager.getToken();
+        if (token == null || token.isEmpty()) {
+            Toast.makeText(this, "Token không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
         }
-    }
 
-    private void setDefaultStudentData() {
-        txtNameStudent.setText("Họ và tên");
-        txtClassStudent.setText("Lớp");
-    }
+        String bearerToken = "Bearer " + token;
 
-    private void setupTabListener() {
-        myTab.setOnTabChangedListener(tabId -> {
-            if ("t5".equals(tabId)) {
-                fetchUserProfile();
+        apiService.getParentStudents(bearerToken).enqueue(new Callback<ApiResponse<List<Student>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Student>>> call, Response<ApiResponse<List<Student>>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    List<Student> students = response.body().getData();
+                    studentList.clear();
+                    studentList.addAll(students);
+                    studentHeaderAdapter.updateList(studentList);
+
+                    if (!studentList.isEmpty()) {
+                        studentHeaderAdapter.setSelectedPosition(0);
+                        updateSelectedStudent(studentList.get(0));
+
+                        Gson gson = new Gson();
+                        String studentJson = gson.toJson(studentList.get(0));
+                        tokenManager.saveStudentData(studentJson);
+                    }
+                } else {
+                    Toast.makeText(ParentMainActivity.this, "Không thể lấy danh sách học sinh", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<ApiResponse<List<Student>>> call, Throwable t) {
+                Toast.makeText(ParentMainActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -246,7 +292,6 @@ public class ParentMainActivity extends AppCompatActivity {
                     ) {
                         handleUserProfileResponse(response);
                     }
-
                     @Override
                     public void onFailure(
                             Call<ApiResponse<Map<String, Object>>> call,
@@ -261,6 +306,39 @@ public class ParentMainActivity extends AppCompatActivity {
                 });
     }
 
+    private void fetchNotifications() {
+        String token = tokenManager.getToken();
+        String bearerToken = "Bearer " + token;
+
+        ApiService apiService = RetrofitClient.getInstance().createService(ApiService.class);
+        Call<ApiResponse<List<Notification>>> call = apiService.getNotifications(bearerToken);
+
+        call.enqueue(new Callback<ApiResponse<List<Notification>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Notification>>> call, Response<ApiResponse<List<Notification>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Notification> notifications = response.body().getData();
+                    notificationAdapter.updateData(notifications);
+                } else {
+                    Toast.makeText(ParentMainActivity.this, "Không thể lấy thông báo", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<ApiResponse<List<Notification>>> call, Throwable t) {
+                Toast.makeText(ParentMainActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateSelectedStudent(Student student) {
+        Gson gson = new Gson();
+        String studentJson = gson.toJson(student);
+        tokenManager.saveStudentData(studentJson);
+    }
+
+    /**
+     * Xử lý phản hồi từ API khi lấy thông tin profile người dùng
+     */
     private void handleUserProfileResponse(Response<ApiResponse<Map<String, Object>>> response) {
         if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
             Map<String, Object> userProfile = response.body().getData();
@@ -275,30 +353,16 @@ public class ParentMainActivity extends AppCompatActivity {
         }
     }
 
-    private void fetchNotifications() {
-        String token = tokenManager.getToken();
-
-        String bearerToken = "Bearer " + token;
-
-        ApiService apiService = RetrofitClient.getInstance().createService(ApiService.class);
-        Call<ApiResponse<List<Notification>>> call = apiService.getNotifications(bearerToken);
-
-        call.enqueue(new Callback<ApiResponse<List<Notification>>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<List<Notification>>> call, Response<ApiResponse<List<Notification>>> response) {
-
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Notification> notifications = response.body().getData();
-                    notificationAdapter.updateData(notifications);
-                } else {
-                    Toast.makeText(ParentMainActivity.this, "Không thể lấy thông báo", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<List<Notification>>> call, Throwable t) {
-                Toast.makeText(ParentMainActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void showLogoutConfirmDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Đăng xuất")
+                .setMessage("Bạn có chắc chắn muốn đăng xuất khỏi tài khoản không?")
+                .setPositiveButton("Có", (dialog, which) -> {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("Không", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 }

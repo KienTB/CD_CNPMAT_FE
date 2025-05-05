@@ -1,4 +1,4 @@
-package com.example.intent;
+package com.example.intent.Request;
 
 public class RefreshTokenRequest {
     private String refreshToken;

@@ -25,6 +25,9 @@ import com.example.intent.R;
 import com.example.intent.Token.TokenManager;
 import com.google.gson.Gson;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,6 +38,7 @@ public class AddStudentActivity extends AppCompatActivity {
     private ApiService apiService;
     private ImageView imgBack;
     private TokenManager tokenManager;
+    private static final String TAG = "AddStudentActivity";
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -62,7 +66,6 @@ public class AddStudentActivity extends AppCompatActivity {
                     Toast.makeText(AddStudentActivity.this, "Vui lòng nhập mã học sinh", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                tokenManager.clearStudentData();
                 getStudentById(Integer.parseInt(studentId));
             }
         });
@@ -96,7 +99,7 @@ public class AddStudentActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<Student>> call, Throwable t) {
-                Log.e("AddStudentActivity", "Lỗi mạng: " + t.getMessage(), t);
+                Log.e(TAG, "Lỗi mạng: " + t.getMessage(), t);
                 Toast.makeText(AddStudentActivity.this, "Lỗi mạng, vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
             }
         });
@@ -115,24 +118,50 @@ public class AddStudentActivity extends AppCompatActivity {
         builder.setMessage(message);
 
         builder.setPositiveButton("Xác nhận", (dialog, which) -> {
-            Gson gson = new Gson();
-            String studentJson = gson.toJson(student);
-
-            tokenManager.saveStudentData(studentJson);
-
-            Toast.makeText(AddStudentActivity.this, "Thêm học sinh thành công!", Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(AddStudentActivity.this, ParentMainActivity.class);
-            intent.putExtra("studentName", student.getName());
-            intent.putExtra("studentClass", student.getClass_name());
-            intent.putExtra("tabIndex", 2); // Tab thứ 3 (index = 2)
-            startActivity(intent);
-            finish();
+            // Thay vì chỉ lưu trong SharedPreferences, giờ ta gọi API để lưu mapping
+            addStudentToParent(student.getStudentId());
         });
 
         builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void addStudentToParent(Long studentId) {
+        String token = "Bearer " + tokenManager.getToken();
+        Map<String, Long> requestBody = new HashMap<>();
+        requestBody.put("studentId", studentId);
+
+        apiService.addStudentToParent(token, requestBody).enqueue(new Callback<ApiResponse<Boolean>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Boolean>> call, Response<ApiResponse<Boolean>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<Boolean> apiResponse = response.body();
+                    if (apiResponse.isSuccess() && apiResponse.getData() != null && apiResponse.getData()) {
+                        Toast.makeText(AddStudentActivity.this, "Thêm học sinh thành công!", Toast.LENGTH_SHORT).show();
+
+                        // Chuyển về màn hình chính và chọn tab thứ 3
+                        Intent intent = new Intent(AddStudentActivity.this, ParentMainActivity.class);
+                        intent.putExtra("tabIndex", 2); // Tab thứ 3 (index = 2)
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(AddStudentActivity.this,
+                                apiResponse.getMessage() != null ? apiResponse.getMessage() : "Thêm học sinh thất bại",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(AddStudentActivity.this, "Thêm học sinh thất bại, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Thêm học sinh lỗi: " + response.code() + " - " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Boolean>> call, Throwable t) {
+                Log.e(TAG, "Lỗi khi thêm học sinh: " + t.getMessage(), t);
+                Toast.makeText(AddStudentActivity.this, "Lỗi mạng, vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

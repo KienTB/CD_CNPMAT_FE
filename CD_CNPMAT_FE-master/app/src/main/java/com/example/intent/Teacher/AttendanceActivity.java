@@ -3,9 +3,7 @@ package com.example.intent.Teacher;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -24,7 +22,7 @@ import com.example.intent.Model.Schedule;
 import com.example.intent.Model.Student;
 import com.example.intent.R;
 import com.example.intent.Request.ScheduleRequest;
-import com.example.intent.StudentAdapter;
+import com.example.intent.Adapter.StudentAdapter;
 import com.example.intent.Token.TokenManager;
 
 import java.text.SimpleDateFormat;

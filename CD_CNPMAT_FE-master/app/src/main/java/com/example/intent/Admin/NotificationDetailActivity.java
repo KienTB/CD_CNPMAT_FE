@@ -92,7 +92,7 @@ public class NotificationDetailActivity extends AppCompatActivity {
         String token = tokenManager.getToken();
         apiService = RetrofitClient.getInstance().createService(ApiService.class);
 
-        Call<ApiResponse<String>> call = apiService.deleteUser("Bearer " + token, notificationId);
+        Call<ApiResponse<String>> call = apiService.deleteNotification("Bearer " + token, notificationId);
 
         call.enqueue(new Callback<ApiResponse<String>>() {
             @Override

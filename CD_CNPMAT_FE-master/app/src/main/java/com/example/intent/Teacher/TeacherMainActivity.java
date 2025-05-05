@@ -25,7 +25,7 @@ import com.example.intent.ChangePasswordActivity;
 import com.example.intent.InformationProductActivity;
 import com.example.intent.LoginActivity;
 import com.example.intent.Model.Notification;
-import com.example.intent.NotificationAdapter;
+import com.example.intent.Adapter.NotificationAdapter;
 import com.example.intent.Parent.AccountInformationActivity;
 import com.example.intent.R;
 import com.example.intent.Token.TokenManager;
@@ -37,8 +37,6 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import android.animation.ObjectAnimator;
 
 public class TeacherMainActivity extends AppCompatActivity {
     private TabHost myTab;
