@@ -1,7 +1,5 @@
 package com.example.intent.Request;
 
-import com.google.gson.annotations.SerializedName;
-
 public class UpdateGradeRequest {
     private String subject;
     private float score;

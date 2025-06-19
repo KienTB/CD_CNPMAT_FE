@@ -85,37 +85,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:orientation="horizontal"
                 android:gravity="center">
 
-                <LinearLayout
+                <RadioButton
+                    android:id="@+id/radioPresent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:text="Có mặt"
+                    android:tag="Có mặt"
+                    android:layout_marginEnd="16dp"/>
 
-                    <RadioButton
-                        android:id="@+id/radioPresent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Có mặt"
-                        android:tag="Có mặt" />
+                <RadioButton
+                    android:id="@+id/radioAbsent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vắng mặt"
+                    android:tag="Vắng mặt"
+                    android:layout_marginEnd="16dp"/>
 
-                    <RadioButton
-                        android:id="@+id/radioAbsent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="Vắng mặt"
-                        android:tag="Vắng mặt" />
-
-                    <RadioButton
-                        android:id="@+id/radioLate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="Tới trễ"
-                        android:tag="Tới trễ" />
-                </LinearLayout>
+                <RadioButton
+                    android:id="@+id/radioLate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tới trễ"
+                    android:tag="Tới trễ"/>
             </RadioGroup>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
